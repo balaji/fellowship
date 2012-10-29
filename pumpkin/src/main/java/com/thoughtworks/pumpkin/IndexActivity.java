@@ -3,7 +3,7 @@ package com.thoughtworks.pumpkin;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class HelloAndroidActivity extends Activity {
+public class IndexActivity extends Activity {
 
     /**
      * Called when the activity is first created.
