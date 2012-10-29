@@ -1,0 +1,20 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-android-plugin:1.2.1'
+    }
+}
+
+apply plugin: 'android'
+
+repositories {
+    mavenCentral()
+}
+
+version = "1.0-SNAPSHOT"
+
+dependencies {
+    compile 'pumpkin:pumpkin:1.0-SNAPSHOT'
+}
