@@ -6,7 +6,7 @@ import com.thoughtworks.pumpkin.HelloAndroidActivity;
 public class HelloAndroidActivityTest extends ActivityInstrumentationTestCase2<HelloAndroidActivity> {
 
     public HelloAndroidActivityTest() {
-        super("com.thoughtworks.pumpkin", HelloAndroidActivity.class);
+        super(HelloAndroidActivity.class);
     }
 
     public void testActivity() {

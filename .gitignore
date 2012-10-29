@@ -5,3 +5,5 @@
 **/build
 classes
 *.iml
+.DS_Store
+log.roo

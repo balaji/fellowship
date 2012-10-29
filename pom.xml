@@ -11,11 +11,11 @@
     <modules>
         <module>pumpkin</module>
         <module>pumpkin-it</module>
+        <module>pumpkin-server</module>
     </modules>
 
     <properties>
-        <platform.version>4.0.1.2
-        </platform.version>
+        <platform.version>4.0.1.2</platform.version>
     </properties>
 
     <dependencyManagement>
