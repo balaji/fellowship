@@ -1,0 +1,68 @@
+<html>
+<head>
+    <title>Sample</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.7.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        Parse.initialize("API KEY", "JAVASCRIPT KEY");
+    
+        var ratedBooks = [["1", "9780340896983"], ["2", "9780718154776"], ["3", "9780141046341"], ["4", "9780330519021"], ["5", "9780141039282"], ["6", "9781904994688"], ["7", "9781847245458"],
+        ["8", "9780099545798"], ["9", "9781849162746"], ["10", "9781906694180"], ["11", "9780141028675"], ["12", "9780718156817"], ["13", "9780007428540"], ["14", "9780755375516"],
+        ["15", "9780141324913"], ["16", "9780755379309"], ["17", "9780553825480"], ["18", "9780593067918"], ["19", "9780141324906"], ["20", "9780552772464"], ["21", "9780141324920"],
+        ["22", "9780141331973"], ["23", "9780099539551"], ["24", "9780552772556"], ["25", "9781444710335"], ["26", "9780141341880"], ["27", "9780141331980"], ["28", "9781409117919"],
+        ["29", "9780751543926"], ["30", "9780718156183"], ["31", "9780552774383"], ["32", "9780385619264"], ["33", "9780099549024"], ["34", "9780330477581"], ["35", "9781847394651"],
+        ["36", "9781444714500"], ["37", "9781848873568"], ["38", "9781409117209"], ["39", "9780099509769"], ["40", "9780099550068"], ["41", "9780007275946"], ["42", "9780141045672"],
+        ["43", "9780571272129"], ["44", "9780749942014"], ["45", "9781849902687"], ["46", "9781405367110"], ["47", "9780141039800"], ["48", "9781409390350"], ["49", "9781847679277"],
+        ["50", "9781409120766"], ["51", "9780099548973"], ["52", "9780099550051"], ["53", "9780241950364"], ["54", "9780099492399"], ["55", "9780099553724"], ["56", "9780755308460"],
+        ["57", "9780099525387"], ["58", "9780755359424"], ["59", "9781408812129"], ["60", "9780007275922"], ["61", "978075288336t"], ["62", "9780099458289"], ["63", "9780385618649"],
+        ["64", "9780340978900"], ["65", "9780099553731"], ["66", "9781847396471"], ["67", "9781444716009"], ["68", "9780385616492"], ["69", "9780099546764"], ["70", "9780099546771"],
+        ["71", "9780553820515"], ["72", "9780099520276"], ["73", "9780141046617"], ["74", "9780755375530"], ["75", "9780330515566"], ["76", "9780006479895"], ["77", "9780007431786"],
+        ["78", "9781408809938"], ["79", "9780751540031"], ["80", "9780333710937"], ["81", "9780091940737"], ["82", "9781408703748"], ["83", "9781444728170"], ["84", "9780751542110"],
+        ["85", "9780749942168"], ["86", "9780552157803"], ["87", "9781907410352"], ["88", "9781846059353"], ["89", "9780141049168"], ["90", "9780751543223"], ["91", "9781845354534"],
+        ["92", "9781409118305"], ["93", "9780099478454"], ["94", "9780753827406"], ["95", "9780099546757"], ["96", "9780330517980"], ["97", "9781405020466"], ["98", "9780091940768"],
+        ["99", "9780956627650"], ["100", "9780007371440"]];
+    
+        $.each(ratedBooks, function(index) {
+            $.getJSON('https://www.googleapis.com/books/v1/volumes?q='+ ratedBooks[index][1] +'&orderBy=relevance&maxResults=1&key=AIzaSyAkwxYZuP0W29EOxUWKST6SZipjs_CeTfI', function(data) {
+                try {
+                    var Book = Parse.Object.extend("Book");
+                    var book = new Book();
+                    var smallThumbnail = "http://books.google.co.in/googlebooks/images/no_cover_thumb.gif";
+                    var thumbnail = "http://books.google.co.in/googlebooks/images/no_cover_thumb.gif";
+                    var snippet = "--";
+                    if(data.items[0].searchInfo) {
+                        snippet = data.items[0].searchInfo.textSnippet;
+                    }
+                    if(data.items[0].volumeInfo.imageLinks) {
+                        thumbnail = data.items[0].volumeInfo.imageLinks.thumbnail;
+                        smallThumbnail = data.items[0].volumeInfo.imageLinks.smallThumbnail;
+                    }
+                    book.save({
+                                title: data.items[0].volumeInfo.title, 
+                                isbn10: data.items[0].volumeInfo.industryIdentifiers[0].identifier,
+                                isbn13: data.items[0].volumeInfo.industryIdentifiers[1].identifier, 
+                                authors: data.items[0].volumeInfo.authors,
+                                description:data.items[0].volumeInfo.description, 
+                                publisher: data.items[0].volumeInfo.publisher,
+                                pageCount: data.items[0].volumeInfo.pageCount, 
+                                smallThumbnail: smallThumbnail,
+                                thumbnail: thumbnail, 
+                                link: data.items[0].volumeInfo.webReaderLink,
+                                snippet:snippet, 
+                                rating: ratedBooks[index][0]
+                            }, 
+                            {success: function(object) {
+                                    console.log(object);
+                            }});
+                } catch(err) {
+                    console.log("Error in saving book: " + ratedBooks[index][1]);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

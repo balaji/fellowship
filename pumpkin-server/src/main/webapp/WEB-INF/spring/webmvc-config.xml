@@ -6,25 +6,13 @@
                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
                        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
-    <!-- The controllers are autodetected POJOs labeled with the @Controller annotation. -->
     <context:component-scan base-package="com.thoughtworks.pumpkin" use-default-filters="false">
         <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
-
-    <!-- Turns on support for mapping requests to Spring MVC @Controller methods
-Also registers default Formatters and Validators for use across all @Controllers -->
     <mvc:annotation-driven/>
-
-    <!-- Allows for mapping the DispatcherServlet to "/" by forwarding static resource 
-    requests to the container's default Servlet -->
     <mvc:default-servlet-handler/>
 
-    <!-- Selects a static view for rendering without the need for an explicit controller -->
-    <mvc:view-controller path="/" view-name="index"/>
-
-    <!-- Enable this for integration of file upload functionality -->
     <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver"/>
-
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" id="tilesViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
     </bean>
@@ -32,7 +20,6 @@ Also registers default Formatters and Validators for use across all @Controllers
         <property name="definitions">
             <list>
                 <value>/WEB-INF/layouts/layouts.xml</value>
-                <!-- Scan views directory for Tiles configurations -->
                 <value>/WEB-INF/views/**/views.xml</value>
             </list>
         </property>
