@@ -50,10 +50,10 @@ public class TwitterLoginActivity extends RoboActivity {
         Uri data = getIntent().getData();
         try {
             if (data != null) {
-                if (Constants.SCHEME.equals(data.getScheme())) {
+                if (Constants.CALLBACK_SCHEME.equals(data.getScheme())) {
                     consumer.setTokenWithSecret(preferences.getString("consumer_token", null), preferences.getString("consumer_secret", null));
                     provider.retrieveAccessToken(consumer, data.getQueryParameter("oauth_verifier"));
-                    setContentView(R.layout.hello);
+                    setContentView(R.layout.index);
 
                     HttpGet get = new HttpGet("http://api.twitter.com/1/account/verify_credentials.json");
                     consumer.sign(get);
@@ -62,7 +62,9 @@ public class TwitterLoginActivity extends RoboActivity {
                     if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_OK) {
                         StringWriter writer = new StringWriter();
                         IOUtils.copy(response.getEntity().getContent(), writer);
-                        welcome.setText("Welcome " + new JSONObject(writer.toString()).getString("name") + "!");
+                        String username = new JSONObject(writer.toString()).getString("name");
+                        preferences.edit().putString("username", username).commit();
+                        welcome.setText("Welcome " + username + "!");
                     }
                     return;
                 }
@@ -71,8 +73,8 @@ public class TwitterLoginActivity extends RoboActivity {
             String redirectUrl = provider.retrieveRequestToken(consumer, Constants.TWITTER_REDIRECT_URL);
             preferences.edit().putString("consumer_token", consumer.getToken()).commit();
             preferences.edit().putString("consumer_secret", consumer.getTokenSecret()).commit();
-            Uri uri = Uri.parse(redirectUrl);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(redirectUrl));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         } catch (OAuthMessageSignerException
                 | OAuthNotAuthorizedException

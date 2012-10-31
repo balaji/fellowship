@@ -13,7 +13,7 @@ public class FacebookLoginActivity extends FacebookActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.hello);
+        setContentView(R.layout.index);
         this.openSession();
     }
 
@@ -24,8 +24,8 @@ public class FacebookLoginActivity extends FacebookActivity {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
                     if (user != null) {
-                        TextView welcome = (TextView) findViewById(R.id.welcome);
-                        welcome.setText("Hello " + user.getName() + "!");
+                        getPreferences(MODE_PRIVATE).edit().putString("username", user.getName()).commit();
+                        ((TextView)findViewById(R.id.welcome)).setText("Hello " + user.getName() + "!");
                     }
                 }
             });

@@ -1,7 +1,7 @@
 package com.thoughtworks.pumpkin.helpers;
 
 public interface Constants {
-    String SCHEME = "x-oauthflow-twitter";
-    String HOST = "com.thoughtworks.pumpkin";
-    String TWITTER_REDIRECT_URL = SCHEME + "://" + HOST;
+    String CALLBACK_SCHEME = "x-oauthflow-twitter";
+    String CALLBACK_HOST = "com.thoughtworks.pumpkin";
+    String TWITTER_REDIRECT_URL = CALLBACK_SCHEME + "://" + CALLBACK_HOST;
 }
