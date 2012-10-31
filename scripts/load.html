@@ -26,7 +26,7 @@
         ["99", "9780956627650"], ["100", "9780007371440"]];
     
         $.each(ratedBooks, function(index) {
-            $.getJSON('https://www.googleapis.com/books/v1/volumes?q='+ ratedBooks[index][1] +'&orderBy=relevance&maxResults=1&key=AIzaSyAkwxYZuP0W29EOxUWKST6SZipjs_CeTfI', function(data) {
+            $.getJSON('https://www.googleapis.com/books/v1/volumes?q='+ ratedBooks[index][1] +'&orderBy=relevance&maxResults=1&key=#', function(data) {
                 try {
                     var Book = Parse.Object.extend("Book");
                     var book = new Book();

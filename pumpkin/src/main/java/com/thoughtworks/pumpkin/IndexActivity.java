@@ -1,21 +1,34 @@
 package com.thoughtworks.pumpkin;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import com.facebook.FacebookActivity;
 
-public class IndexActivity extends Activity {
+public class IndexActivity extends FacebookActivity {
 
-    /**
-     * Called when the activity is first created.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        final IndexActivity indexActivity = this;
+
+        Button twitterButton = (Button) findViewById(R.id.twitterSignin);
+        twitterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(indexActivity, TwitterLoginActivity.class));
+            }
+        });
+
+        Button facebookButton = (Button) findViewById(R.id.facebookSignin);
+        facebookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(indexActivity, FacebookLoginActivity.class));
+            }
+        });
     }
 
 }
