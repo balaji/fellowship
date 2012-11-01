@@ -1,7 +1,7 @@
 .idea
 .gradle
 **/target
-**/gen
+gen
 **/build
 classes
 *.iml

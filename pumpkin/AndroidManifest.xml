@@ -13,7 +13,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".FacebookLoginActivity" android:noHistory="true"/>
+        <activity android:name=".FacebookLoginActivity"/>
         <activity android:name=".TwitterLoginActivity" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>

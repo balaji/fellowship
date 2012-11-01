@@ -6,6 +6,7 @@ import com.facebook.FacebookActivity;
 import com.facebook.GraphUser;
 import com.facebook.Request;
 import com.facebook.Response;
+import com.facebook.Session;
 import com.facebook.SessionState;
 
 public class FacebookLoginActivity extends FacebookActivity {
@@ -13,6 +14,10 @@ public class FacebookLoginActivity extends FacebookActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Session session = getSession();
+        if(session != null) {
+            session.closeAndClearTokenInformation();
+        }
         setContentView(R.layout.index);
         this.openSession();
     }
@@ -24,7 +29,7 @@ public class FacebookLoginActivity extends FacebookActivity {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
                     if (user != null) {
-                        getPreferences(MODE_PRIVATE).edit().putString("username", user.getName()).commit();
+                        getSharedPreferences("com.thoughtworks.pumpkin_preferences", MODE_WORLD_WRITEABLE).edit().putString("username", user.getName()).commit();
                         ((TextView)findViewById(R.id.welcome)).setText("Hello " + user.getName() + "!");
                     }
                 }

@@ -11,21 +11,15 @@ import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.exception.OAuthNotAuthorizedException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
 import org.json.JSONObject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 
@@ -76,12 +70,7 @@ public class TwitterLoginActivity extends RoboActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(redirectUrl));
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
-        } catch (OAuthMessageSignerException
-                | OAuthNotAuthorizedException
-                | OAuthExpectationFailedException
-                | OAuthCommunicationException
-                | IOException
-                | JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
