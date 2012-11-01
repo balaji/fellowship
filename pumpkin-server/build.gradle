@@ -1,3 +1,1 @@
-dependencies {
-    compile ''
-}
+apply plugin: 'java'
