@@ -1,16 +1,16 @@
 package com.thoughtworks.pumpkin.test;
 
 import android.test.ActivityInstrumentationTestCase2;
-import com.thoughtworks.pumpkin.IndexActivity;
+import com.thoughtworks.pumpkin.SigninActivity;
 
-public class IndexActivityTest extends ActivityInstrumentationTestCase2<IndexActivity> {
+public class IndexActivityTest extends ActivityInstrumentationTestCase2<SigninActivity> {
 
     public IndexActivityTest() {
-        super(IndexActivity.class);
+        super(SigninActivity.class);
     }
 
     public void testActivity() {
-        IndexActivity activity = getActivity();
+        SigninActivity activity = getActivity();
         assertNotNull(activity);
     }
 }

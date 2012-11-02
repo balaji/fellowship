@@ -5,8 +5,8 @@
               android:layout_height="fill_parent">
 
     <Button android:layout_height="wrap_content" android:layout_width="fill_parent"
-            android:text="Sign in with Facebook" android:id="@+id/facebookSignin"/>
+            android:text="@string/facebook_signin_button" android:id="@+id/facebookSignin"/>
 
     <Button android:layout_height="wrap_content" android:layout_width="fill_parent"
-            android:text="Sign in with Twitter" android:id="@+id/twitterSignin"/>
+            android:text="@string/twitter_signin_button" android:id="@+id/twitterSignin"/>
 </LinearLayout>

@@ -1,7 +1,7 @@
 package com.thoughtworks.pumpkin;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 import com.facebook.FacebookActivity;
 import com.facebook.GraphUser;
 import com.facebook.Request;
@@ -18,19 +18,19 @@ public class FacebookLoginActivity extends FacebookActivity {
         if(session != null) {
             session.closeAndClearTokenInformation();
         }
-        setContentView(R.layout.index);
         this.openSession();
     }
 
     @Override
     protected void onSessionStateChange(SessionState state, Exception exception) {
+        final FacebookLoginActivity facebookLoginActivity = this;
         if (state.isOpened()) {
             Request request = Request.newMeRequest(this.getSession(), new Request.GraphUserCallback() {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
                     if (user != null) {
                         getSharedPreferences("com.thoughtworks.pumpkin_preferences", MODE_WORLD_WRITEABLE).edit().putString("username", user.getName()).commit();
-                        ((TextView)findViewById(R.id.welcome)).setText("Hello " + user.getName() + "!");
+                       startActivity(new Intent(facebookLoginActivity, HomeActivity.class));
                     }
                 }
             });

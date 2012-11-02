@@ -3,4 +3,8 @@
     <string name="hello">Hello pumpkin!</string>
     <string name="app_name">pumpkin</string>
     <string name="app_id">509095802449138</string>
+    <string name="book_image_description">Book Image</string>
+    <string name="facebook_signin_button">Sign in with Facebook</string>
+    <string name="twitter_signin_button">Sign in with Twitter</string>
+    <string name="browse_books_button">Browse Books</string>
 </resources>

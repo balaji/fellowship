@@ -1,4 +1,4 @@
-package com.thoughtworks.pumpkin.helpers;
+package com.thoughtworks.pumpkin.helper;
 
 public interface Constants {
     String CALLBACK_SCHEME = "x-oauthflow-twitter";

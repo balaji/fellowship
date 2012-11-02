@@ -7,4 +7,4 @@ classes
 *.iml
 .DS_Store
 log.roo
-pumpkin/src/main/java/com/thoughtworks/pumpkin/helpers/Keys.java
+pumpkin/src/main/java/com/thoughtworks/pumpkin/helper/Keys.java

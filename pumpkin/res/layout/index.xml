@@ -6,4 +6,7 @@
     <TextView android:id="@+id/welcome"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"/>
+
+    <Button android:layout_height="wrap_content" android:layout_width="fill_parent"
+            android:text="@string/browse_books_button" android:id="@+id/browseButton"/>
 </LinearLayout>

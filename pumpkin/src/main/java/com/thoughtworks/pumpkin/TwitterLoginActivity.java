@@ -4,9 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.TextView;
-import com.thoughtworks.pumpkin.helpers.Constants;
-import com.thoughtworks.pumpkin.helpers.Keys;
+import com.thoughtworks.pumpkin.helper.Constants;
+import com.thoughtworks.pumpkin.helper.Keys;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
@@ -17,7 +16,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
 
 import javax.inject.Inject;
 import java.io.StringWriter;
@@ -32,9 +30,6 @@ public class TwitterLoginActivity extends RoboActivity {
     @Inject
     SharedPreferences preferences;
 
-    @InjectView(R.id.welcome)
-    TextView welcome;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +42,6 @@ public class TwitterLoginActivity extends RoboActivity {
                 if (Constants.CALLBACK_SCHEME.equals(data.getScheme())) {
                     consumer.setTokenWithSecret(preferences.getString("consumer_token", null), preferences.getString("consumer_secret", null));
                     provider.retrieveAccessToken(consumer, data.getQueryParameter("oauth_verifier"));
-                    setContentView(R.layout.index);
 
                     HttpGet get = new HttpGet("http://api.twitter.com/1/account/verify_credentials.json");
                     consumer.sign(get);
@@ -58,7 +52,7 @@ public class TwitterLoginActivity extends RoboActivity {
                         IOUtils.copy(response.getEntity().getContent(), writer);
                         String username = new JSONObject(writer.toString()).getString("name");
                         preferences.edit().putString("username", username).commit();
-                        welcome.setText("Welcome " + username + "!");
+                        startActivity(new Intent(this, HomeActivity.class));
                     }
                     return;
                 }
