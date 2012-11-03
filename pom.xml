@@ -10,7 +10,7 @@
 
     <modules>
         <module>pumpkin</module>
-        <module>pumpkin-it</module>
+        <!--<module>pumpkin-it</module>-->
         <module>pumpkin-server</module>
     </modules>
 
