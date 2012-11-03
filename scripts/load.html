@@ -28,8 +28,6 @@
         $.each(ratedBooks, function(index) {
             $.getJSON('https://www.googleapis.com/books/v1/volumes?q='+ ratedBooks[index][1] +'&orderBy=relevance&maxResults=1&key=#', function(data) {
                 try {
-                    var Book = Parse.Object.extend("Book");
-                    var book = new Book();
                     var smallThumbnail = "http://books.google.co.in/googlebooks/images/no_cover_thumb.gif";
                     var thumbnail = "http://books.google.co.in/googlebooks/images/no_cover_thumb.gif";
                     var snippet = "--";
@@ -40,6 +38,8 @@
                         thumbnail = data.items[0].volumeInfo.imageLinks.thumbnail;
                         smallThumbnail = data.items[0].volumeInfo.imageLinks.smallThumbnail;
                     }
+                    var Book = Parse.Object.extend("Book");
+                    var book = new Book();
                     book.save({
                                 title: data.items[0].volumeInfo.title, 
                                 isbn10: data.items[0].volumeInfo.industryIdentifiers[0].identifier,
