@@ -7,8 +7,7 @@ public enum OAuthClient {
             "http://twitter.com/oauth/access_token",
             "http://twitter.com/oauth/authorize",
             "http://api.twitter.com/1/account/verify_credentials.json",
-            Constants.TWITTER_CALLBACK_SCHEME,
-            Constants.TWITTER_CALLBACK_SCHEME + "://" + Constants.CALLBACK_HOST),
+            "x-oauthflow-twitter://com.thoughtworks.pumpkin"),
 
     GOOGLE(Keys.GOOGLE_CONSUMER_KEY,
             Keys.GOOGLE_CONSUMER_SECRET,
@@ -16,8 +15,7 @@ public enum OAuthClient {
             "https://www.google.com/accounts/OAuthGetAccessToken",
             "https://www.google.com/accounts/OAuthAuthorizeToken?hd=default",
             "https://www.googleapis.com/oauth2/v1/userinfo",
-            Constants.GOOGLE_CALLBACK_SCHEME,
-            Constants.GOOGLE_CALLBACK_SCHEME + "://" + Constants.CALLBACK_HOST);
+            "x-oauthflow-google://com.thoughtworks.pumpkin");
 
     private String apiKey;
     private String apiSecret;
@@ -25,18 +23,16 @@ public enum OAuthClient {
     private String accessTokenUrl;
     private String authorizationUrl;
     private String accessProfileUrl;
-    private String callbackScheme;
     private String callbackUrl;
 
     OAuthClient(String apiKey, String apiSecret, String requestTokenUrl, String accessTokenUrl,
-                String authorizationUrl, String accessProfileUrl, String callbackScheme, String callbackUrl) {
+                String authorizationUrl, String accessProfileUrl, String callbackUrl) {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.requestTokenUrl = requestTokenUrl;
         this.accessTokenUrl = accessTokenUrl;
         this.authorizationUrl = authorizationUrl;
         this.accessProfileUrl = accessProfileUrl;
-        this.callbackScheme = callbackScheme;
         this.callbackUrl = callbackUrl;
     }
 
@@ -62,10 +58,6 @@ public enum OAuthClient {
 
     public String getAccessProfileUrl() {
         return accessProfileUrl;
-    }
-
-    public String getCallbackScheme() {
-        return callbackScheme;
     }
 
     public String getCallbackUrl() {

@@ -33,7 +33,7 @@ public abstract class OAuthLoginActivity extends RoboActivity {
         Uri data = getIntent().getData();
         try {
             if (data != null) {
-                if (client.getCallbackScheme().equals(data.getScheme())) {
+                if (client.getCallbackUrl().startsWith(data.getScheme())) {
                     preferences.edit().putString("username", getUserName(data.getQueryParameter("oauth_verifier"))).commit();
                     startActivity(new Intent(this, HomeActivity.class));
                     return;
