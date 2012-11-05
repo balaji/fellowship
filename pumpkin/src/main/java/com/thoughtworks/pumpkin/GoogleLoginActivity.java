@@ -3,11 +3,10 @@ package com.thoughtworks.pumpkin;
 import android.os.Bundle;
 import com.thoughtworks.pumpkin.helper.OAuthClient;
 
-public class TwitterLoginActivity extends OAuthLoginActivity {
-
+public class GoogleLoginActivity extends OAuthLoginActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        this.client = OAuthClient.TWITTER;
+        this.client = OAuthClient.GOOGLE;
         super.onCreate(savedInstanceState);
     }
 }

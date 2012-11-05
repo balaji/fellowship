@@ -21,6 +21,9 @@ public class SigninActivity extends RoboActivity {
     @InjectView(R.id.facebookSignin)
     Button facebookButton;
 
+    @InjectView(R.id.googleSignin)
+    Button googleButton;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,13 @@ public class SigninActivity extends RoboActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(signinActivity, FacebookLoginActivity.class));
+            }
+        });
+
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(signinActivity, GoogleLoginActivity.class));
             }
         });
     }
