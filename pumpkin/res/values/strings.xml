@@ -7,5 +7,6 @@
     <string name="facebook_signin_button">Sign in with Facebook</string>
     <string name="twitter_signin_button">Sign in with Twitter</string>
     <string name="google_signin_button">Sign in with Google</string>
+    <string name="yahoo_signin_button">Sign in with Yahoo</string>
     <string name="browse_books_button">Browse Books</string>
 </resources>

@@ -29,7 +29,8 @@
             $.getJSON('https://www.googleapis.com/books/v1/volumes?q='+ ratedBooks[index][1] +'&orderBy=relevance&maxResults=1&key=#', function(data) {
                 try {
                     var smallThumbnail = "http://books.google.co.in/googlebooks/images/no_cover_thumb.gif";
-                    var thumbnail = "http://books.google.co.in/googlebooks/images/no_cover_thumb.gif";
+                    var thumbnail = "http://
+    <boo></boo>ks.google.co.in/googlebooks/images/no_cover_thumb.gif";
                     var snippet = "--";
                     if(data.items[0].searchInfo) {
                         snippet = data.items[0].searchInfo.textSnippet;

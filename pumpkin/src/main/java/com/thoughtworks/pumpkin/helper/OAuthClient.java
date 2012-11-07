@@ -15,7 +15,14 @@ public enum OAuthClient {
             "https://www.google.com/accounts/OAuthGetAccessToken",
             "https://www.google.com/accounts/OAuthAuthorizeToken?hd=default",
             "https://www.googleapis.com/oauth2/v1/userinfo",
-            "x-oauthflow-google://com.thoughtworks.pumpkin");
+            "x-oauthflow-google://com.thoughtworks.pumpkin"),
+   YAHOO(Keys.YAHOO_CONSUMER_KEY,
+            Keys.YAHOO_CONSUMER_SECRET,
+            "https://api.login.yahoo.com/oauth/v2/get_request_token",
+            "https://api.login.yahoo.com/oauth/v2/get_token",
+            "https://api.login.yahoo.com/oauth/v2/request_auth",
+            "http://social.yahooapis.com/v1/me/guid?format=json",
+            "x-oauthflow-yahoo://com.thoughtworks.pumpkin");
 
     private String apiKey;
     private String apiSecret;

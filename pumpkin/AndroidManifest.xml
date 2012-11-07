@@ -33,6 +33,14 @@
                 <data android:scheme="x-oauthflow-google" android:host="com.thoughtworks.pumpkin"/>
             </intent-filter>
         </activity>
+        <activity android:name=".YahooLoginActivity" android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="x-oauthflow-yahoo" android:host="com.thoughtworks.pumpkin"/>
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
 
