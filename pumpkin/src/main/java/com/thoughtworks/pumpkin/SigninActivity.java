@@ -24,6 +24,9 @@ public class SigninActivity extends RoboActivity {
     @InjectView(R.id.googleSignin)
     Button googleButton;
 
+    @InjectView(R.id.yahooSignin)
+    Button yahooButton;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,13 @@ public class SigninActivity extends RoboActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(signinActivity, GoogleLoginActivity.class));
+            }
+        });
+
+        yahooButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(signinActivity, YahooLoginActivity.class));
             }
         });
     }

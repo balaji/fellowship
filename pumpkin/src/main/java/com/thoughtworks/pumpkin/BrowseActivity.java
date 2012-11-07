@@ -31,7 +31,7 @@ public class BrowseActivity extends RoboActivity {
         query.orderByAscending("rating");
         final BrowseActivity browseActivity = this;
         query.findInBackground(new FindCallback() {
-            @Override
+           @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "bookImage","Title"});
                 for (int i = 0; i < parseObjects.size(); i++) {

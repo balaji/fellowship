@@ -9,16 +9,9 @@ import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONObject;
 import roboguice.activity.RoboActivity;
 
 import javax.inject.Inject;
-import java.io.StringWriter;
-import java.net.HttpURLConnection;
 
 public abstract class OAuthLoginActivity extends RoboActivity {
 
@@ -54,18 +47,11 @@ public abstract class OAuthLoginActivity extends RoboActivity {
                 client.getAccessTokenUrl(), client.getAuthorizationUrl());
         consumer.setTokenWithSecret(preferences.getString("consumer_token", null), preferences.getString("consumer_secret", null));
         provider.retrieveAccessToken(consumer, null, "oauth_verifier", oauthVerifier);
+        return clientDance(consumer);
 
-        HttpGet get = new HttpGet(client.getAccessProfileUrl());
-        consumer.sign(get);
-        HttpResponse response = new DefaultHttpClient().execute(get);
-
-        if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_OK) {
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(response.getEntity().getContent(), writer);
-            return new JSONObject(writer.toString()).getString("name");
-        }
-        throw new Exception("Error in retrieving User information.");
     }
+
+    protected abstract String clientDance(OAuthConsumer consumer) throws Exception;
 
     public String storeRequestToken(String callbackUrl) throws Exception {
         OAuthConsumer consumer = new CommonsHttpOAuthConsumer(client.getApiKey(), client.getApiSecret());

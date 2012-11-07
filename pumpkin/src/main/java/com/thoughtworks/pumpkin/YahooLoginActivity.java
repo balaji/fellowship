@@ -12,10 +12,10 @@ import org.json.JSONObject;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 
-public class GoogleLoginActivity extends OAuthLoginActivity {
+public class YahooLoginActivity extends OAuthLoginActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        this.client = OAuthClient.GOOGLE;
+        this.client = OAuthClient.YAHOO;
         super.onCreate(savedInstanceState);
     }
 
@@ -27,8 +27,15 @@ public class GoogleLoginActivity extends OAuthLoginActivity {
         if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_OK) {
             StringWriter writer = new StringWriter();
             IOUtils.copy(response.getEntity().getContent(), writer);
-            return new JSONObject(writer.toString()).getString("name");
+            get = new HttpGet("http://social.yahooapis.com/v1/user/" + new JSONObject(writer.toString()).getJSONObject("guid").getString("value") + "/profile/tinyusercard?format=json");
+            consumer.sign(get);
+            response = new DefaultHttpClient().execute(get);
+            if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_OK) {
+                writer = new StringWriter();
+                IOUtils.copy(response.getEntity().getContent(), writer);
+                return new JSONObject(writer.toString()).getJSONObject("profile").getString("nickname");
+            }
         }
-        throw new Exception("unable to get username");
+        throw new Exception("Error in retrieving User information.");
     }
 }
