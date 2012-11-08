@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 
-public class YahooLoginActivity extends OAuthLoginActivity {
+public class YahooLoginActivity extends AbstractOauthActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.client = OAuthClient.YAHOO;

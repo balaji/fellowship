@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 
-public class TwitterLoginActivity extends OAuthLoginActivity {
+public class TwitterLoginActivity extends AbstractOauthActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

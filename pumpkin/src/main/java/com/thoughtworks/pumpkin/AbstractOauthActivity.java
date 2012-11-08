@@ -14,7 +14,7 @@ import roboguice.activity.RoboActivity;
 
 import javax.inject.Inject;
 
-public abstract class OAuthLoginActivity extends RoboActivity {
+public abstract class AbstractOauthActivity extends RoboActivity {
 
     @Inject
     SharedPreferences preferences;
@@ -28,7 +28,7 @@ public abstract class OAuthLoginActivity extends RoboActivity {
         try {
             if (data != null) {
                 if (client.getCallbackUrl().startsWith(data.getScheme())) {
-            preferences.edit().putString(Constant.Preferences.USERNAME, getUserName(data.getQueryParameter("oauth_verifier"))).commit();
+                    preferences.edit().putString(Constant.Preferences.USERNAME, getUserName(data.getQueryParameter("oauth_verifier"))).commit();
                     startActivity(new Intent(this, HomeActivity.class));
                     return;
                 }

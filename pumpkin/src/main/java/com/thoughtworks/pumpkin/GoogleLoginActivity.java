@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 
-public class GoogleLoginActivity extends OAuthLoginActivity {
+public class GoogleLoginActivity extends AbstractOauthActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.client = OAuthClient.GOOGLE;

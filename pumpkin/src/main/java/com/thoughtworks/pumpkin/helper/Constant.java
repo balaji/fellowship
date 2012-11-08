@@ -3,7 +3,6 @@ package com.thoughtworks.pumpkin.helper;
 public interface Constant {
     interface Preferences {
         final String USERNAME = "username";
-        final String FILE_NAME = "com.thoughtworks.pumpkin_preferences";
         final String TOKEN = "token";
         final String SECRET = "secret";
     }

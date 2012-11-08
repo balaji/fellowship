@@ -1,42 +1,50 @@
 package com.thoughtworks.pumpkin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.facebook.FacebookActivity;
-import com.facebook.GraphUser;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
+import android.util.Log;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 import com.thoughtworks.pumpkin.helper.Constant;
+import org.json.JSONObject;
 
-public class FacebookLoginActivity extends FacebookActivity {
+import javax.inject.Inject;
+import java.util.Arrays;
+
+public class FacebookLoginActivity extends AbstractParseActivity {
+
+    @Inject
+    SharedPreferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Session session = getSession();
-        if(session != null) {
-            session.closeAndClearTokenInformation();
-        }
-        this.openSession();
+        ParseFacebookUtils.initialize("509095802449138", true);
+        final FacebookLoginActivity facebookLoginActivity = this;
+        ParseFacebookUtils.logIn(Arrays.asList(ParseFacebookUtils.Permissions.User.ABOUT_ME), this, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException err) {
+                if (user != null) {
+                    try {
+                        String username = new JSONObject(ParseFacebookUtils.getFacebook().request("me")).getString("name");
+                        preferences.edit().putString(Constant.Preferences.USERNAME, username).commit();
+                        startActivity(new Intent(facebookLoginActivity, HomeActivity.class));
+                    } catch (Exception ignored) {
+                    }
+                } else {
+                    Log.d("Pumpkin", "The user cancelled the Facebook login.");
+                }
+            }
+        });
     }
 
     @Override
-    protected void onSessionStateChange(SessionState state, Exception exception) {
-        final FacebookLoginActivity facebookLoginActivity = this;
-        if (state.isOpened()) {
-            Request request = Request.newMeRequest(this.getSession(), new Request.GraphUserCallback() {
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        getSharedPreferences(Constant.Preferences.FILE_NAME, MODE_WORLD_WRITEABLE).edit().putString(Constant.Preferences.USERNAME, user.getName()).commit();
-                       startActivity(new Intent(facebookLoginActivity, HomeActivity.class));
-                    }
-                }
-            });
-            Request.executeBatchAsync(request);
-        }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
     }
 }
 
