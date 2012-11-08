@@ -8,6 +8,7 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.thoughtworks.pumpkin.helper.Constant;
 
 public class FacebookLoginActivity extends FacebookActivity {
 
@@ -29,7 +30,7 @@ public class FacebookLoginActivity extends FacebookActivity {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
                     if (user != null) {
-                        getSharedPreferences("com.thoughtworks.pumpkin_preferences", MODE_WORLD_WRITEABLE).edit().putString("username", user.getName()).commit();
+                        getSharedPreferences(Constant.Preferences.FILE_NAME, MODE_WORLD_WRITEABLE).edit().putString(Constant.Preferences.USERNAME, user.getName()).commit();
                        startActivity(new Intent(facebookLoginActivity, HomeActivity.class));
                     }
                 }

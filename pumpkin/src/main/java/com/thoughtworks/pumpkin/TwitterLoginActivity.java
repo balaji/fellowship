@@ -1,6 +1,8 @@
 package com.thoughtworks.pumpkin;
 
 import android.os.Bundle;
+import com.thoughtworks.pumpkin.exception.OAuthFailedException;
+import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.OAuthClient;
 import oauth.signpost.OAuthConsumer;
 import org.apache.commons.io.IOUtils;
@@ -21,8 +23,8 @@ public class TwitterLoginActivity extends OAuthLoginActivity {
     }
 
     @Override
-    protected String clientDance(OAuthConsumer consumer) throws Exception {
-        HttpGet get = new HttpGet(client.getAccessProfileUrl());
+    protected String getNameFromClient(OAuthConsumer consumer) throws Exception {
+        HttpGet get = new HttpGet(Constant.URL.TWITTER_PROFILE);
         consumer.sign(get);
         HttpResponse response = new DefaultHttpClient().execute(get);
         if (response.getStatusLine().getStatusCode() == HttpURLConnection.HTTP_OK) {
@@ -30,6 +32,6 @@ public class TwitterLoginActivity extends OAuthLoginActivity {
             IOUtils.copy(response.getEntity().getContent(), writer);
             return new JSONObject(writer.toString()).getString("name");
         }
-        throw new Exception("unable to get username");
+        throw new OAuthFailedException();
     }
 }

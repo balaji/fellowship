@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.thoughtworks.pumpkin.helper.Constant;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
@@ -26,7 +27,7 @@ public class HomeActivity  extends RoboActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.index);
-        welcome.setText(preferences.getString("username", null));
+        welcome.setText(preferences.getString(Constant.Preferences.USERNAME, null));
         final HomeActivity homeActivity = this;
         browseButton.setOnClickListener(new View.OnClickListener() {
             @Override

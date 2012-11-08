@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import com.thoughtworks.pumpkin.helper.Constant;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
@@ -30,7 +31,7 @@ public class SigninActivity extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (preferences.getString("username", null) != null) {
+        if (preferences.getString(Constant.Preferences.USERNAME, null) != null) {
             startActivity(new Intent(this, HomeActivity.class));
             return;
         }
