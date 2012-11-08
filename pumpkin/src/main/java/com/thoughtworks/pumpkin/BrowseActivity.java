@@ -3,6 +3,7 @@ package com.thoughtworks.pumpkin;
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -32,11 +33,14 @@ public class BrowseActivity extends RoboActivity {
         query.findInBackground(new FindCallback() {
            @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
-                MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "bookImage"});
+                MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "bookImage","Title"});
                 for (int i = 0; i < parseObjects.size(); i++) {
-                    cursor.addRow(new Object[]{i, parseObjects.get(i).getString("thumbnail")});
+                    cursor.addRow(new Object[]{i, parseObjects.get(i).getString("thumbnail"),parseObjects.get(i).getString("title")});
+                    //TextView tv=(TextView)findViewById(R.id.Title);
+                   // tv.setText("aaa");
+                    //System.out.println(parseObjects.get(i).getString("title"));
                 }
-                books.setAdapter(new BooksCursor(browseActivity, R.layout.book, cursor, new String[]{"bookImage"}, new int[]{R.id.bookImage}));
+                books.setAdapter(new BooksCursor(browseActivity, R.layout.book, cursor, new String[]{"bookImage","Title"}, new int[]{R.id.bookImage,R.id.Title}));
             }
         });
     }
