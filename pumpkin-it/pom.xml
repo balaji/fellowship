@@ -17,6 +17,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.roboguice</groupId>
+            <artifactId>roboguice</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
         </dependency>
@@ -28,12 +33,14 @@
             <groupId>com.thoughtworks.pumpkin</groupId>
             <artifactId>pumpkin</artifactId>
             <type>apk</type>
+            <scope>provided</scope>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.thoughtworks.pumpkin</groupId>
             <artifactId>pumpkin</artifactId>
             <type>jar</type>
+            <scope>provided</scope>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

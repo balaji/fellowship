@@ -31,11 +31,9 @@ public class BrowseActivity extends AbstractParseActivity {
                 MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "bookImage", "Title"});
                 for (int i = 0; i < parseObjects.size(); i++) {
                     cursor.addRow(new Object[]{i, parseObjects.get(i).getString("thumbnail"), parseObjects.get(i).getString("title")});
-                    //TextView tv=(TextView)findViewById(R.id.Title);
-                    // tv.setText("aaa");
-                    //System.out.println(parseObjects.get(i).getString("title"));
                 }
-                books.setAdapter(new BooksCursor(browseActivity, R.layout.book, cursor, new String[]{"bookImage", "Title"}, new int[]{R.id.bookImage, R.id.Title}));
+                books.setAdapter(new BooksCursor(browseActivity, R.layout.book, cursor,
+                        new String[]{"bookImage", "title"}, new int[]{R.id.bookImage, R.id.title}));
             }
         });
     }

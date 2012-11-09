@@ -3,9 +3,9 @@ package com.thoughtworks.pumpkin.test;
 import android.test.ActivityInstrumentationTestCase2;
 import com.thoughtworks.pumpkin.SigninActivity;
 
-public class IndexActivityTest extends ActivityInstrumentationTestCase2<SigninActivity> {
+public class SigninActivityTest extends ActivityInstrumentationTestCase2<SigninActivity> {
 
-    public IndexActivityTest() {
+    public SigninActivityTest() {
         super(SigninActivity.class);
     }
 

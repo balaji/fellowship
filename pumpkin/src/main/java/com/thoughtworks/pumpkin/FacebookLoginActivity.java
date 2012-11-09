@@ -9,6 +9,7 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.thoughtworks.pumpkin.helper.Constant;
+import com.thoughtworks.pumpkin.helper.Keys;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ public class FacebookLoginActivity extends AbstractParseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ParseFacebookUtils.initialize("509095802449138", true);
+        ParseFacebookUtils.initialize(Keys.FACEBOOK_APP_ID, true);
         final FacebookLoginActivity facebookLoginActivity = this;
         ParseFacebookUtils.logIn(Arrays.asList(ParseFacebookUtils.Permissions.User.ABOUT_ME), this, new LogInCallback() {
             @Override
