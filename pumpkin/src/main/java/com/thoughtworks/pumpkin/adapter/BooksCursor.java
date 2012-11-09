@@ -25,7 +25,7 @@ public class BooksCursor extends SimpleCursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
       ImageView imageView = (ImageView) view.findViewById(R.id.bookImage);
         imageLoader.DisplayImage(cursor.getString(cursor.getColumnIndex("bookImage")), imageView);
-        TextView textView = (TextView) view.findViewById(R.id.Title) ;
+        TextView textView = (TextView) view.findViewById(R.id.title) ;
         setViewText(textView, cursor.getString(cursor.getColumnIndex("Title")));
     }
 }
