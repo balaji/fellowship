@@ -5,9 +5,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import com.thoughtworks.pumpkin.helper.Constant;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
+import com.thoughtworks.pumpkin.helper.ConnectionDetector;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import javax.inject.Inject;
 
@@ -38,9 +42,34 @@ public class SigninActivity extends RoboActivity {
         setContentView(R.layout.signin);
         final SigninActivity signinActivity = this;
 
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        // Setting Dialog Title
+        alertDialog.setTitle("Network Settings");
+
+        // Setting Dialog Message
+        alertDialog.setMessage("Connection Not Established");
+
+        // Setting OK Button
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+
+
+        final ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
+
         twitterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Boolean isInternetPresent = cd.isConnectingToInternet();
+                if(!isInternetPresent)
+                {
+                    // Showing Alert Message
+                    alertDialog.show();
+                }
+                else
                 startActivity(new Intent(signinActivity, TwitterLoginActivity.class));
             }
         });
@@ -48,6 +77,13 @@ public class SigninActivity extends RoboActivity {
         facebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Boolean isInternetPresent = cd.isConnectingToInternet();
+                if(!isInternetPresent)
+                {
+                    // Showing Alert Message
+                    alertDialog.show();
+                }
+                else
                 startActivity(new Intent(signinActivity, FacebookLoginActivity.class));
             }
         });
@@ -55,6 +91,13 @@ public class SigninActivity extends RoboActivity {
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Boolean isInternetPresent = cd.isConnectingToInternet();
+                if(!isInternetPresent)
+                {
+                    // Showing Alert Message
+                    alertDialog.show();
+                }
+                else
                 startActivity(new Intent(signinActivity, GoogleLoginActivity.class));
             }
         });
@@ -62,6 +105,13 @@ public class SigninActivity extends RoboActivity {
         yahooButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Boolean isInternetPresent = cd.isConnectingToInternet();
+                if(!isInternetPresent)
+                {
+                    // Showing Alert Message
+                    alertDialog.show();
+                }
+                else
                 startActivity(new Intent(signinActivity, YahooLoginActivity.class));
             }
         });
