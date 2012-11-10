@@ -15,5 +15,4 @@
 
     <Button android:layout_height="wrap_content" android:layout_width="fill_parent"
             android:text="@string/yahoo_signin_button" android:id="@+id/yahooSignin"/>
-
 </LinearLayout>

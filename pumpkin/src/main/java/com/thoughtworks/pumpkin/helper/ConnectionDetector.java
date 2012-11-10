@@ -10,8 +10,6 @@ package com.thoughtworks.pumpkin.helper;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 
 public class ConnectionDetector {
 
@@ -37,20 +35,4 @@ public class ConnectionDetector {
         return false;
     }
 
-  /*  {
-        ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
-
-        Boolean isInternetPresent = cd.isConnectingToInternet(); // true or false
-
-        if (isInternetPresent) {
-            // Internet Connection is Present
-            // make HTTP requests
-            showAlertDialog(AndroidDetectInternetConnectionActivity.this, "Internet Connection",
-                    "You have internet connection", true);
-        } else {
-            // Internet connection is not present
-            // Ask user to connect to Internet
-            showAlertDialog(AndroidDetectInternetConnectionActivity.this, "No Internet Connection",
-                    "You don't have internet connection.", false);
-    }*/
 }
