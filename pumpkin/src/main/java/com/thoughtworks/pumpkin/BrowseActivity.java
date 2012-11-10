@@ -9,11 +9,12 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.thoughtworks.pumpkin.adapter.BooksCursor;
 import roboguice.inject.InjectView;
+import android.app.ProgressDialog;
 
 import java.util.List;
 
 public class BrowseActivity extends AbstractParseActivity {
-
+    BrowseActivity browseActivity = this;
     @InjectView(R.id.books)
     ListView books;
 
@@ -24,7 +25,9 @@ public class BrowseActivity extends AbstractParseActivity {
         ParseQuery query = new ParseQuery("Book");
         query.setLimit(20);
         query.orderByAscending("rating");
-        final BrowseActivity browseActivity = this;
+        ProgressDialog progress = new ProgressDialog(this);
+        progress.setMessage("Loading...");
+        new LoadingActivity(progress).execute();
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
