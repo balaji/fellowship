@@ -22,14 +22,6 @@
             <version>2.0</version>
         </dependency>
         <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>android</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>android-test</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.thoughtworks.pumpkin</groupId>
             <artifactId>pumpkin</artifactId>
             <type>apk</type>
@@ -44,8 +36,24 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>com.parse</groupId>
+            <artifactId>parse</artifactId>
+            <scope>system</scope>
+            <version>1.1.8</version>
+            <systemPath>${project.basedir}/../pumpkin/libs/Parse-1.1.8.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android-test</artifactId>
         </dependency>
     </dependencies>
     <build>

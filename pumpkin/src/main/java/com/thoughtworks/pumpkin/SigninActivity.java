@@ -5,13 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import com.thoughtworks.pumpkin.helper.Constant;
+import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
-import com.thoughtworks.pumpkin.helper.ConnectionDetector;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 
 import javax.inject.Inject;
 
@@ -36,83 +33,31 @@ public class SigninActivity extends RoboActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (preferences.getString(Constant.Preferences.USERNAME, null) != null) {
-            startActivity(new Intent(this, HomeActivity.class));
+            if (preferences.getString(Constant.Preferences.PREFERRED_STORE, null) != null) {
+                startActivity(new Intent(this, HomeActivity.class));
+            }
+            startActivity(new Intent(this, ZipCodeActivity.class));
             return;
         }
         setContentView(R.layout.signin);
         final SigninActivity signinActivity = this;
+        final Util util = new Util(getApplicationContext());
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        onClick(twitterButton, TwitterLoginActivity.class, util, signinActivity);
+        onClick(facebookButton, FacebookLoginActivity.class, util, signinActivity);
+        onClick(yahooButton, YahooLoginActivity.class, util, signinActivity);
+        onClick(googleButton, GoogleLoginActivity.class, util, signinActivity);
+    }
 
-        // Setting Dialog Title
-        alertDialog.setTitle("Network Settings");
-
-        // Setting Dialog Message
-        alertDialog.setMessage("Connection Not Established");
-
-        // Setting OK Button
-        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
-
-
-        final ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
-
-        twitterButton.setOnClickListener(new View.OnClickListener() {
+    private void onClick(Button button, final Class clazz, final Util util, final SigninActivity signinActivity) {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Boolean isInternetPresent = cd.isConnectingToInternet();
-                if(!isInternetPresent)
-                {
-                    // Showing Alert Message
-                    alertDialog.show();
+                if (!util.isConnectingToInternet()) {
+                    util.showDialog(Constant.Message.NO_INTERNET_CONNECTION);
+                } else {
+                    startActivity(new Intent(signinActivity, clazz));
                 }
-                else
-                startActivity(new Intent(signinActivity, TwitterLoginActivity.class));
-            }
-        });
-
-        facebookButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Boolean isInternetPresent = cd.isConnectingToInternet();
-                if(!isInternetPresent)
-                {
-                    // Showing Alert Message
-                    alertDialog.show();
-                }
-                else
-                startActivity(new Intent(signinActivity, FacebookLoginActivity.class));
-            }
-        });
-
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Boolean isInternetPresent = cd.isConnectingToInternet();
-                if(!isInternetPresent)
-                {
-                    // Showing Alert Message
-                    alertDialog.show();
-                }
-                else
-                startActivity(new Intent(signinActivity, GoogleLoginActivity.class));
-            }
-        });
-
-        yahooButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Boolean isInternetPresent = cd.isConnectingToInternet();
-                if(!isInternetPresent)
-                {
-                    // Showing Alert Message
-                    alertDialog.show();
-                }
-                else
-                startActivity(new Intent(signinActivity, YahooLoginActivity.class));
             }
         });
     }

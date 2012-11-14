@@ -8,6 +8,5 @@
 
     <instrumentation android:targetPackage="com.thoughtworks.pumpkin"
                      android:name="android.test.InstrumentationTestRunner"/>
-
 </manifest>
 
