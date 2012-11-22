@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.activity.RoboActivity;
@@ -17,17 +17,17 @@ public class SigninActivity extends RoboActivity {
     @Inject
     SharedPreferences preferences;
 
-    @InjectView(R.id.twitterSignin)
-    Button twitterButton;
+    @InjectView(R.id.twitterSiginin)
+    ImageView twitter;
 
-    @InjectView(R.id.facebookSignin)
-    Button facebookButton;
+    @InjectView(R.id.facebookSiginin)
+    ImageView facebook;
 
-    @InjectView(R.id.googleSignin)
-    Button googleButton;
+    @InjectView(R.id.googleSiginin)
+    ImageView google;
 
-    @InjectView(R.id.yahooSignin)
-    Button yahooButton;
+    @InjectView(R.id.yahooSiginin)
+    ImageView yahoo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,14 +43,14 @@ public class SigninActivity extends RoboActivity {
         final SigninActivity signinActivity = this;
         final Util util = new Util(getApplicationContext());
 
-        onClick(twitterButton, TwitterLoginActivity.class, util, signinActivity);
-        onClick(facebookButton, FacebookLoginActivity.class, util, signinActivity);
-        onClick(yahooButton, YahooLoginActivity.class, util, signinActivity);
-        onClick(googleButton, GoogleLoginActivity.class, util, signinActivity);
+        onClick(twitter, TwitterLoginActivity.class, util, signinActivity);
+        onClick(facebook, FacebookLoginActivity.class, util, signinActivity);
+        onClick(yahoo, YahooLoginActivity.class, util, signinActivity);
+        onClick(google, GoogleLoginActivity.class, util, signinActivity);
     }
 
-    private void onClick(Button button, final Class clazz, final Util util, final SigninActivity signinActivity) {
-        button.setOnClickListener(new View.OnClickListener() {
+    private void onClick(ImageView imageView, final Class clazz, final Util util, final SigninActivity signinActivity) {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!util.isConnectingToInternet()) {

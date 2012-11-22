@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello pumpkin!</string>
+    <string name="hello_world">Hello pumpkin!</string>
     <string name="app_name">pumpkin</string>
     <string name="book_image_description">Book Image</string>
     <string name="book_title">Book Title</string>

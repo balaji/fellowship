@@ -27,7 +27,6 @@ public class BrowseActivity extends AbstractParseActivity {
         query.orderByAscending("rating");
         ProgressDialog progress = new ProgressDialog(this);
         progress.setMessage("Loading...");
-        new LoadingActivity(progress).execute();
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {

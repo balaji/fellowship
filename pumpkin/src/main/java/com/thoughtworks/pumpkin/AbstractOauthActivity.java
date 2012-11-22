@@ -6,11 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.OAuthClient;
+import com.thoughtworks.pumpkin.helper.Util;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import roboguice.activity.RoboActivity;
+import roboguice.util.SafeAsyncTask;
 
 import javax.inject.Inject;
 
@@ -24,18 +26,43 @@ public abstract class AbstractOauthActivity extends RoboActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Uri data = getIntent().getData();
+        setContentView(R.layout.empty);
+        new Util(getApplicationContext()).showProgressDialog(this);
+        final Uri data = getIntent().getData();
+        final AbstractOauthActivity oauthActivity = this;
         try {
             if (data != null) {
                 if (client.getCallbackUrl().startsWith(data.getScheme())) {
-                    preferences.edit().putString(Constant.Preferences.USERNAME, getUserName(data.getQueryParameter("oauth_verifier"))).commit();
-                    startActivity(new Intent(this, HomeActivity.class));
-                    return;
+                    new SafeAsyncTask<Intent>() {
+                        @Override
+                        public Intent call() throws Exception {
+                            preferences.edit().putString(Constant.Preferences.USERNAME,
+                                    getUserName(data.getQueryParameter("oauth_verifier"))).commit();
+                            return new Intent(oauthActivity, HomeActivity.class);
+                        }
+
+                        @Override
+                        protected void onSuccess(Intent intent) throws Exception {
+                            super.onSuccess(intent);
+                            startActivity(intent);
+                        }
+                    }.execute();
                 }
+            } else {
+                new SafeAsyncTask<Intent>() {
+                    @Override
+                    public Intent call() throws Exception {
+                        return new Intent(Intent.ACTION_VIEW, Uri.parse(storeRequestToken()));
+                    }
+
+                    @Override
+                    protected void onSuccess(Intent intent) throws Exception {
+                        super.onSuccess(intent);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent);
+                    }
+                }.execute();
             }
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(storeRequestToken()));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
         }

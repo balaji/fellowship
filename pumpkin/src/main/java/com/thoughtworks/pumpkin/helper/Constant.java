@@ -10,6 +10,8 @@ public interface Constant {
 
     interface Message {
         final String NO_INTERNET_CONNECTION = "No Internet Connection";
+        final String LOADING = "Loading...";
+        final String OK = "Ok";
     }
 
     interface URL {
