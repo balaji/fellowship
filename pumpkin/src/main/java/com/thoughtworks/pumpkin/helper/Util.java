@@ -42,7 +42,7 @@ public class Util {
         builder.create().show();
     }
 
-    public ProgressDialog showProgressDialog(RoboActivity activity) {
+    public static ProgressDialog showProgressDialog(RoboActivity activity) {
         return ProgressDialog.show(activity, "", Constant.Message.LOADING, true, true);
     }
 }

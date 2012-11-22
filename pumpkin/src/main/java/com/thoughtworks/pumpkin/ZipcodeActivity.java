@@ -25,7 +25,7 @@ public class ZipCodeActivity extends RoboActivity {
         zipCodeSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(activity, StoreSelectActivity.class));
+                startActivity(new Intent(activity, HomeActivity.class));
             }
         });
 

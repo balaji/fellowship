@@ -6,13 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.OAuthClient;
-import com.thoughtworks.pumpkin.helper.Util;
+import com.thoughtworks.pumpkin.helper.PumpkinAsyncTask;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import roboguice.activity.RoboActivity;
-import roboguice.util.SafeAsyncTask;
 
 import javax.inject.Inject;
 
@@ -21,24 +20,23 @@ public abstract class AbstractOauthActivity extends RoboActivity {
     @Inject
     SharedPreferences preferences;
 
+
     OAuthClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.empty);
-        new Util(getApplicationContext()).showProgressDialog(this);
         final Uri data = getIntent().getData();
-        final AbstractOauthActivity oauthActivity = this;
         try {
             if (data != null) {
                 if (client.getCallbackUrl().startsWith(data.getScheme())) {
-                    new SafeAsyncTask<Intent>() {
+                    new PumpkinAsyncTask<Intent>() {
                         @Override
                         public Intent call() throws Exception {
                             preferences.edit().putString(Constant.Preferences.USERNAME,
                                     getUserName(data.getQueryParameter("oauth_verifier"))).commit();
-                            return new Intent(oauthActivity, HomeActivity.class);
+                            return new Intent(this.activity, HomeActivity.class);
                         }
 
                         @Override
@@ -46,10 +44,10 @@ public abstract class AbstractOauthActivity extends RoboActivity {
                             super.onSuccess(intent);
                             startActivity(intent);
                         }
-                    }.execute();
+                    }.activity(this).execute();
                 }
             } else {
-                new SafeAsyncTask<Intent>() {
+                new PumpkinAsyncTask<Intent>() {
                     @Override
                     public Intent call() throws Exception {
                         return new Intent(Intent.ACTION_VIEW, Uri.parse(storeRequestToken()));
@@ -61,7 +59,7 @@ public abstract class AbstractOauthActivity extends RoboActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                         startActivity(intent);
                     }
-                }.execute();
+                }.activity(this).execute();
             }
         } catch (Exception e) {
             e.printStackTrace();
