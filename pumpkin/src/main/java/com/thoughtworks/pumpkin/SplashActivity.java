@@ -2,15 +2,15 @@ package com.thoughtworks.pumpkin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
 import roboguice.util.SafeAsyncTask;
 
+@ContentView(R.layout.splash)
 public class SplashActivity extends RoboActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash);
         final SplashActivity splashActivity = this;
         new SafeAsyncTask() {
 
@@ -25,12 +25,5 @@ public class SplashActivity extends RoboActivity {
                 startActivity(new Intent(splashActivity, SigninActivity.class));
             }
         }.execute();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 }

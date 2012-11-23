@@ -5,13 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import com.google.inject.Inject;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-import javax.inject.Inject;
-
+@ContentView(R.layout.signin)
 public class SigninActivity extends RoboActivity {
 
     @Inject
@@ -39,7 +40,6 @@ public class SigninActivity extends RoboActivity {
             startActivity(new Intent(this, ZipCodeActivity.class));
             return;
         }
-        setContentView(R.layout.signin);
         final SigninActivity signinActivity = this;
         final Util util = new Util(getApplicationContext());
 

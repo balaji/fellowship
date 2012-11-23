@@ -46,6 +46,17 @@
             <version>1.7</version>
         </dependency>
         <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>3.0</version>
+            <classifier>no_aop</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>support-v4</artifactId>
+            <version>r7</version>
+        </dependency>
+        <dependency>
             <groupId>com.parse</groupId>
             <artifactId>parse</artifactId>
             <scope>system</scope>

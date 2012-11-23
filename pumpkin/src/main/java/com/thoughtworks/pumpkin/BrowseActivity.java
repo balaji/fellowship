@@ -10,10 +10,12 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.thoughtworks.pumpkin.adapter.BooksCursor;
 import com.thoughtworks.pumpkin.helper.Util;
+import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 import java.util.List;
 
+@ContentView(R.layout.books)
 public class BrowseActivity extends AbstractParseActivity {
     BrowseActivity browseActivity = this;
     @InjectView(R.id.books)
@@ -22,7 +24,6 @@ public class BrowseActivity extends AbstractParseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.books);
         ParseQuery query = new ParseQuery("Book");
         query.setLimit(20);
         query.orderByAscending("rating");

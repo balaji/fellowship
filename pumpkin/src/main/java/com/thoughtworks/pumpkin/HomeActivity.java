@@ -1,17 +1,17 @@
 package com.thoughtworks.pumpkin;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.thoughtworks.pumpkin.helper.Constant;
+import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-import javax.inject.Inject;
 
+
+@ContentView(R.layout.home)
 public class HomeActivity  extends RoboActivity {
 
     @InjectView(R.id.welcome)
@@ -26,14 +26,6 @@ public class HomeActivity  extends RoboActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.index);
-        welcome.setText(preferences.getString(Constant.Preferences.USERNAME, null));
-        final HomeActivity homeActivity = this;
-        browseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(homeActivity, BrowseActivity.class));
-            }
-        });
+
     }
 }

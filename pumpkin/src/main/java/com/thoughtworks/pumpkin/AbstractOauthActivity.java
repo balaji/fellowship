@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import com.google.inject.Inject;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.OAuthClient;
 import com.thoughtworks.pumpkin.helper.PumpkinAsyncTask;
@@ -12,8 +13,6 @@ import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import roboguice.activity.RoboActivity;
-
-import javax.inject.Inject;
 
 public abstract class AbstractOauthActivity extends RoboActivity {
 

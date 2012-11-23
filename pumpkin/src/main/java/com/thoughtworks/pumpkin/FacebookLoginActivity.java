@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import com.google.inject.Inject;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -12,8 +13,9 @@ import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
 import org.json.JSONObject;
 
-import javax.inject.Inject;
 import java.util.Arrays;
+
+import static com.parse.ParseFacebookUtils.logIn;
 
 public class FacebookLoginActivity extends AbstractParseActivity {
 
@@ -25,7 +27,7 @@ public class FacebookLoginActivity extends AbstractParseActivity {
         super.onCreate(savedInstanceState);
         ParseFacebookUtils.initialize(Keys.FACEBOOK_APP_ID, true);
         final FacebookLoginActivity facebookLoginActivity = this;
-        ParseFacebookUtils.logIn(Arrays.asList(ParseFacebookUtils.Permissions.User.ABOUT_ME), this, new LogInCallback() {
+        logIn(Arrays.asList(ParseFacebookUtils.Permissions.User.ABOUT_ME), this, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException err) {
                 if (user != null) {
