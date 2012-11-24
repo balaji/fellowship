@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.google.inject.Inject;
+import com.thoughtworks.pumpkin.helper.Constant;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -28,6 +29,7 @@ public class ZipCodeActivity extends RoboActivity {
         zipCodeSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                preferences.edit().putString(Constant.Preferences.PREFERRED_STORE, "sample").commit();
                 startActivity(new Intent(activity, HomeActivity.class));
             }
         });

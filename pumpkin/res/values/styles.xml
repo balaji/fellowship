@@ -13,8 +13,12 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    <style name="PumpkinTheme" parent="AppBaseTheme">
+
+    </style>
+
+    <style name="background">
+        <item name="android:background">#33B5E5</item>
     </style>
 
 </resources>

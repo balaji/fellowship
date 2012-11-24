@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
 import com.google.inject.Inject;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Util;
@@ -19,16 +19,16 @@ public class SigninActivity extends RoboActivity {
     SharedPreferences preferences;
 
     @InjectView(R.id.twitterSiginin)
-    ImageView twitter;
+    Button twitter;
 
     @InjectView(R.id.facebookSiginin)
-    ImageView facebook;
+    Button facebook;
 
     @InjectView(R.id.googleSiginin)
-    ImageView google;
+    Button google;
 
     @InjectView(R.id.yahooSiginin)
-    ImageView yahoo;
+    Button yahoo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,8 +49,8 @@ public class SigninActivity extends RoboActivity {
         onClick(google, GoogleLoginActivity.class, util, signinActivity);
     }
 
-    private void onClick(ImageView imageView, final Class clazz, final Util util, final SigninActivity signinActivity) {
-        imageView.setOnClickListener(new View.OnClickListener() {
+    private void onClick(Button button, final Class clazz, final Util util, final SigninActivity signinActivity) {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!util.isConnectingToInternet()) {

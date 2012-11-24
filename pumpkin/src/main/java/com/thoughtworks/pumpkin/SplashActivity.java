@@ -16,7 +16,7 @@ public class SplashActivity extends RoboActivity {
 
             @Override
             public Object call() throws Exception {
-                Thread.sleep(2000);
+                Thread.sleep(4000);
                 return null;
             }
 

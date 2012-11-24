@@ -27,9 +27,13 @@ public class HomeFragment extends RoboFragment {
     Button browseButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_fragment, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.home_fragment, container);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         welcome.setText(preferences.getString(Constant.Preferences.USERNAME, null));
         browseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +41,5 @@ public class HomeFragment extends RoboFragment {
                 startActivity(new Intent(getActivity(), BrowseActivity.class));
             }
         });
-        return view;
     }
 }
