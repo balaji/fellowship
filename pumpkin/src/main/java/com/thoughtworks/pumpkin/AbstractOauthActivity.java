@@ -19,7 +19,6 @@ public abstract class AbstractOauthActivity extends RoboActivity {
     @Inject
     SharedPreferences preferences;
 
-
     OAuthClient client;
 
     @Override
@@ -35,7 +34,7 @@ public abstract class AbstractOauthActivity extends RoboActivity {
                         public Intent call() throws Exception {
                             preferences.edit().putString(Constant.Preferences.USERNAME,
                                     getUserName(data.getQueryParameter("oauth_verifier"))).commit();
-                            return new Intent(this.activity, HomeActivity.class);
+                            return new Intent(this.activity, ZipCodeActivity.class);
                         }
 
                         @Override

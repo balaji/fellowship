@@ -12,6 +12,7 @@ public interface Constant {
         final String NO_INTERNET_CONNECTION = "No Internet Connection";
         final String LOADING = "Loading...";
         final String OK = "Ok";
+        final String GREETING = "Hello!";
     }
 
     interface URL {

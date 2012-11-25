@@ -1,23 +1,17 @@
 package com.thoughtworks.pumpkin.helper;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import roboguice.activity.RoboActivity;
 
 public class Util {
 
-    private Context context;
-
-    public Util(Context context) {
-        this.context = context;
-    }
-
-    public boolean isConnectingToInternet() {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public static boolean isConnectingToInternet(Activity activity) {
+        ConnectivityManager connectivity = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
             if (info == null) {
@@ -32,8 +26,8 @@ public class Util {
         return false;
     }
 
-    public void showDialog(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    public static void showDialog(String message, Activity activity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage(message).setNeutralButton(Constant.Message.OK, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
@@ -42,7 +36,7 @@ public class Util {
         builder.create().show();
     }
 
-    public static ProgressDialog showProgressDialog(RoboActivity activity) {
+    public static ProgressDialog showProgressDialog(Activity activity) {
         return ProgressDialog.show(activity, "", Constant.Message.LOADING, true, true);
     }
 }

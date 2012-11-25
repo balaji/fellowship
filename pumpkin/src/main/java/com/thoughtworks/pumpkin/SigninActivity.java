@@ -7,12 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import com.google.inject.Inject;
 import com.thoughtworks.pumpkin.helper.Constant;
-import com.thoughtworks.pumpkin.helper.Util;
+import com.thoughtworks.pumpkin.helper.PumpkinOnClickListener;
 import roboguice.activity.RoboActivity;
-import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-@ContentView(R.layout.signin)
 public class SigninActivity extends RoboActivity {
 
     @Inject
@@ -36,28 +34,24 @@ public class SigninActivity extends RoboActivity {
         if (preferences.getString(Constant.Preferences.USERNAME, null) != null) {
             if (preferences.getString(Constant.Preferences.PREFERRED_STORE, null) != null) {
                 startActivity(new Intent(this, HomeActivity.class));
+            } else {
+                startActivity(new Intent(this, ZipCodeActivity.class));
             }
-            startActivity(new Intent(this, ZipCodeActivity.class));
             return;
         }
         final SigninActivity signinActivity = this;
-        final Util util = new Util(getApplicationContext());
-
-        onClick(twitter, TwitterLoginActivity.class, util, signinActivity);
-        onClick(facebook, FacebookLoginActivity.class, util, signinActivity);
-        onClick(yahoo, YahooLoginActivity.class, util, signinActivity);
-        onClick(google, GoogleLoginActivity.class, util, signinActivity);
+        setContentView(R.layout.signin);
+        onClick(twitter, TwitterLoginActivity.class, signinActivity);
+        onClick(facebook, FacebookLoginActivity.class, signinActivity);
+        onClick(yahoo, YahooLoginActivity.class, signinActivity);
+        onClick(google, GoogleLoginActivity.class, signinActivity);
     }
 
-    private void onClick(Button button, final Class clazz, final Util util, final SigninActivity signinActivity) {
-        button.setOnClickListener(new View.OnClickListener() {
+    private void onClick(Button button, final Class clazz, final SigninActivity signinActivity) {
+        button.setOnClickListener(new PumpkinOnClickListener(signinActivity) {
             @Override
-            public void onClick(View view) {
-                if (!util.isConnectingToInternet()) {
-                    util.showDialog(Constant.Message.NO_INTERNET_CONNECTION);
-                } else {
-                    startActivity(new Intent(signinActivity, clazz));
-                }
+            public void done(View view) {
+                startActivity(new Intent(signinActivity, clazz));
             }
         });
     }
