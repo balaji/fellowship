@@ -22,12 +22,6 @@ public class SigninActivity extends RoboActivity {
     @InjectView(R.id.facebookSiginin)
     Button facebook;
 
-    @InjectView(R.id.googleSiginin)
-    Button google;
-
-    @InjectView(R.id.yahooSiginin)
-    Button yahoo;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +32,6 @@ public class SigninActivity extends RoboActivity {
         setContentView(R.layout.signin);
         onClick(twitter, TwitterLoginActivity.class);
         onClick(facebook, FacebookLoginActivity.class);
-        onClick(yahoo, YahooLoginActivity.class);
-        onClick(google, GoogleLoginActivity.class);
     }
 
     private void onClick(Button button, final Class clazz) {
