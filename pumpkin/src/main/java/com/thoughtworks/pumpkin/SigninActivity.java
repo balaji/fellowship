@@ -25,7 +25,7 @@ public class SigninActivity extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (preferences.getString(Constant.Preferences.USERNAME, null) != null) {
+        if (!preferences.getBoolean(Constant.Preferences.LOGGED_IN, false)) {
             startActivity(new Intent(this, (preferences.getString(Constant.Preferences.PREFERRED_STORE, null) != null) ? HomeActivity.class : ZipCodeActivity.class));
             return;
         }

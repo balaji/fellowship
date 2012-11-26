@@ -2,9 +2,7 @@ package com.thoughtworks.pumpkin.helper;
 
 public interface Constant {
     interface Preferences {
-        final String USERNAME = "username";
-        final String TOKEN = "token";
-        final String SECRET = "secret";
+        final String LOGGED_IN = "logged_in";
         final String PREFERRED_STORE = "firstTimeUser";
     }
 

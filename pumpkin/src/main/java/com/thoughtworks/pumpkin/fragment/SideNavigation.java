@@ -8,19 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import com.google.inject.Inject;
 import com.thoughtworks.pumpkin.BooksCategoryActivity;
 import com.thoughtworks.pumpkin.R;
-import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinOnClickListener;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
 public class SideNavigation extends RoboFragment {
-
-    @InjectView(R.id.welcome)
-    TextView welcome;
 
     @Inject
     SharedPreferences preferences;
@@ -45,7 +40,6 @@ public class SideNavigation extends RoboFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        welcome.setText(Constant.Message.GREETING + " " + preferences.getString(Constant.Preferences.USERNAME, null));
         browseButton.setOnClickListener(new PumpkinOnClickListener((Activity) getActivity()) {
             @Override
             public void done(View view) {

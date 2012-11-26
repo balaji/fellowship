@@ -5,9 +5,6 @@
               android:orientation="vertical"
               android:layout_height="fill_parent">
 
-    <TextView android:id="@+id/welcome" android:layout_width="fill_parent"
-              android:layout_height="wrap_content"/>
-
     <Button android:layout_height="wrap_content" android:layout_width="fill_parent"
             android:text="@string/lists_button" android:id="@+id/listsButton"/>
 
