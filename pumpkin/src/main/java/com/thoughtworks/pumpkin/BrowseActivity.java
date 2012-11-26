@@ -5,18 +5,21 @@ import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.widget.ListView;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.thoughtworks.pumpkin.adapter.BooksCursor;
+import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.Util;
+import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 import java.util.List;
 
 @ContentView(R.layout.books)
-public class BrowseActivity extends AbstractParseActivity {
+public class BrowseActivity extends RoboActivity {
 
     @InjectView(R.id.books)
     ListView books;
@@ -25,6 +28,7 @@ public class BrowseActivity extends AbstractParseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String category = getIntent().getExtras().getString("category");
+        Parse.initialize(this, Keys.PARSE_API_KEY, Keys.PARSE_CLIENT_KEY);
         ParseQuery query = new ParseQuery("Book");
         ParseQuery innerQuery = new ParseQuery("Category");
         innerQuery.whereEqualTo("name", category);

@@ -16,13 +16,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SigninActivity" android:noHistory="true"/>
-        <activity android:name=".FacebookLoginActivity" android:noHistory="true"/>
-        <activity android:name=".ZipCodeActivity" android:noHistory="true"/>
+        <activity android:name=".SigninActivity"/>
+        <activity android:name=".FacebookLoginActivity"/>
+        <activity android:name=".ZipCodeActivity"/>
         <activity android:name=".BrowseActivity"/>
         <activity android:name=".BooksCategoryActivity"/>
         <activity android:name=".HomeActivity"/>
-        <activity android:name=".TwitterLoginActivity" android:noHistory="true">
+        <activity android:name=".TwitterLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -30,7 +30,7 @@
                 <data android:scheme="x-oauthflow-twitter" android:host="com.thoughtworks.pumpkin"/>
             </intent-filter>
         </activity>
-        <activity android:name=".GoogleLoginActivity" android:noHistory="true">
+        <activity android:name=".GoogleLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -38,7 +38,7 @@
                 <data android:scheme="x-oauthflow-google" android:host="com.thoughtworks.pumpkin"/>
             </intent-filter>
         </activity>
-        <activity android:name=".YahooLoginActivity" android:noHistory="true">
+        <activity android:name=".YahooLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
