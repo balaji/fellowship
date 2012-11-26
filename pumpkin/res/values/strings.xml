@@ -8,9 +8,9 @@
     <string name="twitter_signin_button">Sign in with Twitter</string>
     <string name="google_signin_button">Sign in with Google</string>
     <string name="yahoo_signin_button">Sign in with Yahoo</string>
-    <string name="browse_books_button">Browse Books</string>
-    <string name="shops_button">Browse Shops</string>
-    <string name="lists_button">My Lists</string>
+    <string name="browse_books_button">Books</string>
+    <string name="shops_button">Shops</string>
+    <string name="lists_button">My Wishlists</string>
     <string name="settings_button">Settings</string>
     <string name="search_pincode">Search</string>
     <string name="odyssey">Odyssey Store</string>

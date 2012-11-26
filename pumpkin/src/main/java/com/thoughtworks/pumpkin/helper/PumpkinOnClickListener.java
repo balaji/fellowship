@@ -18,5 +18,9 @@ public abstract class PumpkinOnClickListener implements View.OnClickListener {
         done(view);
     }
 
+    public Activity getActivity() {
+        return activity;
+    }
+
     public abstract void done(View view);
 }

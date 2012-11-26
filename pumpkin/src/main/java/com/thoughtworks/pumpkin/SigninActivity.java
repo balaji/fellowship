@@ -32,26 +32,21 @@ public class SigninActivity extends RoboActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (preferences.getString(Constant.Preferences.USERNAME, null) != null) {
-            if (preferences.getString(Constant.Preferences.PREFERRED_STORE, null) != null) {
-                startActivity(new Intent(this, HomeActivity.class));
-            } else {
-                startActivity(new Intent(this, ZipCodeActivity.class));
-            }
+            startActivity(new Intent(this, (preferences.getString(Constant.Preferences.PREFERRED_STORE, null) != null) ? HomeActivity.class : ZipCodeActivity.class));
             return;
         }
-        final SigninActivity signinActivity = this;
         setContentView(R.layout.signin);
-        onClick(twitter, TwitterLoginActivity.class, signinActivity);
-        onClick(facebook, FacebookLoginActivity.class, signinActivity);
-        onClick(yahoo, YahooLoginActivity.class, signinActivity);
-        onClick(google, GoogleLoginActivity.class, signinActivity);
+        onClick(twitter, TwitterLoginActivity.class);
+        onClick(facebook, FacebookLoginActivity.class);
+        onClick(yahoo, YahooLoginActivity.class);
+        onClick(google, GoogleLoginActivity.class);
     }
 
-    private void onClick(Button button, final Class clazz, final SigninActivity signinActivity) {
-        button.setOnClickListener(new PumpkinOnClickListener(signinActivity) {
+    private void onClick(Button button, final Class clazz) {
+        button.setOnClickListener(new PumpkinOnClickListener(this) {
             @Override
             public void done(View view) {
-                startActivity(new Intent(signinActivity, clazz));
+                startActivity(new Intent(getActivity(), clazz));
             }
         });
     }

@@ -33,6 +33,5 @@ public class ZipCodeActivity extends RoboActivity {
                 startActivity(new Intent(activity, HomeActivity.class));
             }
         });
-
     }
 }

@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.google.inject.Inject;
-import com.thoughtworks.pumpkin.BrowseActivity;
+import com.thoughtworks.pumpkin.BooksCategoryActivity;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinOnClickListener;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
-public class HomeFragment extends RoboFragment {
+public class SideNavigation extends RoboFragment {
 
     @InjectView(R.id.welcome)
     TextView welcome;
@@ -39,7 +39,7 @@ public class HomeFragment extends RoboFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home_fragment, container, false);
+        return inflater.inflate(R.layout.side_nav, container, false);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class HomeFragment extends RoboFragment {
         browseButton.setOnClickListener(new PumpkinOnClickListener((Activity) getActivity()) {
             @Override
             public void done(View view) {
-                startActivity(new Intent(getActivity(), BrowseActivity.class));
+                startActivity(new Intent(getActivity(), BooksCategoryActivity.class));
             }
         });
     }

@@ -18,7 +18,6 @@ public class BooksCursor extends SimpleCursorAdapter {
         super(context, layout, c, from, to);
         alphaIndexer = new AlphabetIndexer(c, 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         imageLoader = new ImageLoader(context);
-
     }
 
     @Override

@@ -17,16 +17,20 @@ import java.util.List;
 
 @ContentView(R.layout.books)
 public class BrowseActivity extends AbstractParseActivity {
-    BrowseActivity browseActivity = this;
+
     @InjectView(R.id.books)
     ListView books;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String category = getIntent().getExtras().getString("category");
         ParseQuery query = new ParseQuery("Book");
-        query.setLimit(20);
+        ParseQuery innerQuery = new ParseQuery("Category");
+        innerQuery.whereEqualTo("name", category);
+        query.whereMatchesQuery("parent", innerQuery);
         query.orderByAscending("rating");
+        final BrowseActivity browseActivity = this;
         final ProgressDialog dialog = Util.showProgressDialog(this);
         query.findInBackground(new FindCallback() {
             @Override
