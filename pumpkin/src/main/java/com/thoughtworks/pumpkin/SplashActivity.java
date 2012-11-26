@@ -8,6 +8,7 @@ import roboguice.util.SafeAsyncTask;
 
 @ContentView(R.layout.splash)
 public class SplashActivity extends RoboActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +17,7 @@ public class SplashActivity extends RoboActivity {
 
             @Override
             public Object call() throws Exception {
-                Thread.sleep(2000);
+                Thread.sleep(1300);
                 return null;
             }
 

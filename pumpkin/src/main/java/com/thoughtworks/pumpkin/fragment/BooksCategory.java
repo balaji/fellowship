@@ -4,9 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.MatrixCursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -17,7 +15,6 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.thoughtworks.pumpkin.BrowseActivity;
-import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.fragment.RoboListFragment;
@@ -25,10 +22,6 @@ import roboguice.fragment.RoboListFragment;
 import java.util.List;
 
 public class BooksCategory extends RoboListFragment {
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.categories, container, false);
-    }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -58,7 +51,5 @@ public class BooksCategory extends RoboListFragment {
                 setListAdapter(adapter);
             }
         });
-
-
     }
 }
