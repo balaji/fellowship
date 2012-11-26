@@ -7,7 +7,7 @@
 <body>
 <script type="text/javascript">
     $(document).ready(function() {
-        Parse.initialize("kYtvbqP7IF3YVrlemJAPYXIeSvV1C4yj6VekYQFe", "FIh138E1ICzEPpSruYN6tdYsnpPNQcXj7EKvgOXe");
+        Parse.initialize("API KEY", "JAVASCRIPT KEY");
 
         var ratedBooks = [["98","9780091940768","A  Autobiography: General"],
         ["30","9780718156183","Autobiography:  The Arts"],
@@ -113,7 +113,7 @@
         var categories = {};
 
         $.each(ratedBooks, function(index) {
-            $.getJSON('https://www.googleapis.com/books/v1/volumes?q='+ ratedBooks[index][1] +'&orderBy=relevance&maxResults=1&key=AIzaSyAkwxYZuP0W29EOxUWKST6SZipjs_CeTfI', function(data) {
+            $.getJSON('https://www.googleapis.com/books/v1/volumes?q='+ ratedBooks[index][1] +'&orderBy=relevance&maxResults=1&key=#', function(data) {
                 try {
                     var smallThumbnail = "http://books.google.co.in/googlebooks/images/no_cover_thumb.gif";
                     var thumbnail = "http://books.google.co.in/googlebooks/images/no_cover_thumb.gif";
