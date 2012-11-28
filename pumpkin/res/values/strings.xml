@@ -14,4 +14,5 @@
     <string name="settings_button">Settings</string>
     <string name="search_pincode">Search</string>
     <string name="new_list">Create New</string>
+    <string name="wishListItem">Wish Listed</string>
 </resources>

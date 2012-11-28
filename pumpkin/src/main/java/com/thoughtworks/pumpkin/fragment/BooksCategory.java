@@ -15,6 +15,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.thoughtworks.pumpkin.BrowseActivity;
+import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.fragment.RoboListFragment;
@@ -35,7 +36,7 @@ public class BooksCategory extends RoboListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Parse.initialize(getActivity(), Keys.PARSE_API_KEY, Keys.PARSE_CLIENT_KEY);
-        ParseQuery query = new ParseQuery("Category");
+        ParseQuery query = new ParseQuery(Constant.ParseObject.CATEGORY);
         query.orderByAscending("name");
         final ProgressDialog dialog = Util.showProgressDialog(getActivity());
         query.findInBackground(new FindCallback() {

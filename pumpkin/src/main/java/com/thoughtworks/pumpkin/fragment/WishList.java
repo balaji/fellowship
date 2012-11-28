@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -31,14 +30,13 @@ import roboguice.inject.InjectView;
 import java.util.List;
 
 
-public class WishLists extends RoboListFragment {
+public class WishList extends RoboListFragment {
 
     @InjectView(R.id.newList)
     Button newList;
 
     @Inject
     SharedPreferences preferences;
-    ListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,14 +55,14 @@ public class WishLists extends RoboListFragment {
         newList.setOnClickListener(new PumpkinOnClickListener(getActivity()) {
             @Override
             public void done(View view) {
-                AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
-                ad.setTitle("Name:");
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                alertDialog.setTitle("Name:");
                 final View layout = LayoutInflater.from(getActivity()).inflate(R.layout.create_wishlist_dialog, null);
-                ad.setView(layout);
-                ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                alertDialog.setView(layout);
+                alertDialog.setPositiveButton(Constant.Message.OK, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ParseObject wishLists = new ParseObject("WishLists");
+                        ParseObject wishLists = new ParseObject(Constant.ParseObject.WISH_LIST);
                         wishLists.put("name", ((TextView) layout.findViewById(R.id.newListName)).getText().toString());
                         wishLists.put("owner", preferences.getString(Constant.Preferences.USER_ID, null));
                         wishLists.saveInBackground();
@@ -72,14 +70,13 @@ public class WishLists extends RoboListFragment {
                         loadData();
                     }
                 });
-
-                ad.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                alertDialog.setNegativeButton(Constant.Message.CANCEL, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                     }
                 });
-                ad.show();
+                alertDialog.show();
             }
         });
         loadData();
@@ -98,9 +95,8 @@ public class WishLists extends RoboListFragment {
                 for (int i = 0; i < parseObjects.size(); i++) {
                     cursor.addRow(new Object[]{i, parseObjects.get(i).getString("name")});
                 }
-                adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, cursor,
-                        new String[]{"name"}, new int[]{android.R.id.text1});
-                setListAdapter(adapter);
+                setListAdapter(new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, cursor,
+                        new String[]{"name"}, new int[]{android.R.id.text1}));
             }
         });
     }
