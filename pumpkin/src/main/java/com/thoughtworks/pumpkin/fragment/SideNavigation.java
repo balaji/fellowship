@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.google.inject.Inject;
 import com.thoughtworks.pumpkin.BooksCategoryActivity;
 import com.thoughtworks.pumpkin.R;
+import com.thoughtworks.pumpkin.WishListActivity;
 import com.thoughtworks.pumpkin.helper.PumpkinOnClickListener;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
@@ -44,6 +45,12 @@ public class SideNavigation extends RoboFragment {
             @Override
             public void done(View view) {
                 startActivity(new Intent(getActivity(), BooksCategoryActivity.class));
+            }
+        });
+        lists.setOnClickListener(new PumpkinOnClickListener((Activity) getActivity()) {
+            @Override
+            public void done(View view) {
+                startActivity(new Intent(getActivity(), WishListActivity.class));
             }
         });
     }

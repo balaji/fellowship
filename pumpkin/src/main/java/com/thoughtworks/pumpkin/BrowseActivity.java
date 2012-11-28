@@ -3,7 +3,7 @@ package com.thoughtworks.pumpkin;
 import android.app.ProgressDialog;
 import android.database.MatrixCursor;
 import android.os.Bundle;
-import android.widget.ListView;
+import android.widget.GridView;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -22,7 +22,7 @@ import java.util.List;
 public class BrowseActivity extends RoboActivity {
 
     @InjectView(R.id.books)
-    ListView books;
+    GridView books;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
