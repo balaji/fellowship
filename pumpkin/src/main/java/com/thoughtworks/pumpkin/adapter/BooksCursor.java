@@ -9,9 +9,9 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AlphabetIndexer;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -32,15 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BooksCursor extends SimpleCursorAdapter {
-    private AlphabetIndexer alphaIndexer;
     private ImageLoader imageLoader;
+    private List<String> listOfAllBooksInWishList;
     private String userId;
     private List<ParseObject> wishLists;
 
-    public BooksCursor(Context context, int layout, Cursor c, String[] from, int[] to, String userId) {
+    public BooksCursor(List<String> listOfAllBooksInWishList, Context context, int layout, Cursor c, String[] from, int[] to, String userId) {
         super(context, layout, c, from, to);
+        this.listOfAllBooksInWishList = listOfAllBooksInWishList;
         this.userId = userId;
-        alphaIndexer = new AlphabetIndexer(c, 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         imageLoader = new ImageLoader(context);
     }
 
@@ -49,12 +49,18 @@ public class BooksCursor extends SimpleCursorAdapter {
         imageLoader.DisplayImage(cursor.getString(cursor.getColumnIndex("bookImage")), (ImageView) view.findViewById(R.id.bookImage));
         setViewText((TextView) view.findViewById(R.id.title), cursor.getString(cursor.getColumnIndex("title")));
         setViewText((TextView) view.findViewById(R.id.rank), cursor.getString(cursor.getColumnIndex("rank")));
-        View heartButton = view.findViewById(R.id.heart);
-        heartButton.setTag(cursor.getString(cursor.getColumnIndex("objectId")));
+        ImageButton heartButton = (ImageButton) view.findViewById(R.id.heart);
+        final String bookObjectId = cursor.getString(cursor.getColumnIndex("objectId"));
+        if (listOfAllBooksInWishList.contains(bookObjectId)) {
+            heartButton.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.ic_heart_filled));
+        } else {
+            heartButton.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.ic_action_heart));
+        }
+        heartButton.setTag(bookObjectId);
         heartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String bookObjectId = view.getTag().toString();
+//                final String bookObjectId = view.getTag().toString();
                 final View layout = LayoutInflater.from(context).inflate(R.layout.choose_wishlist_dialog, null);
                 final ListView listView = (ListView) layout.findViewById(R.id.wishListItems);
                 final ProgressDialog dialog = Util.showProgressDialog((Activity) context);
@@ -78,7 +84,7 @@ public class BooksCursor extends SimpleCursorAdapter {
         });
     }
 
-    private void showDialog(Context context, final View layout, final String bookObjectId) {
+    private void showDialog(Context context, final View layout) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle("Options:");
         alertDialog.setView(layout);
@@ -112,7 +118,7 @@ public class BooksCursor extends SimpleCursorAdapter {
                         listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_checked, strings));
                         setItemsInListAsChecked(listView, parseObjects);
                         listView.setOnItemClickListener(new DialogListOnClickListener(chosenBook));
-                        showDialog(context, layout, bookObjectId);
+                        showDialog(context, layout);
                     }
                 });
             }

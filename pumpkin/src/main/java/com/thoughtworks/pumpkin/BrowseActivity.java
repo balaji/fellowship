@@ -28,7 +28,7 @@ import java.util.List;
 public class BrowseActivity extends RoboActivity {
 
     @InjectView(R.id.books)
-    GridView books;
+    GridView booksGridView;
 
     @Inject
     SharedPreferences preferences;
@@ -44,19 +44,18 @@ public class BrowseActivity extends RoboActivity {
     }
 
     private void findByWishList(String wishList) {
-        final BrowseActivity browseActivity = this;
         ParseQuery fetchWishList = new ParseQuery(Constant.ParseObject.WISH_LIST);
         fetchWishList.whereEqualTo("name", wishList);
+        final BrowseActivity browseActivity = this;
+        final ProgressDialog dialog = Util.showProgressDialog(browseActivity);
         fetchWishList.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> wishListObj, ParseException e) {
-                final ProgressDialog dialog = Util.showProgressDialog(browseActivity);
                 ParseQuery query = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
                 query.whereEqualTo("wishListId", wishListObj.iterator().next());
                 query.findInBackground(new FindCallback() {
                     @Override
                     public void done(List<ParseObject> wishListBooks, ParseException e) {
-                        if (dialog.isShowing()) dialog.dismiss();
                         if (wishListBooks.isEmpty()) {
                             AlertDialog alertDialog = Util.dialog("No books in this list.", browseActivity);
                             alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -71,7 +70,7 @@ public class BrowseActivity extends RoboActivity {
                         for (ParseObject wishListBook : wishListBooks) {
                             books.add(wishListBook.getParseObject("bookId"));
                         }
-                        loadBooks(books, browseActivity);
+                        loadBooks(books, browseActivity, dialog);
                     }
                 });
             }
@@ -89,14 +88,35 @@ public class BrowseActivity extends RoboActivity {
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
-                if (dialog.isShowing()) dialog.dismiss();
-                loadBooks(parseObjects, browseActivity);
+                loadBooks(parseObjects, browseActivity, dialog);
             }
         });
     }
 
-    private void loadBooks(List<ParseObject> books, BrowseActivity browseActivity) {
-        MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "bookImage", "title", "rank", "objectId"});
+    private void loadBooks(List<ParseObject> books, final BrowseActivity browseActivity, final ProgressDialog dialog) {
+        final MatrixCursor cursor = createCursor(books);
+        ParseQuery fetchAllBooksForUser = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
+        ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
+        innerQuery.whereEqualTo("owner", preferences.getString(Constant.Preferences.USER_ID, null));
+        fetchAllBooksForUser.whereMatchesQuery("wishListId", innerQuery);
+        fetchAllBooksForUser.findInBackground(new FindCallback() {
+            @Override
+            public void done(List<ParseObject> wishListBooks, ParseException e) {
+                if (dialog.isShowing()) dialog.dismiss();
+                List<String> listOfAllBooksInWishList = new ArrayList<String>();
+                for (ParseObject wishListBook : wishListBooks) {
+                    listOfAllBooksInWishList.add(wishListBook.getParseObject("bookId").getObjectId());
+                }
+                setContentView(R.layout.books);
+                booksGridView.setAdapter(new BooksCursor(listOfAllBooksInWishList, browseActivity, R.layout.book, cursor,
+                        new String[]{"bookImage", "title", "rank", "objectId"}, new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart},
+                        preferences.getString(Constant.Preferences.USER_ID, null)));
+            }
+        });
+    }
+
+    private MatrixCursor createCursor(List<ParseObject> books) {
+        final MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "bookImage", "title", "rank", "objectId"});
         if (Build.VERSION.SDK_INT > 10) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -110,9 +130,6 @@ public class BrowseActivity extends RoboActivity {
                 e.printStackTrace();
             }
         }
-        setContentView(R.layout.books);
-        this.books.setAdapter(new BooksCursor(browseActivity, R.layout.book, cursor,
-                new String[]{"bookImage", "title", "rank", "objectId"}, new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart},
-                preferences.getString(Constant.Preferences.USER_ID, null)));
+        return cursor;
     }
 }
