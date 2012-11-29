@@ -3,6 +3,7 @@ package com.thoughtworks.pumpkin.fragment;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.MatrixCursor;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.thoughtworks.pumpkin.BrowseActivity;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
@@ -47,6 +49,9 @@ public class WishList extends RoboListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        Intent intent = new Intent(getActivity(), BrowseActivity.class);
+        intent.putExtra("wishlist", ((TextView) v).getText().toString());
+        startActivity(intent);
     }
 
     @Override

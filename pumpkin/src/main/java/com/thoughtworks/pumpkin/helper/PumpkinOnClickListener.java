@@ -12,7 +12,7 @@ public abstract class PumpkinOnClickListener implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if(!Util.isConnectingToInternet(activity)) {
-            Util.showDialog(Constant.Message.NO_INTERNET_CONNECTION, activity);
+            Util.dialog(Constant.Message.NO_INTERNET_CONNECTION, activity).show();
             return;
         }
         done(view);

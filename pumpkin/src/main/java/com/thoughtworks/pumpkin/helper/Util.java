@@ -26,14 +26,14 @@ public class Util {
         return false;
     }
 
-    public static void showDialog(String message, Activity activity) {
+    public static AlertDialog dialog(String message, Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage(message).setNeutralButton(Constant.Message.OK, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
             }
         });
-        builder.create().show();
+        return builder.create();
     }
 
     public static ProgressDialog showProgressDialog(Activity activity) {

@@ -32,7 +32,7 @@ public class TwitterLoginActivity extends RoboActivity {
                     preferences.edit().putString(Constant.Preferences.USER_ID, user.getObjectId()).commit();
                     startActivity(new Intent(twitterLoginActivity, ZipCodeActivity.class));
                 } else {
-                    Util.showDialog("Error in signing up, try again later", twitterLoginActivity);
+                    Util.dialog("Error in signing up, try again later", twitterLoginActivity).show();
                 }
             }
         });

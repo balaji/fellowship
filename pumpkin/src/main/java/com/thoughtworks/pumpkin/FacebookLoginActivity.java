@@ -32,7 +32,7 @@ public class FacebookLoginActivity extends RoboActivity {
                     preferences.edit().putString(Constant.Preferences.USER_ID, user.getObjectId()).commit();
                     startActivity(new Intent(facebookLoginActivity, ZipCodeActivity.class));
                 } else {
-                    Util.showDialog("Error in signing up, try again later", facebookLoginActivity);
+                    Util.dialog("Error in signing up, try again later", facebookLoginActivity).show();
                 }
             }
         });

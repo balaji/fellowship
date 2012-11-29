@@ -18,6 +18,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.fedorvlasov.lazylist.ImageLoader;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -62,15 +63,16 @@ public class BooksCursor extends SimpleCursorAdapter {
                     ParseQuery wishListQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
                     wishListQuery.orderByAscending("name");
                     wishListQuery.whereEqualTo("owner", userId);
+                    wishListQuery.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
                     wishListQuery.findInBackground(new FindCallback() {
                         @Override
                         public void done(List<ParseObject> parseObjects, ParseException e) {
                             wishLists = parseObjects;
-                            setListView(dialog, listView, context, layout, bookObjectId);
+                            setListViewOnDialog(dialog, listView, context, layout, bookObjectId);
                         }
                     });
                 } else {
-                    setListView(dialog, listView, context, layout, bookObjectId);
+                    setListViewOnDialog(dialog, listView, context, layout, bookObjectId);
                 }
             }
         });
@@ -90,47 +92,61 @@ public class BooksCursor extends SimpleCursorAdapter {
         alertDialog.show();
     }
 
-    private void setListView(final ProgressDialog dialog, final ListView listView,
-                             final Context context, final View layout, final String bookObjectId) {
+    private void setListViewOnDialog(final ProgressDialog dialog, final ListView listView,
+                                     final Context context, final View layout, final String bookObjectId) {
         final String[] strings = new String[wishLists.size()];
         for (int i = 0; i < wishLists.size(); i++) {
             strings[i] = wishLists.get(i).get("name").toString();
         }
-        ParseQuery queryToFetch = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
-        queryToFetch.whereContainedIn("wishListId", wishListIds());
-        queryToFetch.whereEqualTo("bookId", bookObjectId);
-        queryToFetch.findInBackground(new FindCallback() {
+
+        new ParseQuery(Constant.ParseObject.BOOK).getInBackground(bookObjectId, new GetCallback() {
             @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                if (dialog.isShowing()) dialog.dismiss();
-                listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_multiple_choice, strings));
-                setItemsInListAsChecked(listView, parseObjects);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void done(final ParseObject chosenBook, ParseException e) {
+                ParseQuery queryToFetch = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
+                queryToFetch.whereContainedIn("wishListId", wishLists);
+                queryToFetch.whereEqualTo("bookId", chosenBook);
+                queryToFetch.findInBackground(new FindCallback() {
                     @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (!((CheckedTextView) view).isChecked()) {
-                            ParseObject parseObject = new ParseObject(Constant.ParseObject.WISH_LIST_BOOK);
-                            parseObject.put("bookId", bookObjectId);
-                            parseObject.put("wishListId", wishListIds().get(i));
-                            parseObject.saveInBackground();
-                        } else {
-                            ParseQuery queryToDelete = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
-                            queryToDelete.whereEqualTo("bookId", bookObjectId);
-                            queryToDelete.whereEqualTo("wishListId", wishListIds().get(i));
-                            queryToDelete.findInBackground(new FindCallback() {
-                                @Override
-                                public void done(List<ParseObject> parseObjects, ParseException e) {
-                                    for (ParseObject parseObject : parseObjects) {
-                                        parseObject.deleteInBackground();
-                                    }
-                                }
-                            });
+                    public void done(List<ParseObject> parseObjects, ParseException e) {
+                        if (dialog.isShowing()) dialog.dismiss();
+                        listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_checked, strings));
+                        setItemsInListAsChecked(listView, parseObjects);
+                        listView.setOnItemClickListener(new DialogListOnClickListener(chosenBook));
+                        showDialog(context, layout, bookObjectId);
+                    }
+                });
+            }
+        });
+    }
+
+    class DialogListOnClickListener implements AdapterView.OnItemClickListener {
+        ParseObject chosenBook;
+
+        DialogListOnClickListener(ParseObject chosenBook) {
+            this.chosenBook = chosenBook;
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            if (!((CheckedTextView) view).isChecked()) {   //save
+                ParseObject parseObject = new ParseObject(Constant.ParseObject.WISH_LIST_BOOK);
+                parseObject.put("bookId", chosenBook);
+                parseObject.put("wishListId", wishLists.get(i));
+                parseObject.saveInBackground();
+            } else {   //delete
+                ParseQuery queryToDelete = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
+                queryToDelete.whereEqualTo("bookId", chosenBook);
+                queryToDelete.whereEqualTo("wishListId", wishLists.get(i));
+                queryToDelete.findInBackground(new FindCallback() {
+                    @Override
+                    public void done(List<ParseObject> parseObjects, ParseException e) {
+                        for (ParseObject parseObject : parseObjects) {
+                            parseObject.deleteInBackground();
                         }
                     }
                 });
-                showDialog(context, layout, bookObjectId);
             }
-        });
+        }
     }
 
     private void setItemsInListAsChecked(ListView listView, List<ParseObject> wishListBookMappings) {
@@ -139,17 +155,10 @@ public class BooksCursor extends SimpleCursorAdapter {
             wishListIds.add(wishList.getObjectId());
         }
         for (ParseObject wishListBookMapping : wishListBookMappings) {
-            if (wishListIds.contains(wishListBookMapping.getString("wishListId"))) {
-                listView.setItemChecked(wishListIds.indexOf(wishListBookMapping.getString("wishListId")), true);
+            ParseObject wishListObj = wishListBookMapping.getParseObject("wishListId");
+            if (wishListIds.contains(wishListObj.getObjectId())) {
+                listView.setItemChecked(wishListIds.indexOf(wishListObj.getObjectId()), true);
             }
         }
-    }
-
-    private List<String> wishListIds() {
-        ArrayList<String> strings = new ArrayList<String>();
-        for (ParseObject wishList : wishLists) {
-            strings.add(wishList.getObjectId());
-        }
-        return strings;
     }
 }
