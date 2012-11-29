@@ -15,12 +15,14 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.thoughtworks.pumpkin.BrowseActivity;
-import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.fragment.RoboListFragment;
 
 import java.util.List;
+
+import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.CATEGORY;
+import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN;
 
 public class BooksCategory extends RoboListFragment {
 
@@ -36,8 +38,8 @@ public class BooksCategory extends RoboListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Parse.initialize(getActivity(), Keys.PARSE_API_KEY, Keys.PARSE_CLIENT_KEY);
-        ParseQuery query = new ParseQuery(Constant.ParseObject.CATEGORY);
-        query.orderByAscending("name");
+        ParseQuery query = new ParseQuery(CATEGORY);
+        query.orderByAscending(COLUMN.CATEGORY.NAME);
         final ProgressDialog dialog = Util.showProgressDialog(getActivity());
         query.findInBackground(new FindCallback() {
             @Override
@@ -45,7 +47,7 @@ public class BooksCategory extends RoboListFragment {
                 if (dialog.isShowing()) dialog.dismiss();
                 MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "name"});
                 for (int i = 0; i < parseObjects.size(); i++) {
-                    cursor.addRow(new Object[]{i, parseObjects.get(i).getString("name")});
+                    cursor.addRow(new Object[]{i, parseObjects.get(i).getString(COLUMN.CATEGORY.NAME)});
                 }
                 ListAdapter adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, cursor,
                         new String[]{"name"}, new int[]{android.R.id.text1});

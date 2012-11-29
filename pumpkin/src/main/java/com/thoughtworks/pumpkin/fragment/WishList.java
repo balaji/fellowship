@@ -31,6 +31,8 @@ import roboguice.inject.InjectView;
 
 import java.util.List;
 
+import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.*;
+
 
 public class WishList extends RoboListFragment {
 
@@ -67,9 +69,9 @@ public class WishList extends RoboListFragment {
                 alertDialog.setPositiveButton(Constant.Message.OK, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ParseObject wishLists = new ParseObject(Constant.ParseObject.WISH_LIST);
-                        wishLists.put("name", ((TextView) layout.findViewById(R.id.newListName)).getText().toString());
-                        wishLists.put("owner", preferences.getString(Constant.Preferences.USER_ID, null));
+                        ParseObject wishLists = new ParseObject(WISH_LIST);
+                        wishLists.put(COLUMN.WISH_LIST.NAME, ((TextView) layout.findViewById(R.id.newListName)).getText().toString());
+                        wishLists.put(COLUMN.WISH_LIST.USER, preferences.getString(Constant.Preferences.USER_ID, null));
                         wishLists.saveInBackground();
                         dialogInterface.dismiss();
                         loadData();
@@ -88,9 +90,9 @@ public class WishList extends RoboListFragment {
     }
 
     private void loadData() {
-        ParseQuery wishListQuery = new ParseQuery("WishLists");
-        wishListQuery.orderByAscending("name");
-        wishListQuery.whereEqualTo("owner", preferences.getString(Constant.Preferences.USER_ID, null));
+        ParseQuery wishListQuery = new ParseQuery(WISH_LIST);
+        wishListQuery.orderByAscending(COLUMN.WISH_LIST.NAME);
+        wishListQuery.whereEqualTo(COLUMN.WISH_LIST.USER, preferences.getString(Constant.Preferences.USER_ID, null));
         final ProgressDialog dialog = Util.showProgressDialog(getActivity());
         wishListQuery.findInBackground(new FindCallback() {
             @Override
@@ -98,7 +100,7 @@ public class WishList extends RoboListFragment {
                 if (dialog.isShowing()) dialog.dismiss();
                 MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "name"});
                 for (int i = 0; i < parseObjects.size(); i++) {
-                    cursor.addRow(new Object[]{i, parseObjects.get(i).getString("name")});
+                    cursor.addRow(new Object[]{i, parseObjects.get(i).getString(COLUMN.WISH_LIST.NAME)});
                 }
                 setListAdapter(new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, cursor,
                         new String[]{"name"}, new int[]{android.R.id.text1}));

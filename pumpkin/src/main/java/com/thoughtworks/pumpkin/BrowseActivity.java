@@ -45,14 +45,14 @@ public class BrowseActivity extends RoboActivity {
 
     private void findByWishList(String wishList) {
         ParseQuery fetchWishList = new ParseQuery(Constant.ParseObject.WISH_LIST);
-        fetchWishList.whereEqualTo("name", wishList);
+        fetchWishList.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.NAME, wishList);
         final BrowseActivity browseActivity = this;
         final ProgressDialog dialog = Util.showProgressDialog(browseActivity);
         fetchWishList.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> wishListObj, ParseException e) {
                 ParseQuery query = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
-                query.whereEqualTo("wishListId", wishListObj.iterator().next());
+                query.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.WISH_LIST, wishListObj.iterator().next());
                 query.findInBackground(new FindCallback() {
                     @Override
                     public void done(List<ParseObject> wishListBooks, ParseException e) {
@@ -68,7 +68,7 @@ public class BrowseActivity extends RoboActivity {
                         }
                         final List<ParseObject> books = new ArrayList<ParseObject>();
                         for (ParseObject wishListBook : wishListBooks) {
-                            books.add(wishListBook.getParseObject("bookId"));
+                            books.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK));
                         }
                         loadBooks(books, browseActivity, dialog);
                     }
@@ -80,9 +80,9 @@ public class BrowseActivity extends RoboActivity {
     private void findByCategory(String category) {
         ParseQuery query = new ParseQuery(Constant.ParseObject.BOOK);
         ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.CATEGORY);
-        innerQuery.whereEqualTo("name", category);
+        innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.BOOK.NAME, category);
         query.whereMatchesQuery("parent", innerQuery);
-        query.orderByAscending("rating");
+        query.orderByAscending(Constant.ParseObject.COLUMN.BOOK.RATING);
         final BrowseActivity browseActivity = this;
         final ProgressDialog dialog = Util.showProgressDialog(this);
         query.findInBackground(new FindCallback() {
@@ -97,15 +97,15 @@ public class BrowseActivity extends RoboActivity {
         final MatrixCursor cursor = createCursor(books);
         ParseQuery fetchAllBooksForUser = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
         ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
-        innerQuery.whereEqualTo("owner", preferences.getString(Constant.Preferences.USER_ID, null));
-        fetchAllBooksForUser.whereMatchesQuery("wishListId", innerQuery);
+        innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.USER, preferences.getString(Constant.Preferences.USER_ID, null));
+        fetchAllBooksForUser.whereMatchesQuery(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.WISH_LIST, innerQuery);
         fetchAllBooksForUser.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> wishListBooks, ParseException e) {
                 if (dialog.isShowing()) dialog.dismiss();
                 List<String> listOfAllBooksInWishList = new ArrayList<String>();
                 for (ParseObject wishListBook : wishListBooks) {
-                    listOfAllBooksInWishList.add(wishListBook.getParseObject("bookId").getObjectId());
+                    listOfAllBooksInWishList.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK).getObjectId());
                 }
                 setContentView(R.layout.books);
                 booksGridView.setAdapter(new BooksCursor(listOfAllBooksInWishList, browseActivity, R.layout.book, cursor,
@@ -124,8 +124,9 @@ public class BrowseActivity extends RoboActivity {
         for (int i = 0; i < books.size(); i++) {
             try {
                 ParseObject book = books.get(i).fetchIfNeeded();
-                cursor.addRow(new Object[]{i, book.getString("thumbnail"), book.getString("title"),
-                        String.format("#%s", book.getString("rating")), book.getObjectId()});
+                cursor.addRow(new Object[]{i, book.getString(Constant.ParseObject.COLUMN.BOOK.THUMBNAIL),
+                        book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE),
+                        String.format("#%s", book.getString(Constant.ParseObject.COLUMN.BOOK.RATING)), book.getObjectId()});
             } catch (ParseException e) {
                 e.printStackTrace();
             }

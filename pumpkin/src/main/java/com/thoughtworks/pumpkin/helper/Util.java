@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.View;
 
 public class Util {
 
@@ -31,6 +32,19 @@ public class Util {
         builder.setMessage(message).setNeutralButton(Constant.Message.OK, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
+            }
+        });
+        return builder.create();
+    }
+
+    public static AlertDialog dialog(Context context, final View layout) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Options:");
+        builder.setView(layout);
+        builder.setPositiveButton(Constant.Message.OK, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
             }
         });
         return builder.create();
