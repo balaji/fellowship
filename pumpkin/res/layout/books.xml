@@ -7,7 +7,7 @@
               android:columnWidth="180dp"
               android:numColumns="auto_fit"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_height="fill_parent"
               android:fastScrollEnabled="true"
               android:textFilterEnabled="true"/>
 </LinearLayout>

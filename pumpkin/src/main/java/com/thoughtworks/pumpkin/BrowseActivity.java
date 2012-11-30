@@ -4,10 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.database.MatrixCursor;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.widget.GridView;
 import com.google.inject.Inject;
 import com.parse.FindCallback;
@@ -23,7 +20,9 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BrowseActivity extends RoboActivity {
 
@@ -61,16 +60,18 @@ public class BrowseActivity extends RoboActivity {
                             alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                 @Override
                                 public void onDismiss(DialogInterface dialogInterface) {
+                                    if (dialog.isShowing()) dialog.dismiss();
                                     finish();
                                 }
                             });
                             alertDialog.show();
+                        } else {
+                            final List<ParseObject> books = new ArrayList<ParseObject>();
+                            for (ParseObject wishListBook : wishListBooks) {
+                                books.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK));
+                            }
+                            loadBooks(data(books, false), browseActivity, dialog);
                         }
-                        final List<ParseObject> books = new ArrayList<ParseObject>();
-                        for (ParseObject wishListBook : wishListBooks) {
-                            books.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK));
-                        }
-                        loadBooks(books, browseActivity, dialog);
                     }
                 });
             }
@@ -88,13 +89,12 @@ public class BrowseActivity extends RoboActivity {
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
-                loadBooks(parseObjects, browseActivity, dialog);
+                loadBooks(data(parseObjects, true), browseActivity, dialog);
             }
         });
     }
 
-    private void loadBooks(List<ParseObject> books, final BrowseActivity browseActivity, final ProgressDialog dialog) {
-        final MatrixCursor cursor = createCursor(books);
+    private void loadBooks(final List<Map<String, String>> data, final BrowseActivity browseActivity, final ProgressDialog dialog) {
         ParseQuery fetchAllBooksForUser = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
         ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
         innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.USER, preferences.getString(Constant.Preferences.USER_ID, null));
@@ -108,29 +108,25 @@ public class BrowseActivity extends RoboActivity {
                     listOfAllBooksInWishList.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK).getObjectId());
                 }
                 setContentView(R.layout.books);
-                booksGridView.setAdapter(new BooksCursor(listOfAllBooksInWishList, browseActivity, R.layout.book, cursor,
+                booksGridView.setAdapter(new BooksCursor(listOfAllBooksInWishList, browseActivity, data, R.layout.book,
                         new String[]{"bookImage", "title", "rank", "objectId"}, new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart},
                         preferences.getString(Constant.Preferences.USER_ID, null)));
             }
         });
     }
 
-    private MatrixCursor createCursor(List<ParseObject> books) {
-        final MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "bookImage", "title", "rank", "objectId"});
-        if (Build.VERSION.SDK_INT > 10) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-        for (int i = 0; i < books.size(); i++) {
-            try {
-                ParseObject book = books.get(i).fetchIfNeeded();
-                cursor.addRow(new Object[]{i, book.getString(Constant.ParseObject.COLUMN.BOOK.THUMBNAIL),
-                        book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE),
-                        String.format("#%s", book.getString(Constant.ParseObject.COLUMN.BOOK.RATING)), book.getObjectId()});
-            } catch (ParseException e) {
-                e.printStackTrace();
+    private List<Map<String, String>> data(List<ParseObject> books, boolean fetchAll) {
+        ArrayList<Map<String, String>> maps = new ArrayList<Map<String, String>>();
+        for (ParseObject book : books) {
+            HashMap<String, String> map = new HashMap<String, String>();
+            if (fetchAll) {
+                map.put("bookImage", book.getString(Constant.ParseObject.COLUMN.BOOK.THUMBNAIL));
+                map.put("title", book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE));
+                map.put("rating", book.getString(Constant.ParseObject.COLUMN.BOOK.RATING));
             }
+            map.put("book", book.getObjectId());
+            maps.add(map);
         }
-        return cursor;
+        return maps;
     }
 }
