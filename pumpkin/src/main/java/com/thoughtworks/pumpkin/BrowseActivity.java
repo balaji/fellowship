@@ -21,8 +21,10 @@ import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class BrowseActivity extends RoboActivity {
 
@@ -94,7 +96,7 @@ public class BrowseActivity extends RoboActivity {
         });
     }
 
-    private void loadBooks(final List<Map<String, String>> data, final BrowseActivity browseActivity, final ProgressDialog dialog) {
+    private void loadBooks(final List<Map<String, Object>> data, final BrowseActivity browseActivity, final ProgressDialog dialog) {
         ParseQuery fetchAllBooksForUser = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
         ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
         innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.USER, preferences.getString(Constant.Preferences.USER_ID, null));
@@ -103,7 +105,7 @@ public class BrowseActivity extends RoboActivity {
             @Override
             public void done(List<ParseObject> wishListBooks, ParseException e) {
                 if (dialog.isShowing()) dialog.dismiss();
-                List<String> listOfAllBooksInWishList = new ArrayList<String>();
+                Set<String> listOfAllBooksInWishList = new HashSet<String>();
                 for (ParseObject wishListBook : wishListBooks) {
                     listOfAllBooksInWishList.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK).getObjectId());
                 }
@@ -115,16 +117,12 @@ public class BrowseActivity extends RoboActivity {
         });
     }
 
-    private List<Map<String, String>> data(List<ParseObject> books, boolean fetchAll) {
-        ArrayList<Map<String, String>> maps = new ArrayList<Map<String, String>>();
+    private List<Map<String, Object>> data(List<ParseObject> books, boolean fetchAll) {
+        ArrayList<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
         for (ParseObject book : books) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            if (fetchAll) {
-                map.put("bookImage", book.getString(Constant.ParseObject.COLUMN.BOOK.THUMBNAIL));
-                map.put("title", book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE));
-                map.put("rating", book.getString(Constant.ParseObject.COLUMN.BOOK.RATING));
-            }
-            map.put("book", book.getObjectId());
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("book", book);
+            map.put("complete", fetchAll);
             maps.add(map);
         }
         return maps;
