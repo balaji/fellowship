@@ -5,14 +5,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.google.inject.Inject;
 import com.parse.FindCallback;
@@ -24,14 +23,16 @@ import com.thoughtworks.pumpkin.BrowseActivity;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
-import com.thoughtworks.pumpkin.listener.PumpkinOnClickListener;
 import com.thoughtworks.pumpkin.helper.Util;
+import com.thoughtworks.pumpkin.listener.PumpkinOnClickListener;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.*;
+import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN;
+import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.WISH_LIST;
 
 
 public class WishList extends RoboListFragment {
@@ -41,6 +42,7 @@ public class WishList extends RoboListFragment {
 
     @Inject
     SharedPreferences preferences;
+    ArrayAdapter<String> adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,11 +72,13 @@ public class WishList extends RoboListFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ParseObject wishLists = new ParseObject(WISH_LIST);
-                        wishLists.put(COLUMN.WISH_LIST.NAME, ((TextView) layout.findViewById(R.id.newListName)).getText().toString());
+                        String wishListName = ((TextView) layout.findViewById(R.id.newListName)).getText().toString();
+                        wishLists.put(COLUMN.WISH_LIST.NAME, wishListName);
                         wishLists.put(COLUMN.WISH_LIST.USER, preferences.getString(Constant.Preferences.USER_ID, null));
                         wishLists.saveInBackground();
+                        adapter.add(wishListName);
+                        adapter.notifyDataSetChanged();
                         dialogInterface.dismiss();
-                        loadData();
                     }
                 });
                 alertDialog.setNegativeButton(Constant.Message.CANCEL, new DialogInterface.OnClickListener() {
@@ -96,14 +100,14 @@ public class WishList extends RoboListFragment {
         final ProgressDialog dialog = Util.showProgressDialog(getActivity());
         wishListQuery.findInBackground(new FindCallback() {
             @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
+            public void done(List<ParseObject> wishLists, ParseException e) {
                 if (dialog.isShowing()) dialog.dismiss();
-                MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "name"});
-                for (int i = 0; i < parseObjects.size(); i++) {
-                    cursor.addRow(new Object[]{i, parseObjects.get(i).getString(COLUMN.WISH_LIST.NAME)});
+                ArrayList<String> strings = new ArrayList<String>();
+                for (ParseObject wishList : wishLists) {
+                    strings.add(wishList.getString(COLUMN.WISH_LIST.NAME));
                 }
-                setListAdapter(new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, cursor,
-                        new String[]{"name"}, new int[]{android.R.id.text1}));
+                adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strings);
+                setListAdapter(adapter);
             }
         });
     }
