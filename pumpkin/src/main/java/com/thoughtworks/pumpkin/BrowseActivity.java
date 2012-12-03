@@ -12,7 +12,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.thoughtworks.pumpkin.adapter.BooksCursor;
+import com.thoughtworks.pumpkin.adapter.BooksAdapter;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.Util;
@@ -110,7 +110,7 @@ public class BrowseActivity extends RoboActivity {
                     listOfAllBooksInWishList.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK).getObjectId());
                 }
                 setContentView(R.layout.books);
-                booksGridView.setAdapter(new BooksCursor(listOfAllBooksInWishList, browseActivity, data, R.layout.book,
+                booksGridView.setAdapter(new BooksAdapter(listOfAllBooksInWishList, browseActivity, data, R.layout.book,
                         new String[]{"bookImage", "title", "rank", "objectId"}, new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart},
                         preferences.getString(Constant.Preferences.USER_ID, null)));
             }

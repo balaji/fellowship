@@ -24,15 +24,15 @@ import java.util.Set;
 
 import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN;
 
-public class BooksCursor extends SimpleAdapter {
+public class BooksAdapter extends SimpleAdapter {
     private ImageLoader imageLoader;
     private Set<String> listOfAllBooksInWishList;
     private String userId;
     private List<ParseObject> wishLists;
     private Context context;
 
-    public BooksCursor(Set<String> listOfAllBooksInWishList, Context context, List<? extends Map<String, ?>> data,
-                       int resource, String[] from, int[] to, String userId) {
+    public BooksAdapter(Set<String> listOfAllBooksInWishList, Context context, List<? extends Map<String, ?>> data,
+                        int resource, String[] from, int[] to, String userId) {
         super(context, data, resource, from, to);
         this.context = context;
         this.listOfAllBooksInWishList = listOfAllBooksInWishList;
