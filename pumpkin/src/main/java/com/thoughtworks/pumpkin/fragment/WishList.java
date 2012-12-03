@@ -24,7 +24,7 @@ import com.thoughtworks.pumpkin.BrowseActivity;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
-import com.thoughtworks.pumpkin.helper.PumpkinOnClickListener;
+import com.thoughtworks.pumpkin.listener.PumpkinOnClickListener;
 import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectView;

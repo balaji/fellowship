@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import com.google.inject.Inject;
 import com.thoughtworks.pumpkin.helper.Constant;
-import com.thoughtworks.pumpkin.helper.PumpkinOnClickListener;
+import com.thoughtworks.pumpkin.listener.PumpkinOnClickListener;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 

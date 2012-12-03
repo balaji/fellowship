@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 import com.thoughtworks.pumpkin.BooksCategoryActivity;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.WishListActivity;
-import com.thoughtworks.pumpkin.helper.PumpkinOnClickListener;
+import com.thoughtworks.pumpkin.listener.PumpkinOnClickListener;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
