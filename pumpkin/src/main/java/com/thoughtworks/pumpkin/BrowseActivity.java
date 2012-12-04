@@ -21,10 +21,8 @@ import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class BrowseActivity extends RoboActivity {
 
@@ -97,24 +95,12 @@ public class BrowseActivity extends RoboActivity {
     }
 
     private void loadBooks(final List<Map<String, Object>> data, final BrowseActivity browseActivity, final ProgressDialog dialog) {
-        ParseQuery fetchAllBooksForUser = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
-        ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
-        innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.USER, preferences.getString(Constant.Preferences.USER_ID, null));
-        fetchAllBooksForUser.whereMatchesQuery(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.WISH_LIST, innerQuery);
-        fetchAllBooksForUser.findInBackground(new FindCallback() {
-            @Override
-            public void done(List<ParseObject> wishListBooks, ParseException e) {
-                if (dialog.isShowing()) dialog.dismiss();
-                Set<String> listOfAllBooksInWishList = new HashSet<String>();
-                for (ParseObject wishListBook : wishListBooks) {
-                    listOfAllBooksInWishList.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK).getObjectId());
-                }
-                setContentView(R.layout.books);
-                booksGridView.setAdapter(new BooksAdapter(listOfAllBooksInWishList, browseActivity, data, R.layout.book,
-                        new String[]{"bookImage", "title", "rank", "objectId"}, new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart},
-                        preferences.getString(Constant.Preferences.USER_ID, null)));
-            }
-        });
+        if (dialog.isShowing()) dialog.dismiss();
+        setContentView(R.layout.books);
+        booksGridView.setAdapter(new BooksAdapter(browseActivity, data, R.layout.book,
+                new String[]{"bookImage", "title", "rank", "objectId"}, new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart},
+                preferences.getString(Constant.Preferences.USER_ID, null)));
+
     }
 
     private List<Map<String, Object>> data(List<ParseObject> books, boolean fetchAll) {

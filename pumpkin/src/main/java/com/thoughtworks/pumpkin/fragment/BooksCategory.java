@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.thoughtworks.pumpkin.BrowseActivity;
-import com.thoughtworks.pumpkin.db.AllCategories;
+import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.helper.Constant;
 import roboguice.fragment.RoboListFragment;
 
@@ -27,9 +27,9 @@ public class BooksCategory extends RoboListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AllCategories categories = new AllCategories(getActivity());
+        PumpkinDB categories = new PumpkinDB(getActivity());
         SQLiteDatabase database = categories.getReadableDatabase();
-        Cursor cursor = database.rawQuery("select rowid _id," + Constant.ParseObject.COLUMN.CATEGORY.NAME + " from " + AllCategories.TABLE_NAME, null);
+        Cursor cursor = database.rawQuery("select rowid _id," + Constant.ParseObject.COLUMN.CATEGORY.NAME + " from " + PumpkinDB.CATEGORY_TABLE_NAME, null);
         ListAdapter adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, cursor,
                 new String[]{"name"}, new int[]{android.R.id.text1});
         setListAdapter(adapter);

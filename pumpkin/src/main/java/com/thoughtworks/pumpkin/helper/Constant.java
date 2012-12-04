@@ -2,6 +2,10 @@ package com.thoughtworks.pumpkin.helper;
 
 public interface Constant {
 
+    final String DATABASE_NAME = "pumpkin.db";
+    final int DATABASE_VERSION = 1;
+
+
     interface Preferences {
         final String USER_ID = "logged_in";
         final String PREFERRED_STORE = "firstTimeUser";

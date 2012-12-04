@@ -9,7 +9,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.thoughtworks.pumpkin.db.AllCategories;
+import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
 import roboguice.activity.RoboActivity;
@@ -46,13 +46,13 @@ public class SplashActivity extends RoboActivity {
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> categories, ParseException e) {
-                AllCategories allCategories = new AllCategories(splashActivity);
-                SQLiteDatabase database = allCategories.getWritableDatabase();
-                database.execSQL("delete from " + AllCategories.TABLE_NAME);
+                PumpkinDB pumpkinDB = new PumpkinDB(splashActivity);
+                SQLiteDatabase database = pumpkinDB.getWritableDatabase();
+                database.execSQL("delete from " + PumpkinDB.CATEGORY_TABLE_NAME);
                 for (ParseObject category : categories) {
                     ContentValues values = new ContentValues();
                     values.put(Constant.ParseObject.COLUMN.CATEGORY.NAME, category.getString(Constant.ParseObject.COLUMN.CATEGORY.NAME));
-                    database.insert(AllCategories.TABLE_NAME, Constant.ParseObject.COLUMN.CATEGORY.NAME, values);
+                    database.insert(PumpkinDB.CATEGORY_TABLE_NAME, Constant.ParseObject.COLUMN.CATEGORY.NAME, values);
                 }
             }
         });

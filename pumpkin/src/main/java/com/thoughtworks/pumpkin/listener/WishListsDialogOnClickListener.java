@@ -36,7 +36,7 @@ public class WishListsDialogOnClickListener implements AdapterView.OnItemClickLi
             wishListBook.put(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.WISH_LIST, booksAdapter.getWishLists().get(i));
             wishListBook.saveInBackground();
             holder.setBackgroundDrawable(booksAdapter.getContext().getResources().getDrawable(R.drawable.ic_heart_filled));
-            booksAdapter.getListOfAllBooksInWishList().add(chosenBook.getObjectId());
+            booksAdapter.getBooksInWishlist().put(chosenBook.getObjectId(), 1);
         } else {   //delete
             ParseQuery queryToDelete = new ParseQuery(WISH_LIST_BOOK);
             queryToDelete.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK, chosenBook);
@@ -51,7 +51,7 @@ public class WishListsDialogOnClickListener implements AdapterView.OnItemClickLi
             });
             if (((ListView) adapterView).getCheckedItemCount() == 0) {
                 holder.setBackgroundDrawable(booksAdapter.getContext().getResources().getDrawable(R.drawable.ic_action_heart));
-                booksAdapter.getListOfAllBooksInWishList().remove(chosenBook.getObjectId());
+                booksAdapter.getBooksInWishlist().put(chosenBook.getObjectId(), 0);
             }
         }
     }
