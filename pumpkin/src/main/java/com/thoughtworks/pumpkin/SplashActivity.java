@@ -1,17 +1,18 @@
 package com.thoughtworks.pumpkin;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import com.google.inject.Inject;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
+import com.thoughtworks.pumpkin.helper.PumpkinDB;
+import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.util.SafeAsyncTask;
@@ -19,18 +20,23 @@ import roboguice.util.SafeAsyncTask;
 import java.util.List;
 
 import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.CATEGORY;
+import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.WISH_LIST;
 
 @ContentView(R.layout.splash)
 public class SplashActivity extends RoboActivity {
+
+    @Inject
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SplashActivity splashActivity = this;
+        final PumpkinDB pumpkinDB = new PumpkinDB(splashActivity);
         new SafeAsyncTask() {
             @Override
             public Object call() throws Exception {
-                Thread.sleep(1300);
+                Thread.sleep(2000);
                 return null;
             }
 
@@ -40,20 +46,31 @@ public class SplashActivity extends RoboActivity {
             }
         }.execute();
 
+        if(!Util.isConnectingToInternet(this)) {
+            return;
+        }
+
         Parse.initialize(this, Keys.PARSE_API_KEY, Keys.PARSE_CLIENT_KEY);
         ParseQuery query = new ParseQuery(CATEGORY);
         query.orderByAscending(Constant.ParseObject.COLUMN.CATEGORY.NAME);
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> categories, ParseException e) {
-                PumpkinDB pumpkinDB = new PumpkinDB(splashActivity);
-                SQLiteDatabase database = pumpkinDB.getWritableDatabase();
-                database.execSQL("delete from " + PumpkinDB.CATEGORY_TABLE_NAME);
-                for (ParseObject category : categories) {
-                    ContentValues values = new ContentValues();
-                    values.put(Constant.ParseObject.COLUMN.CATEGORY.NAME, category.getString(Constant.ParseObject.COLUMN.CATEGORY.NAME));
-                    database.insert(PumpkinDB.CATEGORY_TABLE_NAME, Constant.ParseObject.COLUMN.CATEGORY.NAME, values);
-                }
+                pumpkinDB.resetBookCategories(categories);
+            }
+        });
+
+        String userId = preferences.getString(Constant.Preferences.USER_ID, null);
+        if(userId == null) {
+           return;
+       }
+        ParseQuery wishListQuery = new ParseQuery(WISH_LIST);
+        wishListQuery.orderByAscending(Constant.ParseObject.COLUMN.WISH_LIST.NAME);
+        wishListQuery.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.USER, userId);
+        wishListQuery.findInBackground(new FindCallback() {
+            @Override
+            public void done(List<ParseObject> wishLists, ParseException e) {
+                pumpkinDB.resetWishLists(wishLists);
             }
         });
     }

@@ -1,8 +1,6 @@
 package com.thoughtworks.pumpkin.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +20,6 @@ import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.listener.ImageButtonOnClickListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +28,7 @@ import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN;
 
 public class BooksAdapter extends SimpleAdapter {
     private ImageLoader imageLoader;
-    private Map<String, Integer> booksInWishlist;
+    private Map<String, Map<String, ParseObject>> booksInWishlist;
     private String userId;
     private List<ParseObject> wishLists;
     private Context context;
@@ -41,7 +38,7 @@ public class BooksAdapter extends SimpleAdapter {
         super(context, data, resource, from, to);
         this.context = context;
         this.userId = userId;
-        this.booksInWishlist = new HashMap<String, Integer>();
+        this.booksInWishlist = new HashMap<String, Map<String, ParseObject>>();
         imageLoader = new ImageLoader(context);
     }
 
@@ -84,16 +81,20 @@ public class BooksAdapter extends SimpleAdapter {
         if (booksInWishlist.keySet().contains(book.getObjectId())) {
             drawHeartIcon(book, holder);
         } else {
-            booksInWishlist.put(book.getObjectId(), -1);
+            booksInWishlist.put(book.getObjectId(), null);
             ParseQuery query = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
             ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
-            innerQuery.whereContainedIn(COLUMN.WISH_LIST.NAME, getWishListIdsFromLocalDB());
+            innerQuery.whereContainedIn(COLUMN.WISH_LIST.NAME, new PumpkinDB(context).getWishListColumn("name"));
             query.whereMatchesQuery(COLUMN.WISH_LIST_BOOK.WISH_LIST, innerQuery);
             query.whereEqualTo(COLUMN.WISH_LIST_BOOK.BOOK, book);
             query.findInBackground(new FindCallback() {
                 @Override
-                public void done(List<ParseObject> parseObjects, ParseException e) {
-                    booksInWishlist.put(book.getObjectId(), parseObjects.size());
+                public void done(List<ParseObject> wishListBookMappings, ParseException e) {
+                    HashMap<String, ParseObject> mappings = new HashMap<String, ParseObject>();
+                    for (ParseObject bookMapping : wishListBookMappings) {
+                        mappings.put(bookMapping.getParseObject(COLUMN.WISH_LIST_BOOK.WISH_LIST).getObjectId(), bookMapping);
+                    }
+                    booksInWishlist.put(book.getObjectId(), mappings);
                     drawHeartIcon(book, holder);
                 }
             });
@@ -101,36 +102,16 @@ public class BooksAdapter extends SimpleAdapter {
         holder.wishListButton.setOnClickListener(new ImageButtonOnClickListener(this, book));
     }
 
-    private List<String> getWishListIdsFromLocalDB() {
-        SQLiteDatabase database = new PumpkinDB(context).getReadableDatabase();
-        Cursor cursor = database.rawQuery("select name from " + PumpkinDB.WISH_LIST_TABLE_NAME, null);
-        ArrayList<String> wishLists = new ArrayList<String>();
-        if (cursor.moveToFirst()) {
-            do {
-                wishLists.add(cursor.getString(0));
-            } while (cursor.moveToNext());
-        }
-        return wishLists;
-    }
-
     private void drawHeartIcon(ParseObject book, BookViewHolder holder) {
         int resourceId;
-        if (booksInWishlist.get(book.getObjectId()) > 0) {
-            resourceId = R.drawable.ic_heart_filled;
-        } else if (booksInWishlist.get(book.getObjectId()) < 0) {
+        if (booksInWishlist.get(book.getObjectId()) == null) {
+            resourceId = R.drawable.ic_action_heart; //spinner
+        } else if (booksInWishlist.get(book.getObjectId()).isEmpty()) {
             resourceId = R.drawable.ic_action_heart;
         } else {
-            resourceId = R.drawable.ic_action_heart;
+            resourceId = R.drawable.ic_heart_filled;
         }
         holder.wishListButton.setBackgroundDrawable(context.getResources().getDrawable(resourceId));
-    }
-
-    public List<ParseObject> getWishLists() {
-        return wishLists;
-    }
-
-    public void setWishLists(List<ParseObject> wishLists) {
-        this.wishLists = wishLists;
     }
 
     public Context getContext() {
@@ -141,7 +122,7 @@ public class BooksAdapter extends SimpleAdapter {
         return userId;
     }
 
-    public Map<String, Integer> getBooksInWishlist() {
+    public Map<String, Map<String, ParseObject>> getBooksInWishlist() {
         return booksInWishlist;
     }
 }
