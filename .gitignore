@@ -1,8 +1,8 @@
 .idea
 .gradle
-**/target
+target
 gen
-**/build
+build
 classes
 *.iml
 .DS_Store
