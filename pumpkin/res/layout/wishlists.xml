@@ -4,6 +4,5 @@
               android:layout_width="fill_parent"
               android:orientation="vertical"
               android:layout_height="fill_parent">
-    <Button android:id="@+id/newList" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/new_list"/>
     <ListView android:id="@android:id/list" android:layout_height="wrap_content" android:layout_width="fill_parent"/>
 </LinearLayout>

@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.google.inject.Inject;
@@ -22,18 +24,12 @@ import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
-import com.thoughtworks.pumpkin.listener.PumpkinOnClickListener;
 import roboguice.fragment.RoboListFragment;
-import roboguice.inject.InjectView;
 
 import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN;
 import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.WISH_LIST;
 
-
 public class WishList extends RoboListFragment {
-
-    @InjectView(R.id.newList)
-    Button newList;
 
     @Inject
     SharedPreferences preferences;
@@ -44,6 +40,7 @@ public class WishList extends RoboListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Parse.initialize(getActivity(), Keys.PARSE_API_KEY, Keys.PARSE_CLIENT_KEY);
         pumpkinDB = new PumpkinDB(getActivity());
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.wishlists, container, false);
     }
 
@@ -58,9 +55,20 @@ public class WishList extends RoboListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        newList.setOnClickListener(new PumpkinOnClickListener(getActivity()) {
-            @Override
-            public void done(View view) {
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,
+                pumpkinDB.getWishListColumn("name"));
+        setListAdapter(adapter);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.wishlist, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add:
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                 alertDialog.setTitle("Name:");
                 final View layout = LayoutInflater.from(getActivity()).inflate(R.layout.create_wishlist_dialog, null);
@@ -90,14 +98,8 @@ public class WishList extends RoboListFragment {
                     }
                 });
                 alertDialog.show();
-            }
-        });
-        loadData();
-    }
-
-    private void loadData() {
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,
-                pumpkinDB.getWishListColumn("name"));
-        setListAdapter(adapter);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
