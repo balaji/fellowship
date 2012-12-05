@@ -22,10 +22,12 @@
                       android:layout_width="wrap_content"
                       android:gravity="center_vertical|center_horizontal"
                       android:scaleType="fitCenter"/>
+            <ProgressBar android:id="@+id/heartLoading" android:layout_width="wrap_content"
+                         android:layout_height="wrap_content" android:indeterminate="true" />
             <ImageButton android:id="@+id/heart"
                          android:layout_height="wrap_content"
                          android:contentDescription="@string/wishListItem"
-                         android:layout_width="wrap_content"/>
+                         android:layout_width="wrap_content" android:visibility="gone"/>
         </LinearLayout>
     </LinearLayout>
     <TextView android:id="@+id/title"

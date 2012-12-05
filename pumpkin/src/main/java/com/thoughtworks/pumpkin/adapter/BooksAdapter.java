@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import com.fedorvlasov.lazylist.ImageLoader;
@@ -54,6 +55,7 @@ public class BooksAdapter extends SimpleAdapter {
             holder.rating = (TextView) v.findViewById(R.id.rank);
             holder.title = (TextView) v.findViewById(R.id.title);
             holder.wishListButton = (ImageButton) v.findViewById(R.id.heart);
+            holder.spinner = (ProgressBar) v.findViewById(R.id.heartLoading);
             v.setTag(holder);
         } else {
             holder = (BookViewHolder) v.getTag();
@@ -105,12 +107,15 @@ public class BooksAdapter extends SimpleAdapter {
     private void drawHeartIcon(ParseObject book, BookViewHolder holder) {
         int resourceId;
         if (booksInWishlist.get(book.getObjectId()) == null) {
-            resourceId = R.drawable.ic_action_heart; //spinner
-        } else if (booksInWishlist.get(book.getObjectId()).isEmpty()) {
+            return; //do nothing, there is an async call that will update this.
+        }
+        if (booksInWishlist.get(book.getObjectId()).isEmpty()) {
             resourceId = R.drawable.ic_action_heart;
         } else {
             resourceId = R.drawable.ic_heart_filled;
         }
+        holder.spinner.setVisibility(View.GONE);
+        holder.wishListButton.setVisibility(View.VISIBLE);
         holder.wishListButton.setBackgroundDrawable(context.getResources().getDrawable(resourceId));
     }
 
