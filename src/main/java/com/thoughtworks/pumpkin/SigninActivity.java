@@ -26,7 +26,8 @@ public class SigninActivity extends RoboActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (preferences.getString(Constant.Preferences.USER_ID, null) != null) {
-            startActivity(new Intent(this, (preferences.getString(Constant.Preferences.PREFERRED_STORE, null) != null) ? HomeActivity.class : ZipCodeActivity.class));
+            startActivity(new Intent(this, (preferences.getString(Constant.Preferences.PREFERRED_STORE, null) != null) ?
+                    WishListActivity.class : ZipCodeActivity.class));
             return;
         }
         setContentView(R.layout.signin);
