@@ -3,10 +3,8 @@ package com.thoughtworks.pumpkin;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.GridView;
-import com.google.inject.Inject;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -29,9 +27,6 @@ public class BrowseActivity extends RoboActivity {
     @InjectView(R.id.books)
     GridView booksGridView;
 
-    @Inject
-    SharedPreferences preferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,37 +38,32 @@ public class BrowseActivity extends RoboActivity {
     }
 
     private void findByWishList(String wishList) {
-        ParseQuery fetchWishList = new ParseQuery(Constant.ParseObject.WISH_LIST);
-        fetchWishList.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.NAME, wishList);
         final BrowseActivity browseActivity = this;
         final ProgressDialog dialog = Util.showProgressDialog(browseActivity);
-        fetchWishList.findInBackground(new FindCallback() {
+        ParseQuery query = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
+        ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
+        innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.NAME, wishList);
+        query.whereMatchesQuery(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.WISH_LIST, innerQuery);
+        query.findInBackground(new FindCallback() {
             @Override
-            public void done(List<ParseObject> wishListObj, ParseException e) {
-                ParseQuery query = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
-                query.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.WISH_LIST, wishListObj.iterator().next());
-                query.findInBackground(new FindCallback() {
-                    @Override
-                    public void done(List<ParseObject> wishListBooks, ParseException e) {
-                        if (wishListBooks.isEmpty()) {
-                            AlertDialog alertDialog = Util.dialog("No books in this list.", browseActivity);
-                            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialogInterface) {
-                                    if (dialog.isShowing()) dialog.dismiss();
-                                    finish();
-                                }
-                            });
-                            alertDialog.show();
-                        } else {
-                            final List<ParseObject> books = new ArrayList<ParseObject>();
-                            for (ParseObject wishListBook : wishListBooks) {
-                                books.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK));
-                            }
-                            loadBooks(data(books, false), browseActivity, dialog);
+            public void done(List<ParseObject> wishListBooks, ParseException e) {
+                if (wishListBooks.isEmpty()) {
+                    AlertDialog alertDialog = Util.dialog("No books in this list.", browseActivity);
+                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            if (dialog.isShowing()) dialog.dismiss();
+                            finish();
                         }
+                    });
+                    alertDialog.show();
+                } else {
+                    final List<ParseObject> books = new ArrayList<ParseObject>();
+                    for (ParseObject wishListBook : wishListBooks) {
+                        books.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK));
                     }
-                });
+                    loadBooks(data(books, false), browseActivity, dialog);
+                }
             }
         });
     }
@@ -98,9 +88,7 @@ public class BrowseActivity extends RoboActivity {
         if (dialog.isShowing()) dialog.dismiss();
         setContentView(R.layout.books);
         booksGridView.setAdapter(new BooksAdapter(browseActivity, data, R.layout.book,
-                new String[]{"bookImage", "title", "rank", "objectId"}, new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart},
-                preferences.getString(Constant.Preferences.USER_ID, null)));
-
+                new String[]{"bookImage", "title", "rank", "objectId"}, new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart}));
     }
 
     private List<Map<String, Object>> data(List<ParseObject> books, boolean fetchAll) {

@@ -30,15 +30,11 @@ import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN;
 public class BooksAdapter extends SimpleAdapter {
     private ImageLoader imageLoader;
     private Map<String, Map<String, ParseObject>> booksInWishlist;
-    private String userId;
-    private List<ParseObject> wishLists;
     private Context context;
 
-    public BooksAdapter(Context context, List<? extends Map<String, ?>> data,
-                        int resource, String[] from, int[] to, String userId) {
+    public BooksAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
         super(context, data, resource, from, to);
         this.context = context;
-        this.userId = userId;
         this.booksInWishlist = new HashMap<String, Map<String, ParseObject>>();
         imageLoader = new ImageLoader(context);
     }
@@ -121,10 +117,6 @@ public class BooksAdapter extends SimpleAdapter {
 
     public Context getContext() {
         return context;
-    }
-
-    public String getUserId() {
-        return userId;
     }
 
     public Map<String, Map<String, ParseObject>> getBooksInWishlist() {
