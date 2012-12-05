@@ -2,13 +2,13 @@ package com.thoughtworks.pumpkin;
 
 import android.os.Bundle;
 import com.thoughtworks.pumpkin.fragment.BooksCategory;
-import roboguice.activity.RoboFragmentActivity;
 
-public class BooksCategoryActivity extends RoboFragmentActivity {
+public class BooksCategoryActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportFragmentManager().beginTransaction().add(android.R.id.content, new BooksCategory()).commit();
+        setContentView(R.layout.content_frame);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new BooksCategory()).commit();
     }
 }

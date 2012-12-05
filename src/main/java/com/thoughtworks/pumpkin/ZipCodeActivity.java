@@ -30,7 +30,7 @@ public class ZipCodeActivity extends RoboActivity {
             @Override
             public void onClick(View view) {
                 preferences.edit().putString(Constant.Preferences.PREFERRED_STORE, "sample").commit();
-                startActivity(new Intent(activity, HomeActivity.class));
+                startActivity(new Intent(activity, WishListActivity.class));
             }
         });
     }
