@@ -11,4 +11,5 @@ public class BookViewHolder {
     public ImageButton wishListButton;
     public ImageView image;
     public ProgressBar spinner;
+    public ProgressBar bookSpinner;
 }

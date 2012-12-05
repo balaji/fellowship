@@ -4,16 +4,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.google.inject.Inject;
 import com.parse.Parse;
@@ -99,10 +96,8 @@ public class WishList extends RoboListFragment {
     }
 
     private void loadData() {
-        Cursor wishListsCursor = pumpkinDB.getWishListsCursor();
-        getActivity().startManagingCursor(wishListsCursor);
-        ListAdapter adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1,
-                wishListsCursor, new String[]{"name"}, new int[]{android.R.id.text1});
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,
+                pumpkinDB.getWishListColumn("name"));
         setListAdapter(adapter);
     }
 }

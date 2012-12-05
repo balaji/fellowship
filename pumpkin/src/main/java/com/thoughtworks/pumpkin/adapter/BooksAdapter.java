@@ -52,6 +52,7 @@ public class BooksAdapter extends SimpleAdapter {
             holder.title = (TextView) v.findViewById(R.id.title);
             holder.wishListButton = (ImageButton) v.findViewById(R.id.heart);
             holder.spinner = (ProgressBar) v.findViewById(R.id.heartLoading);
+            holder.bookSpinner = (ProgressBar) v.findViewById(R.id.bookLoading);
             v.setTag(holder);
         } else {
             holder = (BookViewHolder) v.getTag();
@@ -73,6 +74,7 @@ public class BooksAdapter extends SimpleAdapter {
     }
 
     private void fillView(final ParseObject book, final BookViewHolder holder) {
+        holder.bookSpinner.setVisibility(View.GONE);
         imageLoader.DisplayImage(book.getString(COLUMN.BOOK.THUMBNAIL), holder.image);
         holder.rating.setText(book.getString(COLUMN.BOOK.RATING));
         holder.title.setText(book.getString(COLUMN.BOOK.TITLE));
