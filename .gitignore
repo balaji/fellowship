@@ -5,6 +5,9 @@ gen
 build
 classes
 *.iml
+*.ipr
+*.iws
+*.*~
 .DS_Store
 log.roo
 pumpkin/src/main/java/com/thoughtworks/pumpkin/helper/Keys.java
