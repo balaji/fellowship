@@ -3,7 +3,7 @@ package com.thoughtworks.pumpkin;
 import android.os.Bundle;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.RoboSlidingFragmentActivity;
-import com.thoughtworks.pumpkin.fragment.SideNavigation;
+import com.thoughtworks.pumpkin.fragment.SidePanel;
 
 
 public class BaseActivity extends RoboSlidingFragmentActivity {
@@ -13,7 +13,7 @@ public class BaseActivity extends RoboSlidingFragmentActivity {
         super.onCreate(savedInstanceState);
         setSlidingActionBarEnabled(true);
         setBehindContentView(R.layout.menu_frame);
-        getSupportFragmentManager().beginTransaction().replace(R.id.menu_frame, new SideNavigation()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.menu_frame, new SidePanel()).commit();
 
         SlidingMenu sm = getSlidingMenu();
         sm.setShadowWidthRes(R.dimen.shadow_width);

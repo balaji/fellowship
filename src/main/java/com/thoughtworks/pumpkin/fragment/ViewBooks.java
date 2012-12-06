@@ -1,45 +1,51 @@
-package com.thoughtworks.pumpkin;
+package com.thoughtworks.pumpkin.fragment;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridView;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.adapter.BooksAdapter;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.Util;
-import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
+import roboguice.fragment.RoboFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BrowseActivity extends RoboActivity {
+public class ViewBooks extends RoboFragment {
 
-    @InjectView(R.id.books)
     GridView booksGridView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Parse.initialize(this, Keys.PARSE_API_KEY, Keys.PARSE_CLIENT_KEY);
-        String category = getIntent().getExtras().getString("category");
-        String wishList = getIntent().getExtras().getString("wishlist");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.books, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        Parse.initialize(getActivity(), Keys.PARSE_API_KEY, Keys.PARSE_CLIENT_KEY);
+        String category = getActivity().getIntent().getExtras().getString("category");
+        String wishList = getActivity().getIntent().getExtras().getString("wishlist");
+        booksGridView = (GridView) view.findViewById(R.id.books);
         if (category != null) findByCategory(category);
         if (wishList != null) findByWishList(wishList);
     }
 
     private void findByWishList(String wishList) {
-        final BrowseActivity browseActivity = this;
-        final ProgressDialog dialog = Util.showProgressDialog(browseActivity);
+        final ProgressDialog dialog = Util.showProgressDialog(getActivity());
         ParseQuery query = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
         ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
         innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.NAME, wishList);
@@ -48,12 +54,12 @@ public class BrowseActivity extends RoboActivity {
             @Override
             public void done(List<ParseObject> wishListBooks, ParseException e) {
                 if (wishListBooks.isEmpty()) {
-                    AlertDialog alertDialog = Util.dialog("No books in this list.", browseActivity);
+                    AlertDialog alertDialog = Util.dialog("No books in this list.", getActivity());
                     alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
                             if (dialog.isShowing()) dialog.dismiss();
-                            finish();
+                            getActivity().finish();
                         }
                     });
                     alertDialog.show();
@@ -62,7 +68,7 @@ public class BrowseActivity extends RoboActivity {
                     for (ParseObject wishListBook : wishListBooks) {
                         books.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK));
                     }
-                    loadBooks(data(books, false), browseActivity, dialog);
+                    loadBooks(data(books, false), dialog);
                 }
             }
         });
@@ -74,20 +80,18 @@ public class BrowseActivity extends RoboActivity {
         innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.BOOK.NAME, category);
         query.whereMatchesQuery("parent", innerQuery);
         query.orderByAscending(Constant.ParseObject.COLUMN.BOOK.RATING);
-        final BrowseActivity browseActivity = this;
-        final ProgressDialog dialog = Util.showProgressDialog(this);
+        final ProgressDialog dialog = Util.showProgressDialog(getActivity());
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
-                loadBooks(data(parseObjects, true), browseActivity, dialog);
+                loadBooks(data(parseObjects, true), dialog);
             }
         });
     }
 
-    private void loadBooks(final List<Map<String, Object>> data, final BrowseActivity browseActivity, final ProgressDialog dialog) {
+    private void loadBooks(final List<Map<String, Object>> data, final ProgressDialog dialog) {
         if (dialog.isShowing()) dialog.dismiss();
-        setContentView(R.layout.books);
-        booksGridView.setAdapter(new BooksAdapter(browseActivity, data, R.layout.book,
+        booksGridView.setAdapter(new BooksAdapter(getActivity(), data, R.layout.book,
                 new String[]{"bookImage", "title", "rank", "objectId"}, new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart}));
     }
 

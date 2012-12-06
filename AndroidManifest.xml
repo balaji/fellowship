@@ -16,9 +16,8 @@
         <activity android:name=".SigninActivity"/>
         <activity android:name=".FacebookLoginActivity"/>
         <activity android:name=".ZipCodeActivity"/>
-        <activity android:name=".BrowseActivity"/>
-        <activity android:name=".BooksCategoryActivity"/>
-        <activity android:name=".WishListActivity"/>
+        <activity android:name=".ViewBooksActivity"/>
+        <activity android:name=".HomePageActivity"/>
         <activity android:name=".TwitterLoginActivity"/>
     </application>
 </manifest>
