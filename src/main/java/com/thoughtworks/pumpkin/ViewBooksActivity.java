@@ -1,14 +1,14 @@
 package com.thoughtworks.pumpkin;
 
 import android.os.Bundle;
-import com.thoughtworks.pumpkin.fragment.WishList;
+import com.thoughtworks.pumpkin.fragment.ViewBooks;
 
-public class WishListActivity extends BaseActivity {
+public class ViewBooksActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_frame);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new WishList()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ViewBooks()).commit();
     }
 }

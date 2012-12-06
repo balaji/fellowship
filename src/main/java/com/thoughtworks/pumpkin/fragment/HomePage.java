@@ -19,7 +19,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
-import com.thoughtworks.pumpkin.BrowseActivity;
+import com.thoughtworks.pumpkin.ViewBooksActivity;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
@@ -29,7 +29,7 @@ import roboguice.fragment.RoboListFragment;
 import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN;
 import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.WISH_LIST;
 
-public class WishList extends RoboListFragment {
+public class HomePage extends RoboListFragment {
 
     @Inject
     SharedPreferences preferences;
@@ -47,7 +47,7 @@ public class WishList extends RoboListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        Intent intent = new Intent(getActivity(), BrowseActivity.class);
+        Intent intent = new Intent(getActivity(), ViewBooksActivity.class);
         intent.putExtra("wishlist", ((TextView) v).getText().toString());
         startActivity(intent);
     }

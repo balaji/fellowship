@@ -65,6 +65,19 @@ public class PumpkinDB extends SQLiteOpenHelper {
         database.close();
         return wishLists;
     }
+    
+    public List<String> getBookCategories() {
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.rawQuery("select name from " + PumpkinDB.CATEGORY_TABLE_NAME, null);
+        ArrayList<String> categories = new ArrayList<String>();
+        if (cursor.moveToFirst()) {
+            do {
+                categories.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        return categories;
+    }
 
     public String getWishListId(String name) {
         SQLiteDatabase database = getReadableDatabase();
