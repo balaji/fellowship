@@ -10,10 +10,13 @@ import com.parse.ParseObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN.*;
+
 public class PumpkinDB extends SQLiteOpenHelper {
 
     public static String CATEGORY_TABLE_NAME = "category";
     public static String WISH_LIST_TABLE_NAME = "wishlist";
+    public static String SHOP_TABLE_NAME = "shop";
 
     public PumpkinDB(Context context) {
         super(context, Constant.DATABASE_NAME, null, Constant.DATABASE_VERSION);
@@ -23,6 +26,7 @@ public class PumpkinDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + CATEGORY_TABLE_NAME + " (name TEXT);");
         sqLiteDatabase.execSQL("CREATE TABLE " + WISH_LIST_TABLE_NAME + " (name TEXT, id TEXT);");
+        sqLiteDatabase.execSQL("CREATE TABLE " + SHOP_TABLE_NAME + " (name TEXT);");
     }
 
     @Override
@@ -30,25 +34,36 @@ public class PumpkinDB extends SQLiteOpenHelper {
 
     }
 
-    public void insertWishList(String wishListName, String objectId) {
-        SQLiteDatabase database = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(Constant.ParseObject.COLUMN.WISH_LIST.NAME, wishListName);
-        values.put("id", objectId);
-        database.insert(PumpkinDB.WISH_LIST_TABLE_NAME, Constant.ParseObject.COLUMN.WISH_LIST.NAME, values);
-    }
-
-    public Cursor getBookCategoriesCursor() {
-        return getReadableDatabase().rawQuery("select rowid _id," + Constant.ParseObject.COLUMN.CATEGORY.NAME + " from " + PumpkinDB.CATEGORY_TABLE_NAME, null);
-    }
-
     public void resetBookCategories(List<ParseObject> categories) {
         SQLiteDatabase database = getWritableDatabase();
         database.execSQL("delete from " + PumpkinDB.CATEGORY_TABLE_NAME);
         for (ParseObject category : categories) {
             ContentValues values = new ContentValues();
-            values.put(Constant.ParseObject.COLUMN.CATEGORY.NAME, category.getString(Constant.ParseObject.COLUMN.CATEGORY.NAME));
-            database.insert(PumpkinDB.CATEGORY_TABLE_NAME, Constant.ParseObject.COLUMN.CATEGORY.NAME, values);
+            values.put(SHOP.NAME, category.getString(SHOP.NAME));
+            database.insert(PumpkinDB.CATEGORY_TABLE_NAME, SHOP.NAME, values);
+        }
+        database.close();
+    }
+
+    public void resetShops(List<ParseObject> shops) {
+        SQLiteDatabase database = getWritableDatabase();
+        database.execSQL("delete from " + PumpkinDB.SHOP_TABLE_NAME);
+        for (ParseObject shop : shops) {
+            ContentValues values = new ContentValues();
+            values.put(SHOP.NAME, shop.getString(SHOP.NAME));
+            database.insert(PumpkinDB.SHOP_TABLE_NAME, SHOP.NAME, values);
+        }
+        database.close();
+    }
+
+    public void resetWishLists(List<ParseObject> wishLists) {
+        SQLiteDatabase database = getWritableDatabase();
+        database.execSQL("delete from " + PumpkinDB.WISH_LIST_TABLE_NAME);
+        for (ParseObject wishList : wishLists) {
+            ContentValues values = new ContentValues();
+            values.put(WISH_LIST.NAME, wishList.getString(WISH_LIST.NAME));
+            values.put("id", wishList.getObjectId());
+            database.insert(PumpkinDB.WISH_LIST_TABLE_NAME, WISH_LIST.NAME, values);
         }
         database.close();
     }
@@ -65,7 +80,7 @@ public class PumpkinDB extends SQLiteOpenHelper {
         database.close();
         return wishLists;
     }
-    
+
     public List<String> getBookCategories() {
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = database.rawQuery("select name from " + PumpkinDB.CATEGORY_TABLE_NAME, null);
@@ -79,6 +94,19 @@ public class PumpkinDB extends SQLiteOpenHelper {
         return categories;
     }
 
+    public List<String> getShops() {
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.rawQuery("select name from " + PumpkinDB.SHOP_TABLE_NAME, null);
+        ArrayList<String> shops = new ArrayList<String>();
+        if (cursor.moveToFirst()) {
+            do {
+                shops.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        return shops;
+    }
+
     public String getWishListId(String name) {
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = database.rawQuery("select id from " + PumpkinDB.WISH_LIST_TABLE_NAME + " where name = ?", new String[]{name});
@@ -89,20 +117,12 @@ public class PumpkinDB extends SQLiteOpenHelper {
         return id;
     }
 
-    public void resetWishLists(List<ParseObject> wishLists) {
+    public void insertWishList(String wishListName, String objectId) {
         SQLiteDatabase database = getWritableDatabase();
-        database.execSQL("delete from " + PumpkinDB.WISH_LIST_TABLE_NAME);
-        for (ParseObject wishList : wishLists) {
-            ContentValues values = new ContentValues();
-            values.put(Constant.ParseObject.COLUMN.WISH_LIST.NAME, wishList.getString(Constant.ParseObject.COLUMN.WISH_LIST.NAME));
-            values.put("id", wishList.getObjectId());
-            database.insert(PumpkinDB.WISH_LIST_TABLE_NAME, Constant.ParseObject.COLUMN.WISH_LIST.NAME, values);
-        }
-        database.close();
+        ContentValues values = new ContentValues();
+        values.put(WISH_LIST.NAME, wishListName);
+        values.put("id", objectId);
+        database.insert(PumpkinDB.WISH_LIST_TABLE_NAME, WISH_LIST.NAME, values);
     }
 
-    public Cursor getWishListsCursor() {
-        return getReadableDatabase().rawQuery("select rowid _id," + Constant.ParseObject.COLUMN.WISH_LIST.NAME
-                + " from " + PumpkinDB.WISH_LIST_TABLE_NAME, null);
-    }
 }

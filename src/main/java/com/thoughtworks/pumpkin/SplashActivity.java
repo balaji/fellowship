@@ -5,12 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.google.inject.Inject;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.thoughtworks.pumpkin.helper.Constant;
-import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.activity.RoboActivity;
@@ -20,6 +18,7 @@ import roboguice.util.SafeAsyncTask;
 import java.util.List;
 
 import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.CATEGORY;
+import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.SHOP;
 import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.WISH_LIST;
 
 @ContentView(R.layout.splash)
@@ -50,13 +49,21 @@ public class SplashActivity extends RoboActivity {
             return;
         }
 
-        Parse.initialize(this, Keys.PARSE_API_KEY, Keys.PARSE_CLIENT_KEY);
         ParseQuery query = new ParseQuery(CATEGORY);
         query.orderByAscending(Constant.ParseObject.COLUMN.CATEGORY.NAME);
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> categories, ParseException e) {
                 pumpkinDB.resetBookCategories(categories);
+            }
+        });
+
+        ParseQuery shopQuery = new ParseQuery(SHOP);
+        shopQuery.orderByAscending(Constant.ParseObject.COLUMN.SHOP.NAME);
+        shopQuery.findInBackground(new FindCallback() {
+            @Override
+            public void done(List<ParseObject> shops, ParseException e) {
+                pumpkinDB.resetShops(shops);
             }
         });
 
