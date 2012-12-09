@@ -118,7 +118,7 @@ public class SidePanel extends RoboFragment {
         }});
         childData.add(wishListChildData(pumpkinDB));
         childData.add(getChildData(pumpkinDB.getBookCategories()));
-        childData.add(new ArrayList<Map<String, String>>());
+        childData.add(getChildData(pumpkinDB.getShops()));
         childData.add(new ArrayList<Map<String, String>>());
         return new SimpleExpandableListAdapter(getActivity(), groupData, android.R.layout.simple_expandable_list_item_1,
                 new String[]{NAME}, new int[]{android.R.id.text1}, childData, android.R.layout.simple_expandable_list_item_1,

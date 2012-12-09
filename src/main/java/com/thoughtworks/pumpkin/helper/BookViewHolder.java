@@ -4,6 +4,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.parse.ParseObject;
+
+import java.util.Map;
 
 public class BookViewHolder {
     public TextView rating;
@@ -12,4 +15,6 @@ public class BookViewHolder {
     public ImageView image;
     public ProgressBar spinner;
     public ProgressBar bookSpinner;
+    public Map<String, ParseObject> wishListBooks;
+    public Integer position;
 }

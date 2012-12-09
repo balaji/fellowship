@@ -15,14 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.google.inject.Inject;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
-import com.thoughtworks.pumpkin.ViewBooksActivity;
 import com.thoughtworks.pumpkin.R;
+import com.thoughtworks.pumpkin.ViewBooksActivity;
 import com.thoughtworks.pumpkin.helper.Constant;
-import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import roboguice.fragment.RoboListFragment;
 
@@ -38,7 +36,6 @@ public class HomePage extends RoboListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Parse.initialize(getActivity(), Keys.PARSE_API_KEY, Keys.PARSE_CLIENT_KEY);
         pumpkinDB = new PumpkinDB(getActivity());
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.wishlists, container, false);

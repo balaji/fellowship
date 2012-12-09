@@ -9,6 +9,7 @@ import android.widget.ListView;
 import com.parse.ParseObject;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.adapter.BooksAdapter;
+import com.thoughtworks.pumpkin.helper.BookViewHolder;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.helper.Util;
@@ -17,12 +18,14 @@ import java.util.Collection;
 import java.util.List;
 
 public class ImageButtonOnClickListener implements View.OnClickListener {
+    private BookViewHolder holder;
     private ParseObject book;
     private BooksAdapter booksAdapter;
     private PumpkinDB pumpkinDB;
 
-    public ImageButtonOnClickListener(BooksAdapter booksAdapter, ParseObject book) {
+    public ImageButtonOnClickListener(BooksAdapter booksAdapter, BookViewHolder holder, ParseObject book) {
         this.booksAdapter = booksAdapter;
+        this.holder = holder;
         this.book = book;
         pumpkinDB = new PumpkinDB(booksAdapter.getContext());
     }
@@ -33,8 +36,8 @@ public class ImageButtonOnClickListener implements View.OnClickListener {
         final ListView listView = (ListView) layout.findViewById(R.id.wishListItems);
         final Context context = booksAdapter.getContext();
         listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_checked, pumpkinDB.getWishListColumn("name")));
-        setItemsInListAsChecked(listView, booksAdapter.getBooksInWishlist().get(book.getObjectId()).values());
-        listView.setOnItemClickListener(new WishListsDialogOnClickListener(booksAdapter, book, (ImageButton) view));
+         setItemsInListAsChecked(listView, holder.wishListBooks.values());
+        listView.setOnItemClickListener(new WishListsDialogOnClickListener(booksAdapter, holder, (ImageButton) view, book));
         Util.dialog(context, layout).show();
     }
 

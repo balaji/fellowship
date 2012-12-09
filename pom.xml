@@ -10,7 +10,7 @@
     <name>pumpkin - Application</name>
 
     <properties>
-        <platform.version>4.0.1.2</platform.version>
+        <platform.version>4.1.1.4</platform.version>
     </properties>
 
     <dependencies>

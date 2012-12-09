@@ -20,6 +20,10 @@ public interface Constant {
 
     interface ParseObject {
         final String WISH_LIST = "WishLists";
+        final String CATEGORY = "Category";
+        final String BOOK = "Book";
+        final String WISH_LIST_BOOK = "WishList_Book";
+        final String SHOP = "Shop";
 
         interface COLUMN {
             interface WISH_LIST {
@@ -42,10 +46,10 @@ public interface Constant {
             interface CATEGORY {
                 final String NAME = "name";
             }
-        }
 
-        final String CATEGORY = "Category";
-        final String BOOK = "Book";
-        final String WISH_LIST_BOOK = "WishList_Book";
+            interface SHOP {
+                final String NAME = "name";
+            }
+        }
     }
 }

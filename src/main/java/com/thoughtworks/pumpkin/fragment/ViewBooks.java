@@ -9,14 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.adapter.BooksAdapter;
 import com.thoughtworks.pumpkin.helper.Constant;
-import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.fragment.RoboFragment;
 
@@ -36,7 +34,6 @@ public class ViewBooks extends RoboFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        Parse.initialize(getActivity(), Keys.PARSE_API_KEY, Keys.PARSE_CLIENT_KEY);
         String category = getActivity().getIntent().getExtras().getString("category");
         String wishList = getActivity().getIntent().getExtras().getString("wishlist");
         booksGridView = (GridView) view.findViewById(R.id.books);
