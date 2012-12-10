@@ -16,6 +16,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 import com.thoughtworks.pumpkin.R;
+import com.thoughtworks.pumpkin.ShopActivity;
 import com.thoughtworks.pumpkin.ViewBooksActivity;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
@@ -52,6 +53,8 @@ public class SidePanel extends RoboFragment {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                 String key = null;
+                Intent intent = null;
+
                 switch (i) {
                     case 0:
                         key = "wishlist";
@@ -87,13 +90,19 @@ public class SidePanel extends RoboFragment {
                             alertDialog.show();
                             return true;
                         }
+                        intent = new Intent(getActivity(), ViewBooksActivity.class);
                         break;
 
                     case 1:
                         key = "category";
+                        intent = new Intent(getActivity(), ViewBooksActivity.class);
+                        break;
+                    case 2:
+                        key = "shop";
+                        intent = new Intent(getActivity(), ShopActivity.class);
                         break;
                 }
-                Intent intent = new Intent(getActivity(), ViewBooksActivity.class);
+
                 intent.putExtra(key, ((TextView)view).getText());
                 startActivity(intent);
                 return false;

@@ -43,8 +43,8 @@ public class BooksAdapter extends SimpleAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         BookViewHolder holder;
         if (convertView == null) {
-            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.book, null);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.book, null);
             holder = new BookViewHolder();
             holder.image = (ImageView) convertView.findViewById(R.id.bookImage);
             holder.rating = (TextView) convertView.findViewById(R.id.rank);
