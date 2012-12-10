@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import com.parse.ParseObject;
 import com.thoughtworks.pumpkin.R;
@@ -37,7 +36,7 @@ public class ImageButtonOnClickListener implements View.OnClickListener {
         final Context context = booksAdapter.getContext();
         listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_checked, pumpkinDB.getWishListColumn("name")));
          setItemsInListAsChecked(listView, holder.wishListBooks.values());
-        listView.setOnItemClickListener(new WishListsDialogOnClickListener(booksAdapter, holder, (ImageButton) view, book));
+        listView.setOnItemClickListener(new WishListsDialogOnClickListener(booksAdapter, book, holder.position));
         Util.dialog(context, layout).show();
     }
 

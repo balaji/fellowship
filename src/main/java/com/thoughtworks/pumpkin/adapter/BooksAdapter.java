@@ -1,6 +1,7 @@
 package com.thoughtworks.pumpkin.adapter;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.listener.ImageButtonOnClickListener;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,13 +30,13 @@ import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN;
 public class BooksAdapter extends SimpleAdapter {
     private ImageLoader imageLoader;
     private Context context;
-    int count;
+    private Map<Integer, Map<String, ParseObject>> chest;
 
     public BooksAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
         super(context, data, resource, from, to);
         this.context = context;
-        count = 0;
         imageLoader = new ImageLoader(context);
+        chest = new HashMap<Integer, Map<String, ParseObject>>();
     }
 
     @Override
@@ -50,7 +52,7 @@ public class BooksAdapter extends SimpleAdapter {
             holder.wishListButton = (ImageButton) convertView.findViewById(R.id.heart);
             holder.spinner = (ProgressBar) convertView.findViewById(R.id.heartLoading);
             holder.bookSpinner = (ProgressBar) convertView.findViewById(R.id.bookLoading);
-            holder.position = position;
+            holder.wishListBooks = new HashMap<String, ParseObject>();
             convertView.setTag(holder);
         } else {
             holder = (BookViewHolder) convertView.getTag();
@@ -71,47 +73,44 @@ public class BooksAdapter extends SimpleAdapter {
         return convertView;
     }
 
-    private void fillView(final int p, BookViewHolder h, ParseObject book) {
-        h.bookSpinner.setVisibility(View.GONE);
-        imageLoader.DisplayImage(book.getString(COLUMN.BOOK.THUMBNAIL), h.image);
-        h.rating.setText(book.getString(COLUMN.BOOK.RATING));
-        h.title.setText(book.getString(COLUMN.BOOK.TITLE));
-        if (h.spinner.getVisibility() == View.GONE) {
-            drawHeartIcon(h);
+    private void fillView(int position, BookViewHolder holder, ParseObject book) {
+        holder.bookSpinner.setVisibility(View.GONE);
+        imageLoader.DisplayImage(book.getString(COLUMN.BOOK.THUMBNAIL), holder.image);
+        holder.rating.setText(book.getString(COLUMN.BOOK.RATING));
+        holder.title.setText(book.getString(COLUMN.BOOK.TITLE));
+        if (chest.keySet().contains(position)) {
+            drawHeartIcon(holder, position);
         } else {
-            ParseQuery query = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
-            ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
-            innerQuery.whereContainedIn(COLUMN.WISH_LIST.NAME, new PumpkinDB(context).getWishListColumn("name"));
-            query.whereMatchesQuery(COLUMN.WISH_LIST_BOOK.WISH_LIST, innerQuery);
-            query.whereEqualTo(COLUMN.WISH_LIST_BOOK.BOOK, book);
-            query.findInBackground(new FindCallback(p, book.getObjectId(), h) {
-                @Override
-                public void done(List<ParseObject> wishListBookMappings, ParseException e) {
-                    count++;
-                    if (p == position) {
-                        Map<String, ParseObject> mappings = new HashMap<String, ParseObject>();
-                        for (ParseObject bookMapping : wishListBookMappings) {
-                            mappings.put(bookMapping.getParseObject(COLUMN.WISH_LIST_BOOK.WISH_LIST).getObjectId(), bookMapping);
-                        }
-                        holder.wishListBooks = mappings;
-                        drawHeartIcon(holder);
-                    }
-                }
-            });
+            chest.put(position, null);
+            heartIcon(false, holder);
+            new LoadWishListInfoAsync().execute(book, position);
         }
-        h.wishListButton.setOnClickListener(new ImageButtonOnClickListener(this, h, book));
+        holder.wishListButton.setOnClickListener(new ImageButtonOnClickListener(this, holder, book));
     }
 
-    private void drawHeartIcon(BookViewHolder holder) {
-        if (holder.wishListBooks == null) return;
-        holder.spinner.setVisibility(View.GONE);
-        holder.wishListButton.setVisibility(View.VISIBLE);
-        holder.wishListButton.setBackgroundDrawable(context.getResources()
-                .getDrawable(holder.wishListBooks.isEmpty() ? R.drawable.ic_action_heart : R.drawable.ic_heart_filled));
+    private void drawHeartIcon(BookViewHolder holder, int position) {
+        if (chest.get(position) == null) {
+            heartIcon(false, holder);
+        } else {
+            heartIcon(true, holder);
+            holder.wishListBooks.clear();
+            holder.wishListBooks.putAll(chest.get(position));
+            holder.wishListButton.setBackgroundDrawable(context.getResources()
+                    .getDrawable(chest.get(position).isEmpty() ? R.drawable.ic_action_heart : R.drawable.ic_heart_filled));
+        }
+    }
+
+    private void heartIcon(boolean toggle, BookViewHolder holder) {
+        holder.spinner.setVisibility(!toggle ? View.VISIBLE : View.GONE);
+        holder.wishListButton.setVisibility(toggle ? View.VISIBLE : View.GONE);
     }
 
     public Context getContext() {
         return context;
+    }
+
+    public Map<Integer, Map<String, ParseObject>> getChest() {
+        return chest;
     }
 
     abstract class GetCallback extends com.parse.GetCallback {
@@ -124,16 +123,31 @@ public class BooksAdapter extends SimpleAdapter {
         }
     }
 
-    abstract class FindCallback extends com.parse.FindCallback {
+    class LoadWishListInfoAsync extends AsyncTask<Object, Void, List<Object>> {
 
-        int position;
-        String bookId;
-        BookViewHolder holder;
+        @Override
+        protected void onPostExecute(List<Object> objects) {
+            super.onPostExecute(objects);
+            Map<String, ParseObject> mappings = new HashMap<String, ParseObject>();
+            for (ParseObject bookMapping : (List<ParseObject>) objects.get(0)) {
+                mappings.put(bookMapping.getParseObject(COLUMN.WISH_LIST_BOOK.WISH_LIST).getObjectId(), bookMapping);
+            }
+            chest.put((Integer) objects.get(1), mappings);
+            notifyDataSetChanged();
+        }
 
-        FindCallback(int position, String bookId, BookViewHolder holder) {
-            this.position = position;
-            this.bookId = bookId;
-            this.holder = holder;
+        @Override
+        protected List<Object> doInBackground(Object... params) {
+            ParseQuery query = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
+            ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
+            innerQuery.whereContainedIn(COLUMN.WISH_LIST.NAME, new PumpkinDB(context).getWishListColumn("name"));
+            query.whereMatchesQuery(COLUMN.WISH_LIST_BOOK.WISH_LIST, innerQuery);
+            query.whereEqualTo(COLUMN.WISH_LIST_BOOK.BOOK, params[0]);
+            try {
+                return Arrays.asList(query.find(), params[1]);
+            } catch (ParseException e) {
+                return null;
+            }
         }
     }
 }
