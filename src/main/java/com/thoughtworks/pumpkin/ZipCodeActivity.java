@@ -11,8 +11,6 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-
-
 @ContentView(R.layout.zip_code)
 public class ZipCodeActivity extends RoboActivity {
 

@@ -3,11 +3,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
-    <GridView android:id="@+id/books"
-              android:columnWidth="180dp"
-              android:numColumns="auto_fit"
-              android:layout_width="wrap_content"
-              android:layout_height="fill_parent"
-              android:fastScrollEnabled="true"
-              android:textFilterEnabled="true"/>
+
+    <GridView
+            android:id="@+id/books"
+            android:columnWidth="180dp"
+            android:numColumns="auto_fit"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:fastScrollEnabled="true"
+            android:textFilterEnabled="true"/>
 </LinearLayout>

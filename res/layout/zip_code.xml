@@ -4,8 +4,17 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
-    <EditText android:layout_height="wrap_content" android:layout_width="fill_parent"
-              android:id="@+id/pincode" android:inputType="text" android:hint="Zip Code"/>
-    <Button android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:id="@+id/submit" android:text="@string/search_pincode"/>
+
+    <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:id="@+id/pincode"
+            android:inputType="text"
+            android:hint="Zip Code"/>
+
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/submit"
+            android:text="@string/search_pincode"/>
 </LinearLayout>

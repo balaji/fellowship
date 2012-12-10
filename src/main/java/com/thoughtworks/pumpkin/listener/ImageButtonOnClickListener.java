@@ -35,7 +35,7 @@ public class ImageButtonOnClickListener implements View.OnClickListener {
         final ListView listView = (ListView) layout.findViewById(R.id.wishListItems);
         final Context context = booksAdapter.getContext();
         listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_checked, pumpkinDB.getWishListColumn("name")));
-         setItemsInListAsChecked(listView, holder.wishListBooks.values());
+        setItemsInListAsChecked(listView, holder.wishListBooks.values());
         listView.setOnItemClickListener(new WishListsDialogOnClickListener(booksAdapter, book, holder.position));
         Util.dialog(context, layout).show();
     }

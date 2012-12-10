@@ -4,37 +4,59 @@
               android:layout_width="fill_parent"
               android:orientation="vertical"
               android:layout_height="fill_parent">
-    <ProgressBar android:layout_height="match_parent" android:layout_width="match_parent" android:id="@+id/bookLoading"/>
-    <LinearLayout android:layout_width="fill_parent"
-                  android:orientation="horizontal"
-                  android:layout_height="fill_parent">
-        <ImageView android:id="@+id/bookImage" android:paddingTop="6dp"
-                   android:layout_height="wrap_content"
-                   android:layout_width="wrap_content"
-                   android:gravity="center_vertical|center_horizontal"
-                   android:scaleType="fitCenter"
-                   android:contentDescription="@string/book_image_description"/>
-        <LinearLayout android:layout_width="fill_parent"
-                      android:orientation="vertical"
-                      android:layout_height="fill_parent">
-            <TextView android:id="@+id/rank"
-                      android:layout_height="wrap_content"
-                      style="@android:style/TextAppearance.Large"
-                      android:layout_width="wrap_content"
-                      android:gravity="center_vertical|center_horizontal"
-                      android:scaleType="fitCenter"/>
-            <ProgressBar android:id="@+id/heartLoading" android:layout_width="wrap_content"
-                         android:layout_height="wrap_content" android:indeterminate="true" />
-            <ImageButton android:id="@+id/heart"
-                         android:layout_height="wrap_content"
-                         android:contentDescription="@string/wishListItem"
-                         android:layout_width="wrap_content" android:visibility="gone"/>
+
+    <ProgressBar
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/bookLoading"/>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:orientation="horizontal"
+            android:layout_height="fill_parent">
+
+        <ImageView
+                android:id="@+id/bookImage"
+                android:paddingTop="6dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/book_image_description"/>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="vertical"
+                android:layout_height="fill_parent">
+
+            <TextView
+                    android:id="@+id/rank"
+                    android:layout_height="wrap_content"
+                    style="@android:style/TextAppearance.Large"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:scaleType="fitCenter"/>
+
+            <ProgressBar
+                    android:id="@+id/heartLoading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"/>
+
+            <ImageButton
+                    android:id="@+id/heart"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/wishListItem"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"/>
         </LinearLayout>
     </LinearLayout>
-    <TextView android:id="@+id/title"
-              android:layout_height="wrap_content"
-              android:layout_width="wrap_content"
-              android:gravity="center_vertical|center_horizontal"
-              android:scaleType="fitCenter"
-              android:contentDescription="@string/book_title"/>
+
+    <TextView
+            android:id="@+id/title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/book_title"/>
 </LinearLayout>
