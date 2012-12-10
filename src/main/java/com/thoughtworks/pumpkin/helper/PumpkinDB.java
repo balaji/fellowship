@@ -10,7 +10,8 @@ import com.parse.ParseObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN.*;
+import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN.SHOP;
+import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.COLUMN.WISH_LIST;
 
 public class PumpkinDB extends SQLiteOpenHelper {
 
@@ -110,7 +111,7 @@ public class PumpkinDB extends SQLiteOpenHelper {
     public String getWishListId(String name) {
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = database.rawQuery("select id from " + PumpkinDB.WISH_LIST_TABLE_NAME + " where name = ?", new String[]{name});
-        if(cursor.getCount() == 0) return null;
+        if (cursor.getCount() == 0) return null;
         cursor.moveToFirst();
         String id = cursor.getString(0);
         database.close();

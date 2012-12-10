@@ -58,7 +58,7 @@ public class SidePanel extends RoboFragment {
                 switch (i) {
                     case 0:
                         key = "wishlist";
-                        if(i1 == 0) {
+                        if (i1 == 0) {
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                             alertDialog.setTitle("Name:");
                             final View layout = LayoutInflater.from(getActivity()).inflate(R.layout.create_wishlist_dialog, null);
@@ -103,7 +103,7 @@ public class SidePanel extends RoboFragment {
                         break;
                 }
 
-                intent.putExtra(key, ((TextView)view).getText());
+                intent.putExtra(key, ((TextView) view).getText());
                 startActivity(intent);
                 return false;
             }
@@ -136,7 +136,9 @@ public class SidePanel extends RoboFragment {
 
     private ArrayList<Map<String, String>> wishListChildData(PumpkinDB pumpkinDB) {
         ArrayList<Map<String, String>> wishListNames = getChildData(pumpkinDB.getWishListColumn("name"));
-        wishListNames.add(0, new HashMap<String, String>() {{put(NAME, "Create New...");}});
+        wishListNames.add(0, new HashMap<String, String>() {{
+            put(NAME, "Create New...");
+        }});
         return wishListNames;
     }
 

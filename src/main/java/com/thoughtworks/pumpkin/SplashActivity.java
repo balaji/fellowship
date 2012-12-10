@@ -45,7 +45,7 @@ public class SplashActivity extends RoboActivity {
             }
         }.execute();
 
-        if(!Util.isConnectingToInternet(this)) {
+        if (!Util.isConnectingToInternet(this)) {
             return;
         }
 
@@ -68,9 +68,9 @@ public class SplashActivity extends RoboActivity {
         });
 
         String userId = preferences.getString(Constant.Preferences.USER_ID, null);
-        if(userId == null) {
-           return;
-       }
+        if (userId == null) {
+            return;
+        }
         ParseQuery wishListQuery = new ParseQuery(WISH_LIST);
         wishListQuery.orderByAscending(Constant.ParseObject.COLUMN.WISH_LIST.NAME);
         wishListQuery.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.USER, userId);
