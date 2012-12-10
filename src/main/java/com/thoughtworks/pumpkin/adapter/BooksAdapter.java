@@ -52,6 +52,7 @@ public class BooksAdapter extends SimpleAdapter {
             holder.wishListButton = (ImageButton) convertView.findViewById(R.id.heart);
             holder.spinner = (ProgressBar) convertView.findViewById(R.id.heartLoading);
             holder.bookSpinner = (ProgressBar) convertView.findViewById(R.id.bookLoading);
+            holder.position = position;
             holder.wishListBooks = new HashMap<String, ParseObject>();
             convertView.setTag(holder);
         } else {
