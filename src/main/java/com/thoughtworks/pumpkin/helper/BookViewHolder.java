@@ -16,4 +16,5 @@ public class BookViewHolder {
     public ProgressBar spinner;
     public ProgressBar bookSpinner;
     public Map<String, ParseObject> wishListBooks;
+    public int position;
 }
