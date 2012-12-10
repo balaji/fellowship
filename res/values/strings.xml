@@ -15,5 +15,5 @@
     <string name="search_pincode">Search</string>
     <string name="new_list">Create New</string>
     <string name="wishListItem">Wish Listed</string>
-    <string name="add_new_wishlist">Add New</string>
+    <string name="view_cart">Visit Shop…</string>
 </resources>

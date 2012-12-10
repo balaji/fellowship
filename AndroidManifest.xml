@@ -28,6 +28,7 @@
         </activity>
         <activity android:name=".SigninActivity" />
         <activity android:name=".FacebookLoginActivity" />
+        <activity android:name=".ShopActivity" />
         <activity android:name=".ZipCodeActivity" />
         <activity android:name=".ViewBooksActivity" />
         <activity android:name=".HomePageActivity" />
