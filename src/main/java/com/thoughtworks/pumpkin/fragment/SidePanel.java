@@ -18,6 +18,7 @@ import com.parse.SaveCallback;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.ShopActivity;
 import com.thoughtworks.pumpkin.ViewBooksActivity;
+import com.thoughtworks.pumpkin.adapter.SidePanelAdapter;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import roboguice.fragment.RoboFragment;
@@ -39,7 +40,7 @@ public class SidePanel extends RoboFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.side_nav, container, false);
+        return inflater.inflate(R.layout.side_panel, container, false);
     }
 
     @Override
@@ -129,7 +130,7 @@ public class SidePanel extends RoboFragment {
         childData.add(getChildData(pumpkinDB.getBookCategories()));
         childData.add(getChildData(pumpkinDB.getShops()));
         childData.add(new ArrayList<Map<String, String>>());
-        return new SimpleExpandableListAdapter(getActivity(), groupData, android.R.layout.simple_expandable_list_item_1,
+        return new SidePanelAdapter(this, getActivity(), groupData, android.R.layout.simple_expandable_list_item_1,
                 new String[]{NAME}, new int[]{android.R.id.text1}, childData, android.R.layout.simple_expandable_list_item_1,
                 new String[]{NAME}, new int[]{android.R.id.text1});
     }
