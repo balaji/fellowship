@@ -76,6 +76,13 @@
             <systemPath>${project.basedir}/libs/Parse-1.1.8.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>com.skyhookwireless</groupId>
+            <artifactId>wps</artifactId>
+            <scope>system</scope>
+            <version>4.7.0</version>
+            <systemPath>${project.basedir}/libs/wpsapi.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
