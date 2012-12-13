@@ -3,6 +3,7 @@ package com.thoughtworks.pumpkin;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.google.inject.Inject;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -11,7 +12,6 @@ import com.parse.ParseQuery;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.helper.Util;
-import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.util.SafeAsyncTask;
 
@@ -22,7 +22,7 @@ import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.SHOP;
 import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.WISH_LIST;
 
 @ContentView(R.layout.splash)
-public class SplashActivity extends RoboActivity {
+public class SplashActivity extends RoboSherlockActivity {
 
     @Inject
     SharedPreferences preferences;
@@ -30,6 +30,7 @@ public class SplashActivity extends RoboActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         final SplashActivity splashActivity = this;
         final PumpkinDB pumpkinDB = new PumpkinDB(splashActivity);
         new SafeAsyncTask() {
