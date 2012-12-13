@@ -19,6 +19,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.thoughtworks.pumpkin.BaseActivity;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.ShopActivity;
 import com.thoughtworks.pumpkin.adapter.BooksAdapter;
@@ -50,6 +51,7 @@ public class ViewBooks extends RoboFragment {
         category = getActivity().getIntent().getStringExtra("category");
         wishList = getActivity().getIntent().getStringExtra("wishlist");
         booksGridView = (GridView) view.findViewById(R.id.books);
+        ((BaseActivity)getActivity()).getSupportActionBar().setTitle((category != null) ? category : wishList);
         if (category != null) findByCategory(category);
         if (wishList != null) findByWishList(wishList);
     }

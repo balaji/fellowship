@@ -37,41 +37,41 @@ public class PumpkinDB extends SQLiteOpenHelper {
 
     public void resetBookCategories(List<ParseObject> categories) {
         SQLiteDatabase database = getWritableDatabase();
-        database.execSQL("delete from " + PumpkinDB.CATEGORY_TABLE_NAME);
+        database.execSQL("delete from " + CATEGORY_TABLE_NAME);
         for (ParseObject category : categories) {
             ContentValues values = new ContentValues();
             values.put(SHOP.NAME, category.getString(SHOP.NAME));
-            database.insert(PumpkinDB.CATEGORY_TABLE_NAME, SHOP.NAME, values);
+            database.insert(CATEGORY_TABLE_NAME, SHOP.NAME, values);
         }
         database.close();
     }
 
     public void resetShops(List<ParseObject> shops) {
         SQLiteDatabase database = getWritableDatabase();
-        database.execSQL("delete from " + PumpkinDB.SHOP_TABLE_NAME);
+        database.execSQL("delete from " + SHOP_TABLE_NAME);
         for (ParseObject shop : shops) {
             ContentValues values = new ContentValues();
             values.put(SHOP.NAME, shop.getString(SHOP.NAME));
-            database.insert(PumpkinDB.SHOP_TABLE_NAME, SHOP.NAME, values);
+            database.insert(SHOP_TABLE_NAME, SHOP.NAME, values);
         }
         database.close();
     }
 
     public void resetWishLists(List<ParseObject> wishLists) {
         SQLiteDatabase database = getWritableDatabase();
-        database.execSQL("delete from " + PumpkinDB.WISH_LIST_TABLE_NAME);
+        database.execSQL("delete from " + WISH_LIST_TABLE_NAME);
         for (ParseObject wishList : wishLists) {
             ContentValues values = new ContentValues();
             values.put(WISH_LIST.NAME, wishList.getString(WISH_LIST.NAME));
             values.put("id", wishList.getObjectId());
-            database.insert(PumpkinDB.WISH_LIST_TABLE_NAME, WISH_LIST.NAME, values);
+            database.insert(WISH_LIST_TABLE_NAME, WISH_LIST.NAME, values);
         }
         database.close();
     }
 
     public List<String> getWishListColumn(String columnName) {
         SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor = database.rawQuery("select " + columnName + " from " + PumpkinDB.WISH_LIST_TABLE_NAME, null);
+        Cursor cursor = database.rawQuery("select " + columnName + " from " + WISH_LIST_TABLE_NAME, null);
         ArrayList<String> wishLists = new ArrayList<String>();
         if (cursor.moveToFirst()) {
             do {
@@ -84,7 +84,7 @@ public class PumpkinDB extends SQLiteOpenHelper {
 
     public List<String> getBookCategories() {
         SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor = database.rawQuery("select name from " + PumpkinDB.CATEGORY_TABLE_NAME, null);
+        Cursor cursor = database.rawQuery("select name from " + CATEGORY_TABLE_NAME, null);
         ArrayList<String> categories = new ArrayList<String>();
         if (cursor.moveToFirst()) {
             do {
@@ -97,7 +97,7 @@ public class PumpkinDB extends SQLiteOpenHelper {
 
     public List<String> getShops() {
         SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor = database.rawQuery("select name from " + PumpkinDB.SHOP_TABLE_NAME, null);
+        Cursor cursor = database.rawQuery("select name from " + SHOP_TABLE_NAME, null);
         ArrayList<String> shops = new ArrayList<String>();
         if (cursor.moveToFirst()) {
             do {
@@ -110,7 +110,7 @@ public class PumpkinDB extends SQLiteOpenHelper {
 
     public String getWishListId(String name) {
         SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor = database.rawQuery("select id from " + PumpkinDB.WISH_LIST_TABLE_NAME + " where name = ?", new String[]{name});
+        Cursor cursor = database.rawQuery("select id from " + WISH_LIST_TABLE_NAME + " where name = ?", new String[]{name});
         if (cursor.getCount() == 0) return null;
         cursor.moveToFirst();
         String id = cursor.getString(0);
@@ -123,7 +123,7 @@ public class PumpkinDB extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(WISH_LIST.NAME, wishListName);
         values.put("id", objectId);
-        database.insert(PumpkinDB.WISH_LIST_TABLE_NAME, WISH_LIST.NAME, values);
+        database.insert(WISH_LIST_TABLE_NAME, WISH_LIST.NAME, values);
     }
 
 }
