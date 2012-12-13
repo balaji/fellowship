@@ -21,7 +21,7 @@ public class FacebookLoginActivity extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ParseFacebookUtils.initialize(Keys.FACEBOOK_APP_ID, true);
+        ParseFacebookUtils.initialize(Keys.FACEBOOK_APP_ID, false);
         final FacebookLoginActivity facebookLoginActivity = this;
         ParseFacebookUtils.logIn(this, new LogInCallback() {
             @Override

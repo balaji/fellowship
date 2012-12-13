@@ -11,4 +11,5 @@ classes
 .DS_Store
 log.roo
 out
-pumpkin/src/main/java/com/thoughtworks/pumpkin/helper/Keys.java
+src/main/java/com/thoughtworks/pumpkin/helper/Keys.java
+gen-external-apklibs

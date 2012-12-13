@@ -1,7 +1,6 @@
 <resources>
 
     <!-- Application theme. -->
-    <style name="PumpkinTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:windowFullscreen">true</item>
+    <style name="PumpkinTheme" parent="Theme.Sherlock.Light">
     </style>
 </resources>
