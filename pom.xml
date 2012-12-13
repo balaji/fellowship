@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.thoughtworks.pumpkin</groupId>
@@ -13,23 +13,17 @@
         <platform.version>4.1.1.4</platform.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>repo</id>
+            <url>file://${project.basedir}/repo</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
             <version>${platform.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>android-test</artifactId>
-            <version>${platform.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -68,20 +62,20 @@
             <artifactId>support-v4</artifactId>
             <version>r7</version>
         </dependency>
+
         <dependency>
             <groupId>com.parse</groupId>
-            <artifactId>parse</artifactId>
-            <scope>system</scope>
+            <artifactId>parse-android</artifactId>
             <version>1.1.8</version>
-            <systemPath>${project.basedir}/libs/Parse-1.1.8.jar</systemPath>
         </dependency>
+
         <dependency>
-            <groupId>com.skyhookwireless</groupId>
-            <artifactId>wps</artifactId>
-            <scope>system</scope>
-            <version>4.7.0</version>
-            <systemPath>${project.basedir}/libs/wpsapi.jar</systemPath>
+            <groupId>com.actionbarsherlock</groupId>
+            <artifactId>actionbarsherlock</artifactId>
+            <version>4.2.0</version>
+            <type>apklib</type>
         </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -99,7 +93,7 @@
                     <resourceDirectory>${project.basedir}/res</resourceDirectory>
                     <nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
                     <sdk>
-                        <platform>16</platform>
+                        <platform>15</platform>
                     </sdk>
                     <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>
