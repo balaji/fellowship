@@ -1,6 +1,7 @@
 package com.thoughtworks.pumpkin;
 
 import android.os.Bundle;
+import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.RoboSlidingFragmentActivity;
 import com.thoughtworks.pumpkin.fragment.SidePanel;
@@ -22,5 +23,15 @@ public class BaseActivity extends RoboSlidingFragmentActivity {
         sm.setFadeDegree(0.35f);
         sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                toggle();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

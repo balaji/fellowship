@@ -1,6 +1,4 @@
 <resources>
-
     <!-- Application theme. -->
-    <style name="PumpkinTheme" parent="Theme.Sherlock.Light">
-    </style>
+    <style name="PumpkinTheme" parent="Theme.Sherlock.Light.DarkActionBar"/>
 </resources>
