@@ -37,7 +37,7 @@
         <activity android:name=".FacebookLoginActivity"/>
         <activity android:name=".ShopActivity"/>
         <activity android:name=".ZipCodeActivity"/>
-        <activity android:name=".ViewBooksActivity"/>
+        <activity android:name=".ViewBooksActivity" android:configChanges="orientation"/>
         <activity android:name=".HomePageActivity"/>
         <activity android:name=".TwitterLoginActivity"/>
     </application>
