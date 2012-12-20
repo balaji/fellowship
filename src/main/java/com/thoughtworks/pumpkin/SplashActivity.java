@@ -2,7 +2,9 @@ package com.thoughtworks.pumpkin;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Log;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.google.inject.Inject;
 import com.parse.FindCallback;
@@ -15,6 +17,10 @@ import com.thoughtworks.pumpkin.helper.Util;
 import roboguice.inject.ContentView;
 import roboguice.util.SafeAsyncTask;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.CATEGORY;
@@ -36,7 +42,7 @@ public class SplashActivity extends RoboSherlockActivity {
         new SafeAsyncTask() {
             @Override
             public Object call() throws Exception {
-                Thread.sleep(2000);
+                copyAssets();
                 return null;
             }
 
@@ -81,5 +87,38 @@ public class SplashActivity extends RoboSherlockActivity {
                 pumpkinDB.resetWishLists(wishLists);
             }
         });
+    }
+
+
+    private void copyAssets() {
+        AssetManager assetManager = getAssets();
+        String[] files = null;
+        try {
+            files = assetManager.list("");
+        } catch (IOException e) {
+            Log.e("tag", e.getMessage());
+        }
+        for (String filename : files) {
+            InputStream in;
+            OutputStream out;
+            try {
+                in = assetManager.open(filename);
+                out = new FileOutputStream("/sdcard/" + filename);
+                copyFile(in, out);
+                in.close();
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                Log.e("tag", e.getMessage());
+            }
+        }
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
     }
 }
