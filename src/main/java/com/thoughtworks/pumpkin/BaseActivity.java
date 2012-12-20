@@ -1,6 +1,7 @@
 package com.thoughtworks.pumpkin;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.RoboSlidingFragmentActivity;
@@ -33,5 +34,16 @@ public class BaseActivity extends RoboSlidingFragmentActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode,KeyEvent event)
+    {
+        if(keyCode == KeyEvent.KEYCODE_MENU)
+        {
+            toggle();
+            return true;
+        }
+        return super.onKeyDown(keyCode,event);
     }
 }
