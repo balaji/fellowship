@@ -16,7 +16,6 @@ public class BaseActivity extends RoboSlidingFragmentActivity {
         setSlidingActionBarEnabled(true);
         setBehindContentView(R.layout.menu_frame);
         getSupportFragmentManager().beginTransaction().replace(R.id.menu_frame, new SidePanel()).commit();
-
         SlidingMenu sm = getSlidingMenu();
         sm.setShadowWidthRes(R.dimen.shadow_width);
         sm.setShadowDrawable(R.drawable.shadow);
@@ -37,13 +36,11 @@ public class BaseActivity extends RoboSlidingFragmentActivity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode,KeyEvent event)
-    {
-        if(keyCode == KeyEvent.KEYCODE_MENU)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             toggle();
             return true;
         }
-        return super.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
     }
 }
