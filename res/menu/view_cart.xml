@@ -5,5 +5,10 @@
             android:id="@+id/menu_cart"
             android:actionLayout="@layout/spin_shop"
             android:title="@string/view_cart"
-            android:showAsAction="ifRoom|withText"/>
+            android:showAsAction="ifRoom|withText" />
+     <item
+            android:id="@+id/menu_search"
+            android:title="Search"
+            android:showAsAction="always"
+            android:actionViewClass="android.widget.SearchView" />
 </menu>

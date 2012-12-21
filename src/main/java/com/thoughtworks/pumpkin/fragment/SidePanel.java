@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.inject.Inject;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -22,6 +25,10 @@ import com.thoughtworks.pumpkin.adapter.SidePanelAdapter;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import roboguice.fragment.RoboFragment;
+import android.app.Activity;
+import android.app.SearchManager;
+import android.widget.SearchView;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -152,4 +159,6 @@ public class SidePanel extends RoboFragment {
         }
         return childData;
     }
+
+
 }

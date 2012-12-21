@@ -15,5 +15,7 @@
     <string name="search_pincode">Search</string>
     <string name="new_list">Create New</string>
     <string name="wishListItem">Wish Listed</string>
+    <string name = "app_label">pumpkin</string>
+    <string name = "search_hint">Search</string>
     <string name="view_cart">Visit Shop…</string>
 </resources>
