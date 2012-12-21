@@ -39,6 +39,7 @@ public class ViewBooks extends SherlockFragment {
     private GridView booksGridView;
     private String category;
     private String wishList;
+    private String query;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,10 +51,21 @@ public class ViewBooks extends SherlockFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         category = getActivity().getIntent().getStringExtra("category");
         wishList = getActivity().getIntent().getStringExtra("wishlist");
+        query = getActivity().getIntent().getStringExtra("query");
         booksGridView = (GridView) view.findViewById(R.id.books);
-        ((BaseActivity)getActivity()).getSupportActionBar().setTitle((category != null) ? category : wishList);
-        if (category != null) findByCategory(category);
-        if (wishList != null) findByWishList(wishList);
+        ((BaseActivity) getActivity()).getSupportActionBar().setTitle((category != null) ? category : wishList);
+        if (category != null) {
+            findByCategory(category);
+            return;
+        }
+        if (wishList != null) {
+            findByWishList(wishList);
+            return;
+        }
+        if (query != null) {
+            searchBooks(query);
+            return;
+        }
     }
 
     private void findByWishList(String wishList) {
@@ -91,6 +103,19 @@ public class ViewBooks extends SherlockFragment {
         ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.CATEGORY);
         innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.BOOK.NAME, category);
         query.whereMatchesQuery("parent", innerQuery);
+        query.orderByAscending(Constant.ParseObject.COLUMN.BOOK.RATING);
+        final ProgressDialog dialog = Util.showProgressDialog(getActivity());
+        query.findInBackground(new FindCallback() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                loadBooks(parseObjects, true, dialog);
+            }
+        });
+    }
+
+    public void searchBooks(String queryString) {
+        ParseQuery query = new ParseQuery(Constant.ParseObject.BOOK);
+        query.whereContains(Constant.ParseObject.COLUMN.BOOK.TITLE, queryString);
         query.orderByAscending(Constant.ParseObject.COLUMN.BOOK.RATING);
         final ProgressDialog dialog = Util.showProgressDialog(getActivity());
         query.findInBackground(new FindCallback() {
