@@ -22,10 +22,6 @@ public class FacebookLoginActivity extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD:src/main/java/com/thoughtworks/pumpkin/FacebookLoginActivity.java
-=======
-        ParseFacebookUtils.initialize(Keys.FACEBOOK_APP_ID, false);
->>>>>>> bb29d7bde8fe383ce5b7ecce3263cfc034900afa:src/main/java/com/thoughtworks/pumpkin/FacebookLoginActivity.java
         final FacebookLoginActivity facebookLoginActivity = this;
         ParseFacebookUtils.logIn(this, new LogInCallback() {
             @Override
