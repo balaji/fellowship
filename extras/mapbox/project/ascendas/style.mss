@@ -10,7 +10,7 @@ Map { background-color: lighten(#fff1cf, 7); }
 #indoor::l[buildingpart = "shelf"] {
   line-color: black;
   line-width: 1.5;
-  polygon-fill: gray;
+  polygon-fill: green;
  
   }
 

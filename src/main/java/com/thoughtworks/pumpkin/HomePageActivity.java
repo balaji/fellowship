@@ -32,7 +32,7 @@ public class HomePageActivity extends BaseActivity {
         if(keyCode == KeyEvent.KEYCODE_SEARCH)
         {
             searchView.setIconifiedByDefault(false);
-            searchView.setFocusable(false);
+            searchView.setFocusable(true);
             searchView.requestFocus();
             searchView.requestFocusFromTouch();
             searchView.setSubmitButtonEnabled(true);

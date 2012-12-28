@@ -10,12 +10,15 @@ classes
 *.*~
 .DS_Store
 <<<<<<< HEAD
+<<<<<<< HEAD
 log.roo
 <<<<<<< HEAD
 =======
 >>>>>>> bb29d7bde8fe383ce5b7ecce3263cfc034900afa
 =======
 >>>>>>> 4044dd6ed0fc45fc2d0e5ff44ac1feb3f040cb6b
+=======
+>>>>>>> e244c1dcf46604e149cacddce3963f12867f9c96
 out
 src/main/java/com/thoughtworks/pumpkin/helper/Keys.java
 gen-external-apklibs

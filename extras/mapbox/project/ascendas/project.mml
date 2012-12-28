@@ -31,7 +31,7 @@
       "id": "indoor",
       "class": "",
       "Datasource": {
-        "file": "C:\\Users\\Balaji\\Desktop\\indoor-zenith.json"
+        "file": "/home/natchu/ascendas.json"
       },
       "srs-name": "autodetect",
       "srs": "",
@@ -41,7 +41,6 @@
   ],
   "scale": 1,
   "metatile": 2,
-  "_basemap": "http://a.tiles.mapbox.com/v3/mapbox.mapbox-streets.jsonp",
   "name": "data",
   "description": "",
   "attribution": ""
