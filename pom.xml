@@ -65,7 +65,11 @@
         <dependency>
             <groupId>com.parse</groupId>
             <artifactId>parse-android</artifactId>
+<<<<<<< HEAD
             <version>1.1.10</version>
+=======
+            <version>1.1.8</version>
+>>>>>>> bb29d7bde8fe383ce5b7ecce3263cfc034900afa
         </dependency>
         <dependency>
             <groupId>com.skyhookwireless</groupId>

@@ -21,6 +21,10 @@ public class TwitterLoginActivity extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD:src/main/java/com/thoughtworks/pumpkin/TwitterLoginActivity.java
+=======
+        ParseTwitterUtils.initialize(Keys.TWITTER_CONSUMER_KEY, Keys.TWITTER_CONSUMER_SECRET);
+>>>>>>> bb29d7bde8fe383ce5b7ecce3263cfc034900afa:src/main/java/com/thoughtworks/pumpkin/TwitterLoginActivity.java
         final TwitterLoginActivity twitterLoginActivity = this;
         ParseTwitterUtils.logIn(this, new LogInCallback() {
             @Override

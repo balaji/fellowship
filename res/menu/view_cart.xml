@@ -10,5 +10,9 @@
             android:id="@+id/menu_search"
             android:title="Search"
             android:showAsAction="always"
+<<<<<<< HEAD
             android:actionViewClass="com.actionbarsherlock.widget.SearchView" />
+=======
+            android:actionViewClass="android.widget.SearchView" />
+>>>>>>> bb29d7bde8fe383ce5b7ecce3263cfc034900afa
 </menu>
