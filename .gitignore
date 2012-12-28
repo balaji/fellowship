@@ -11,8 +11,13 @@ classes
 .DS_Store
 <<<<<<< HEAD
 log.roo
+<<<<<<< HEAD
 =======
 >>>>>>> bb29d7bde8fe383ce5b7ecce3263cfc034900afa
+=======
+>>>>>>> 4044dd6ed0fc45fc2d0e5ff44ac1feb3f040cb6b
 out
 src/main/java/com/thoughtworks/pumpkin/helper/Keys.java
 gen-external-apklibs
+extras/mapbox/cache
+extras/mapbox/export
