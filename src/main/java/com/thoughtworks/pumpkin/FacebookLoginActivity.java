@@ -3,6 +3,7 @@ package com.thoughtworks.pumpkin;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import com.google.inject.Inject;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -21,7 +22,6 @@ public class FacebookLoginActivity extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ParseFacebookUtils.initialize(Keys.FACEBOOK_APP_ID, false);
         final FacebookLoginActivity facebookLoginActivity = this;
         ParseFacebookUtils.logIn(this, new LogInCallback() {
             @Override
@@ -29,11 +29,22 @@ public class FacebookLoginActivity extends RoboActivity {
                 if (user != null) {
                     preferences.edit().putString(Constant.Preferences.USER_ID, user.getObjectId()).commit();
                     startActivity(new Intent(facebookLoginActivity, ZipCodeActivity.class));
-                } else {
-                    Util.dialog("Error in signing up, try again later", facebookLoginActivity).show();
+                }   else if(user == null)  {
+                        startActivity(new Intent(facebookLoginActivity,SigninActivity.class));
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode,KeyEvent event)
+    {
+        if(keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            startActivity(new Intent(this,SigninActivity.class));
+            return true;
+        }
+        return super.onKeyDown(keyCode,event);
     }
 }
 

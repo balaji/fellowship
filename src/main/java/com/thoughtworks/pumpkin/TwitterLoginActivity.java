@@ -21,7 +21,6 @@ public class TwitterLoginActivity extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ParseTwitterUtils.initialize(Keys.TWITTER_CONSUMER_KEY, Keys.TWITTER_CONSUMER_SECRET);
         final TwitterLoginActivity twitterLoginActivity = this;
         ParseTwitterUtils.logIn(this, new LogInCallback() {
             @Override
@@ -29,8 +28,8 @@ public class TwitterLoginActivity extends RoboActivity {
                 if (user != null) {
                     preferences.edit().putString(Constant.Preferences.USER_ID, user.getObjectId()).commit();
                     startActivity(new Intent(twitterLoginActivity, ZipCodeActivity.class));
-                } else {
-                    Util.dialog("Error in signing up, try again later", twitterLoginActivity).show();
+                }   else if(user == null)  {
+                    startActivity(new Intent(twitterLoginActivity,SigninActivity.class));
                 }
             }
         });
