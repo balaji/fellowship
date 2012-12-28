@@ -9,7 +9,6 @@ classes
 *.iws
 *.*~
 .DS_Store
-log.roo
 out
 src/main/java/com/thoughtworks/pumpkin/helper/Keys.java
 gen-external-apklibs
