@@ -4,11 +4,10 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.Menu;
-import android.widget.SearchView;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.widget.SearchView;
 import com.thoughtworks.pumpkin.fragment.HomePage;
-import com.thoughtworks.pumpkin.fragment.ViewBooks;
 
 
 public class HomePageActivity extends BaseActivity {
