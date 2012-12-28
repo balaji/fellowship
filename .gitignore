@@ -12,3 +12,5 @@ classes
 out
 src/main/java/com/thoughtworks/pumpkin/helper/Keys.java
 gen-external-apklibs
+extras/mapbox/cache
+extras/mapbox/export
