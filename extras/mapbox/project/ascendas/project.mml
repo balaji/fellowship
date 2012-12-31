@@ -31,7 +31,10 @@
       "id": "indoor",
       "class": "",
       "Datasource": {
-        "file": "C:\\Users\\Balaji\\Desktop\\indoor-zenith.json"
+        "file": "C:\\Users\\Balaji\\Desktop\\indoor-zenith.json",
+        "id": "indoor",
+        "project": "ascendas",
+        "srs": ""
       },
       "srs-name": "autodetect",
       "srs": "",

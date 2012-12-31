@@ -4,6 +4,4 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/mapLayout">
-    <TextView android:id="@+id/handler" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-    <Button android:id="@+id/show" android:text="show" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 </RelativeLayout>

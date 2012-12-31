@@ -67,14 +67,15 @@ public class ShopDisplay extends RoboFragment implements LocationListener {
         mapView.setClickable(true);
         mapView.setUseDataConnection(false);
         mapView.getController().setZoom(19);
-        GeoPoint point = new GeoPoint(12.9840, 80.246);
-        mapView.getController().setCenter(point);
+        mapView.getController().setCenter(new GeoPoint(12.9840, 80.246));
 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100, this);
 
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-        items.add(new OverlayItem("Here", "SampleDescription", point));
+        OverlayItem item = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9840, 80.246));
+        item.setMarker(getActivity().getResources().getDrawable(R.drawable.marker));
+        items.add(item);
 
         ItemizedOverlay<OverlayItem> locationOverlay = new ItemizedIconOverlay<OverlayItem>(items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
