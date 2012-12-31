@@ -15,41 +15,38 @@ import com.thoughtworks.pumpkin.fragment.HomePage;
 public class HomePageActivity extends BaseActivity {
 
     SearchView searchView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_frame);
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-          //  doMySearch(query);
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new HomePage()).commit();
     }
 
-    public boolean onKeyDown(int keyCode,KeyEvent event)
-    {
-        if(keyCode == KeyEvent.KEYCODE_SEARCH)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_SEARCH) {
             searchView.setIconifiedByDefault(false);
-            searchView.setFocusable(false);
+            searchView.setFocusable(true);
             searchView.requestFocus();
             searchView.requestFocusFromTouch();
             searchView.setSubmitButtonEnabled(true);
 
             return true;
         }
-        return super.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
     }
 
-    public void doMySearch(String Query){
+    public void doMySearch(String Query) {
         Intent intent = new Intent(this, ViewBooksActivity.class);
         intent.putExtra("query", Query);
         startActivity(intent);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.view_cart, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -62,7 +59,7 @@ public class HomePageActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-               doMySearch(query);
+                doMySearch(query);
                 return true;
             }
 
