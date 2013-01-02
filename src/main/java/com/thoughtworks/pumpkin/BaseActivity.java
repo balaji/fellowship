@@ -1,23 +1,14 @@
 package com.thoughtworks.pumpkin;
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.KeyEvent;
-import android.widget.SearchView;
 import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.RoboSlidingFragmentActivity;
-import android.app.Activity;
 import com.thoughtworks.pumpkin.fragment.SidePanel;
-import com.thoughtworks.pumpkin.helper.PumpkinDB;
 
 
-public class BaseActivity extends RoboSlidingFragmentActivity {
+public abstract class BaseActivity extends RoboSlidingFragmentActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

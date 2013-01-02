@@ -36,15 +36,16 @@
 
         <activity android:name=".SigninActivity" />
         <activity android:name=".FacebookLoginActivity" />
-        <activity android:name=".ShopActivity" />
+        <activity
+            android:name=".ShopActivity"
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".ShelfActivity" />
         <activity android:name=".ZipCodeActivity" />
         <activity android:name=".HomePageActivity" />
         <activity
             android:name=".ViewBooksActivity"
             android:uiOptions="splitActionBarWhenNarrow"
-            android:configChanges="orientation" />
-        <activity android:name=".BaseActivity" />
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".TwitterLoginActivity" />
     </application>
 </manifest>

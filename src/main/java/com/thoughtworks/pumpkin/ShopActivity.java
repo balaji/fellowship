@@ -11,4 +11,5 @@ public class ShopActivity extends BaseActivity {
         setContentView(R.layout.content_frame);
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ShopDisplay()).commit();
     }
+
 }
