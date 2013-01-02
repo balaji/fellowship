@@ -148,12 +148,12 @@
     authors: data.items[0].volumeInfo.authors,
     description:data.items[0].volumeInfo.description,
     publisher: data.items[0].volumeInfo.publisher,
-    pageCount: data.items[0].volumeInfo.pageCount,
+    pageCount: parseInt(data.items[0].volumeInfo.pageCount),
     smallThumbnail: smallThumbnail,
     thumbnail: thumbnail,
     link: data.items[0].volumeInfo.webReaderLink,
     snippet:snippet,
-    rating: ratedBooks[index][0],
+    rating: parseInt(ratedBooks[index][0]),
     parent: category
     },
     {success: function(object) {

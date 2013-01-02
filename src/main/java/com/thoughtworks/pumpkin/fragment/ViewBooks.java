@@ -71,8 +71,7 @@ public class ViewBooks extends SherlockFragment {
         });
 
         booksListView = (ListView) view.findViewById(R.id.books);
-        ((BaseActivity) getActivity()).getSupportActionBar().setTitle((category != null) ?
-                category : (wishList != null) ? wishList : "\"" + query + "\" - results");
+        ((BaseActivity) getActivity()).getSupportActionBar().setTitle((category != null) ? category : wishList);
 
         if (category != null) {
             findByCategory(category);
@@ -133,7 +132,7 @@ public class ViewBooks extends SherlockFragment {
         });
     }
 
-    public void searchBooks(String queryString) {
+    public void searchBooks(final String queryString) {
         ParseQuery query = new ParseQuery(Constant.ParseObject.BOOK);
         query.whereMatches(Constant.ParseObject.COLUMN.BOOK.TITLE, queryString, "i");
         query.orderByAscending(Constant.ParseObject.COLUMN.BOOK.RATING);
@@ -141,6 +140,7 @@ public class ViewBooks extends SherlockFragment {
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
+                ((BaseActivity) getActivity()).getSupportActionBar().setTitle("\"" + queryString + "\" - " + parseObjects.size() + " results");
                 loadBooks(parseObjects, true, dialog);
             }
         });

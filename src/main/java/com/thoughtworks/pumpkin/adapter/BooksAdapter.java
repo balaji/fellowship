@@ -81,7 +81,7 @@ public class BooksAdapter extends SimpleAdapter {
     private void fillView(int position, BookViewHolder holder, ParseObject book) {
         holder.bookSpinner.setVisibility(View.GONE);
         imageLoader.DisplayImage(book.getString(COLUMN.BOOK.THUMBNAIL), holder.image);
-        holder.rating.setText("#" + book.getString(COLUMN.BOOK.RATING));
+        holder.rating.setText("#" + book.getInt(COLUMN.BOOK.RATING));
         holder.title.setText(book.getString(COLUMN.BOOK.TITLE));
         try {
             holder.authors.setText("- " + book.getJSONArray(COLUMN.BOOK.AUTHORS).join(", ").replaceAll("\"", ""));
