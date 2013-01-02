@@ -9,13 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -36,7 +33,7 @@ import java.util.Map;
 
 public class ViewBooks extends SherlockFragment {
 
-    private GridView booksGridView;
+    private ListView booksListView;
     private String category;
     private String wishList;
     private String query;
@@ -52,8 +49,31 @@ public class ViewBooks extends SherlockFragment {
         category = getActivity().getIntent().getStringExtra("category");
         wishList = getActivity().getIntent().getStringExtra("wishlist");
         query = getActivity().getIntent().getStringExtra("query");
-        booksGridView = (GridView) view.findViewById(R.id.books);
-        ((BaseActivity) getActivity()).getSupportActionBar().setTitle((category != null) ? category : wishList);
+
+        Spinner spinner = (Spinner) view.findViewById(R.id.cart);
+        List<String> shops = new PumpkinDB(getActivity()).getShops();
+        shops.add(0, getResources().getString(R.string.view_cart));
+        spinner.setAdapter(new ShopsAdapter<String>(getActivity(), R.layout.spin_shop_rowitem, shops));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 0) return;
+                Intent intent = new Intent(getActivity(), ShopActivity.class);
+                if (category != null) intent.putExtra("category", category);
+                if (wishList != null) intent.putExtra("wishlist", wishList);
+                intent.putExtra("shop", ((TextView) view.findViewById(R.id.text1)).getText());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        booksListView = (ListView) view.findViewById(R.id.books);
+        ((BaseActivity) getActivity()).getSupportActionBar().setTitle((category != null) ?
+                category : (wishList != null) ? wishList : "\"" + query + "\" - results");
+
         if (category != null) {
             findByCategory(category);
             return;
@@ -135,32 +155,9 @@ public class ViewBooks extends SherlockFragment {
             maps.add(map);
         }
         if (dialog.isShowing()) dialog.dismiss();
-        booksGridView.setAdapter(new BooksAdapter(getActivity(), maps, R.layout.book,
-                new String[]{"bookImage", "title", "rank", "objectId"}, new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart}));
+        booksListView.setAdapter(new BooksAdapter(getActivity(), maps, R.layout.book,
+                new String[]{"bookImage", "title", "rank", "objectId", "snippet", "authors"},
+                new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart, R.id.description, R.id.authors}));
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.view_cart, menu);
-        MenuItem menuItem = menu.findItem(R.id.menu_cart);
-        Spinner spinner = (Spinner) menuItem.getActionView();
-        List<String> shops = new PumpkinDB(getActivity()).getShops();
-        shops.add(0, getResources().getString(R.string.view_cart));
-        spinner.setAdapter(new ShopsAdapter<String>(getActivity(), R.layout.spin_shop_rowitem, shops));
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) return;
-                Intent intent = new Intent(getActivity(), ShopActivity.class);
-                if (category != null) intent.putExtra("category", category);
-                if (wishList != null) intent.putExtra("wishlist", wishList);
-                intent.putExtra("shop", ((TextView) view.findViewById(R.id.text1)).getText());
-                startActivity(intent);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-    }
 }

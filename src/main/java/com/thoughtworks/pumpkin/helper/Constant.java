@@ -40,6 +40,8 @@ public interface Constant {
                 final String NAME = "name";
                 final String RATING = "rating";
                 final String TITLE = "title";
+                final String AUTHORS = "authors";
+                final String SNIPPET = "snippet";
                 final String THUMBNAIL = "thumbnail";
             }
 

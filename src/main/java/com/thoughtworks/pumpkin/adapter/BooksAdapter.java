@@ -2,6 +2,7 @@ package com.thoughtworks.pumpkin.adapter;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.thoughtworks.pumpkin.helper.BookViewHolder;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.listener.ImageButtonOnClickListener;
+import org.json.JSONException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,6 +51,8 @@ public class BooksAdapter extends SimpleAdapter {
             holder.image = (ImageView) convertView.findViewById(R.id.bookImage);
             holder.rating = (TextView) convertView.findViewById(R.id.rank);
             holder.title = (TextView) convertView.findViewById(R.id.title);
+            holder.description = (TextView) convertView.findViewById(R.id.description);
+            holder.authors = (TextView) convertView.findViewById(R.id.authors);
             holder.wishListButton = (ImageButton) convertView.findViewById(R.id.heart);
             holder.spinner = (ProgressBar) convertView.findViewById(R.id.heartLoading);
             holder.bookSpinner = (ProgressBar) convertView.findViewById(R.id.bookLoading);
@@ -77,8 +81,13 @@ public class BooksAdapter extends SimpleAdapter {
     private void fillView(int position, BookViewHolder holder, ParseObject book) {
         holder.bookSpinner.setVisibility(View.GONE);
         imageLoader.DisplayImage(book.getString(COLUMN.BOOK.THUMBNAIL), holder.image);
-        holder.rating.setText(book.getString(COLUMN.BOOK.RATING));
+        holder.rating.setText("#" + book.getString(COLUMN.BOOK.RATING));
         holder.title.setText(book.getString(COLUMN.BOOK.TITLE));
+        try {
+            holder.authors.setText("- " + book.getJSONArray(COLUMN.BOOK.AUTHORS).join(", ").replaceAll("\"", ""));
+        } catch (JSONException e) {
+        }
+        holder.description.setText(Html.fromHtml(book.getString(COLUMN.BOOK.SNIPPET)));
         if (chest.keySet().contains(position)) {
             drawHeartIcon(holder, position);
         } else {

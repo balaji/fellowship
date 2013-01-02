@@ -1,6 +1,7 @@
 package com.thoughtworks.pumpkin.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class ShopsAdapter<T> extends ArrayAdapter<T> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.spin_shop_rowitem, parent, false);
         TextView textView = (TextView) v.findViewById(R.id.text1);
+        textView.setTextColor(Color.BLACK);
         textView.setText((String) objects.get(position));
         parent.setVerticalScrollBarEnabled(false);
         return v;
