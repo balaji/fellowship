@@ -135,7 +135,7 @@ public class ViewBooks extends SherlockFragment {
 
     public void searchBooks(String queryString) {
         ParseQuery query = new ParseQuery(Constant.ParseObject.BOOK);
-        query.whereContains(Constant.ParseObject.COLUMN.BOOK.TITLE, queryString);
+        query.whereMatches(Constant.ParseObject.COLUMN.BOOK.TITLE, queryString, "i");
         query.orderByAscending(Constant.ParseObject.COLUMN.BOOK.RATING);
         final ProgressDialog dialog = Util.showProgressDialog(getActivity());
         query.findInBackground(new FindCallback() {
