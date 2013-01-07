@@ -20,6 +20,7 @@ import com.thoughtworks.pumpkin.helper.BookViewHolder;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.listener.ImageButtonOnClickListener;
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.Arrays;
@@ -84,7 +85,12 @@ public class BooksAdapter extends SimpleAdapter {
         holder.rating.setText("#" + book.getInt(COLUMN.BOOK.RATING));
         holder.title.setText(book.getString(COLUMN.BOOK.TITLE));
         try {
-            holder.authors.setText("- " + book.getJSONArray(COLUMN.BOOK.AUTHORS).join(", ").replaceAll("\"", ""));
+            JSONArray jsonArray = book.getJSONArray(COLUMN.BOOK.AUTHORS);
+            if (jsonArray != null) {
+                holder.authors.setText("- " + jsonArray.join(", ").replaceAll("\"", ""));
+            } else {
+                holder.authors.setText("");
+            }
         } catch (JSONException e) {
         }
         holder.description.setText(Html.fromHtml(book.getString(COLUMN.BOOK.SNIPPET)));

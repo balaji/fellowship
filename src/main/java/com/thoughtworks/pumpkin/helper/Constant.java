@@ -24,6 +24,7 @@ public interface Constant {
         final String BOOK = "Book";
         final String WISH_LIST_BOOK = "WishList_Book";
         final String SHOP = "Shop";
+        final String SHOP_CATEGORY = "Shop_Category";
 
         interface COLUMN {
             interface WISH_LIST {

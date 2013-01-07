@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.7.min.js"></script>
+
+</head>
+<body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        Parse.initialize("api key", "javascript key");
+        var Shop = Parse.Object.extend("Shop");
+        $.each(["Chitlapakkam", "Mylapore", "Adyar", "Triplicane", "Saidapet", "Nungambakkam"], function(index, value) {
+            var shop = new Shop();
+            shop.save({
+                name: value
+            },
+            {
+            success: function(object) {
+                console.log(object);
+            }});
+        });
+
+        var ShopCategory = Parse.Object.extend("Shop_Category");
+        var Category = Parse.Object.extend("Category");
+        $.each([
+                ["Chitlapakkam", "A Autobiography: General","12.9838732,80.2461409"],
+                ["Chitlapakkam", "Autobiography: The Arts","12.9838768,80.246208"],
+                ["Chitlapakkam", "Biography: Business","12.9838786,80.2462752"],
+                ["Chitlapakkam", "Biography: General","12.9838786,80.2462752"],
+                ["Chitlapakkam", "Children's Annuals","12.9838823,80.24632424"],
+                ["Chitlapakkam", "Children's Fiction","12.9838823,80.2464058"],
+                ["Chitlapakkam", "Children's General Interest & Leisure","12.9838823,80.2464058"],
+                ["Chitlapakkam", "Crime, Thriller & Adventure","12.9841423,80.2462883"],
+                ["Chitlapakkam", "Encyclopedias & General Reference","12.9840571,80.2465309"],
+                ["Chitlapakkam", "Film, TV & Radio","12.9838874,80.2464715"],
+                ["Chitlapakkam", "Fitness & Diet","12.9838848,80.2465124"],
+                ["Chitlapakkam", "Food & Drink: General","12.9838861,80.2465969"],
+                ["Chitlapakkam", "General & Literary Fiction","12.9841432,80.2465415"],
+                ["Chitlapakkam", "Historical & Mythological Fiction","12.9837241,80.2462776"],
+                ["Chitlapakkam", "History: Specific Subjects","12.9837318,80.2465995"],
+                ["Chitlapakkam", "Humour: Collections & General","12.9837254,80.2463462"],
+                ["Chitlapakkam", "National & Regional Cuisine","12.9838848,80.2465124"],
+                ["Chitlapakkam", "Novelty & Activity Books","12.9837292,80.2464122"],
+                ["Chitlapakkam", "Picture Books","12.9837331,80.2464755"],
+                ["Chitlapakkam", "Popular Culture & Media: General Interest","12.9837305,80.2465375"],
+                ["Chitlapakkam", "Science Fiction & Fantasy","12.9841406,80.2464161"],
+                ["Chitlapakkam", "Young Adult Fiction","12.9838823,80.2464058"]
+            ], function(index, value) {
+            var query = new Parse.Query(Category);
+            query.equalTo("name", value[1]);
+            query.find({
+                success: function(results) {
+                    var shopCategory = new ShopCategory();
+                    shopCategory.set("category_name", results[0]);
+                    shopCategory.set("shop_name", value[0]);
+                    shopCategory.set("coordinates", value[2]);
+                    shopCategory.save(null,{
+                        success: function(object) {
+                            console.log(object);
+                        },
+                        error: function(object, error) {
+                            console.log("www:" + error);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

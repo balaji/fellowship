@@ -51,6 +51,6 @@ public class Util {
     }
 
     public static ProgressDialog showProgressDialog(Activity activity) {
-        return ProgressDialog.show(activity, "", Constant.Message.LOADING, true, true);
+        return ProgressDialog.show(activity, "", Constant.Message.LOADING, true, false);
     }
 }

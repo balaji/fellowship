@@ -1,22 +1,24 @@
 package com.thoughtworks.pumpkin.fragment;
 
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.slidingmenu.lib.SlidingMenu;
 import com.thoughtworks.pumpkin.BaseActivity;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.ShelfActivity;
+import com.thoughtworks.pumpkin.helper.Constant;
+import com.thoughtworks.pumpkin.helper.Util;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.MapTileProviderArray;
@@ -35,10 +37,14 @@ import roboguice.fragment.RoboFragment;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class ShopDisplay extends RoboFragment implements LocationListener {
+public class ShopDisplay extends RoboFragment {
 
     MapView mapView;
+    ArrayList<OverlayItem> items;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +53,7 @@ public class ShopDisplay extends RoboFragment implements LocationListener {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        final ProgressDialog dialog = Util.showProgressDialog(getActivity());
         ((BaseActivity) getActivity()).getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         RelativeLayout layout = (RelativeLayout) view.findViewById(R.id.mapLayout);
         XYTileSource mbtilesSource = new XYTileSource("mbtiles", ResourceProxy.string.offline_mode, 19, 21, 256, ".png", "http://pumpkin.thoughtworks.com/");
@@ -58,72 +65,62 @@ public class ShopDisplay extends RoboFragment implements LocationListener {
         MapTileProviderArray tileProviderArray = new MapTileProviderArray(mbtilesSource, null, new MapTileModuleProviderBase[]{moduleProvider});
 
         mapView = new MapView(getActivity(), 256, resourceProxy, tileProviderArray);
-        mapView.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-        ));
+        mapView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
         layout.addView(mapView);
 
         mapView.setBuiltInZoomControls(true);
         mapView.setMultiTouchControls(true);
-        mapView.setClickable(true);
         mapView.setUseDataConnection(false);
         mapView.getController().setZoom(19);
-        mapView.getController().setCenter(new GeoPoint(12.9840, 80.246));
+        mapView.getController().setCenter(new GeoPoint(12.9839, 80.2462));
 
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100, this);
-        Drawable marker = getActivity().getResources().getDrawable(R.drawable.marker);
+        try {
+            addOverlays(resourceProxy);
+        } catch (ParseException e) {
+        }
+        if (dialog.isShowing()) dialog.dismiss();
+        mapView.invalidate();
+    }
 
-        ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-//        OverlayItem item1 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9837211, 80.2461532));
-//        OverlayItem item2 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9837211, 80.2461858));
-//        OverlayItem item3 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9837211, 80.2462229));
-//        OverlayItem item4 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9837211, 80.2462504));
-//        OverlayItem item5 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9837211, 80.2462875));
-//        OverlayItem item6 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9837211, 80.2463187));
-//        OverlayItem item7 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9837211, 80.2463521));
-//        OverlayItem item8 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9838773, 80.2461658));
-//        OverlayItem item9 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9838773, 80.2462311));
-//        OverlayItem item10 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9838773, 80.2462957));
-//        OverlayItem item11 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9838773, 80.246361));
-//        OverlayItem item12 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9841189, 80.2461503));
-//        OverlayItem item13 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9841189, 80.2462828));
-//        OverlayItem item14 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.983806, 80.2466289));
-//        OverlayItem item15 = new OverlayItem("Here", "SampleDescription", new GeoPoint(12.9842354, 80.2463476));
-//
-//        item1.setMarker(marker);
-//        item2.setMarker(marker);
-//        item3.setMarker(marker);
-//        item4.setMarker(marker);
-//        item5.setMarker(marker);
-//        item6.setMarker(marker);
-//        item7.setMarker(marker);
-//        item8.setMarker(marker);
-//        item9.setMarker(marker);
-//        item10.setMarker(marker);
-//        item11.setMarker(marker);
-//        item12.setMarker(marker);
-//        item13.setMarker(marker);
-//        item14.setMarker(marker);
-//        item15.setMarker(marker);
-//
-//        items.add(item1);
-//        items.add(item2);
-//        items.add(item3);
-//        items.add(item4);
-//        items.add(item5);
-//        items.add(item6);
-//        items.add(item7);
-//        items.add(item8);
-//        items.add(item9);
-//        items.add(item10);
-//        items.add(item11);
-//        items.add(item12);
-//        items.add(item13);
-//        items.add(item14);
-//        items.add(item15);
+    private void addOverlays(final DefaultResourceProxyImpl resourceProxy) throws ParseException {
+        HashMap<String, String> books = (HashMap<String, String>) getActivity().getIntent().getExtras().get("books");
+        items = new ArrayList<OverlayItem>();
 
+        HashMap<String, String> localCache = new HashMap<String, String>();
+        ArrayList<String> usedCoordinates = new ArrayList<String>();
+        String coordinates;
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+        for (Map.Entry<String, String> entry : books.entrySet()) {
+            if (entry.getValue() == null) {
+                ParseObject parseObject = new ParseQuery(Constant.ParseObject.BOOK).get(entry.getKey());
+                ParseQuery query = new ParseQuery(Constant.ParseObject.SHOP_CATEGORY);
+                query.whereEqualTo("category_name", parseObject.getParseObject("parent"));
+                List<ParseObject> coordinateList = query.find();
+                String coordinate = coordinateList.get(0).getString("coordinates");
+                if (!usedCoordinates.contains(coordinate)) {
+                    usedCoordinates.add(coordinate);
+                    items.add(createOverlayItem(coordinate));
+                    refreshOverlays(resourceProxy);
+                }
+                continue;
+            }
+            if (localCache.get(entry.getValue()) == null) {
+                ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.CATEGORY);
+                ParseQuery query = new ParseQuery(Constant.ParseObject.SHOP_CATEGORY);
+                query.whereEqualTo("category_name", innerQuery.get(entry.getValue()));
+                List<ParseObject> coordinateList = query.find();
+                coordinates = coordinateList.get(0).getString("coordinates");
+                localCache.put(entry.getValue(), coordinates);
+            } else {
+                coordinates = localCache.get(entry.getValue());
+            }
+            items.add(createOverlayItem(coordinates));
+        }
+        refreshOverlays(resourceProxy);
+    }
+
+    private void refreshOverlays(DefaultResourceProxyImpl resourceProxy) {
         ItemizedOverlay<OverlayItem> locationOverlay = new ItemizedIconOverlay<OverlayItem>(items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
@@ -137,29 +134,14 @@ public class ShopDisplay extends RoboFragment implements LocationListener {
                         return false;
                     }
                 }, resourceProxy);
+
+        mapView.getOverlays().clear();
         mapView.getOverlays().add(locationOverlay);
-        mapView.invalidate();
-
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        int lat = (int) (location.getLatitude() * 1E6);
-        int lng = (int) (location.getLongitude() * 1E6);
-        GeoPoint gpt = new GeoPoint(lat, lng);
-        mapView.getController().setCenter(gpt);
-        mapView.invalidate();
-    }
-
-    @Override
-    public void onProviderDisabled(String arg0) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    private OverlayItem createOverlayItem(String coordinates) {
+        String[] coordinatePairs = coordinates.split(",");
+        return new OverlayItem("Here", "SampleDescription",
+                new GeoPoint(Double.parseDouble(coordinatePairs[0]), Double.parseDouble(coordinatePairs[1])));
     }
 }

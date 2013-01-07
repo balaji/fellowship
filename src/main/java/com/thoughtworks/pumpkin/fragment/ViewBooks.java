@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class ViewBooks extends SherlockFragment {
     private String category;
     private String wishList;
     private String query;
+    private HashMap<String, String> forMapView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,7 +65,9 @@ public class ViewBooks extends SherlockFragment {
                 if (category != null) intent.putExtra("category", category);
                 if (wishList != null) intent.putExtra("wishlist", wishList);
                 intent.putExtra("shop", ((TextView) view.findViewById(R.id.text1)).getText());
+                intent.putExtra("books", forMapView);
                 startActivity(intent);
+                getActivity().finish();
             }
 
             @Override
@@ -134,11 +138,20 @@ public class ViewBooks extends SherlockFragment {
     }
 
     public void searchBooks(final String queryString) {
-        ParseQuery query = new ParseQuery(Constant.ParseObject.BOOK);
-        query.whereMatches(Constant.ParseObject.COLUMN.BOOK.TITLE, queryString, "i");
-        query.orderByAscending(Constant.ParseObject.COLUMN.BOOK.RATING);
+        ParseQuery searchInBookTitle = new ParseQuery(Constant.ParseObject.BOOK);
+        searchInBookTitle.whereMatches(Constant.ParseObject.COLUMN.BOOK.TITLE, queryString, "i");
+
+        ParseQuery searchInBookAuthor = new ParseQuery(Constant.ParseObject.BOOK);
+        searchInBookAuthor.whereMatches(Constant.ParseObject.COLUMN.BOOK.AUTHORS, queryString, "i");
+
+        ArrayList<ParseQuery> parseQueries = new ArrayList<ParseQuery>();
+        parseQueries.add(searchInBookAuthor);
+        parseQueries.add(searchInBookTitle);
+
+        ParseQuery mainQuery = ParseQuery.or(parseQueries);
+        mainQuery.orderByAscending(Constant.ParseObject.COLUMN.BOOK.RATING);
         final ProgressDialog dialog = Util.showProgressDialog(getActivity());
-        query.findInBackground(new FindCallback() {
+        mainQuery.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 ((BaseActivity) getActivity()).getSupportActionBar().setTitle("\"" + queryString + "\" - " + parseObjects.size() + " results");
@@ -149,11 +162,18 @@ public class ViewBooks extends SherlockFragment {
 
     private void loadBooks(List<ParseObject> books, boolean fetchAll, final ProgressDialog dialog) {
         ArrayList<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+        forMapView = new HashMap<String, String>();
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         for (ParseObject book : books) {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("book", book);
             map.put("complete", fetchAll);
             maps.add(map);
+            if (fetchAll) {
+                forMapView.put(book.getObjectId(), book.getParseObject("parent").getObjectId());
+            } else {
+                forMapView.put(book.getObjectId(), null);
+            }
         }
         if (dialog.isShowing()) dialog.dismiss();
         booksListView.setAdapter(new BooksAdapter(getActivity(), maps, R.layout.book,
