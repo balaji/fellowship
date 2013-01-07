@@ -141,11 +141,11 @@ public class ViewBooks extends SherlockFragment {
         ParseQuery searchInBookTitle = new ParseQuery(Constant.ParseObject.BOOK);
         searchInBookTitle.whereMatches(Constant.ParseObject.COLUMN.BOOK.TITLE, queryString, "i");
 
-        ParseQuery searchInBookAuthor = new ParseQuery(Constant.ParseObject.BOOK);
-        searchInBookAuthor.whereMatches(Constant.ParseObject.COLUMN.BOOK.AUTHORS, queryString, "i");
+//        ParseQuery searchInBookAuthor = new ParseQuery(Constant.ParseObject.BOOK);
+//        searchInBookAuthor.whereContains(Constant.ParseObject.COLUMN.BOOK.AUTHORS, queryString);
 
         ArrayList<ParseQuery> parseQueries = new ArrayList<ParseQuery>();
-        parseQueries.add(searchInBookAuthor);
+//        parseQueries.add(searchInBookAuthor);
         parseQueries.add(searchInBookTitle);
 
         ParseQuery mainQuery = ParseQuery.or(parseQueries);
