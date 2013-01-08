@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.Log;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.google.inject.Inject;
 import com.parse.FindCallback;
@@ -96,7 +95,6 @@ public class SplashActivity extends RoboSherlockActivity {
         try {
             files = assetManager.list("");
         } catch (IOException e) {
-            Log.e("tag", e.getMessage());
         }
         for (String filename : files) {
             InputStream in;
@@ -109,7 +107,6 @@ public class SplashActivity extends RoboSherlockActivity {
                 out.flush();
                 out.close();
             } catch (Exception e) {
-                Log.e("tag", e.getMessage());
             }
         }
     }

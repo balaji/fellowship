@@ -1,5 +1,6 @@
 package com.thoughtworks.pumpkin.fragment;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -89,49 +90,62 @@ public class ShopDisplay extends RoboFragment {
 
         HashMap<String, String> localCache = new HashMap<String, String>();
         ArrayList<String> usedCoordinates = new ArrayList<String>();
+        HashMap<String, List<String>> labels = new HashMap<String, List<String>>();
         String coordinates;
+        ParseObject category = null;
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         for (Map.Entry<String, String> entry : books.entrySet()) {
             if (entry.getValue() == null) {
                 ParseObject parseObject = new ParseQuery(Constant.ParseObject.BOOK).get(entry.getKey());
                 ParseQuery query = new ParseQuery(Constant.ParseObject.SHOP_CATEGORY);
-                query.whereEqualTo("category_name", parseObject.getParseObject("parent"));
-                List<ParseObject> coordinateList = query.find();
-                String coordinate = coordinateList.get(0).getString("coordinates");
-                if (!usedCoordinates.contains(coordinate)) {
-                    usedCoordinates.add(coordinate);
-                    items.add(createOverlayItem(coordinate));
-                    refreshOverlays(resourceProxy);
-                }
-                continue;
-            }
-            if (localCache.get(entry.getValue()) == null) {
-                ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.CATEGORY);
-                ParseQuery query = new ParseQuery(Constant.ParseObject.SHOP_CATEGORY);
-                query.whereEqualTo("category_name", innerQuery.get(entry.getValue()));
+                category = parseObject.getParseObject("parent");
+                query.whereEqualTo("category_name", category);
                 List<ParseObject> coordinateList = query.find();
                 coordinates = coordinateList.get(0).getString("coordinates");
-                localCache.put(entry.getValue(), coordinates);
             } else {
-                coordinates = localCache.get(entry.getValue());
+                if (localCache.get(entry.getValue()) == null) {
+                    ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.CATEGORY);
+                    ParseQuery query = new ParseQuery(Constant.ParseObject.SHOP_CATEGORY);
+                    category = innerQuery.get(entry.getValue());
+                    query.whereEqualTo("category_name", category);
+                    List<ParseObject> coordinateList = query.find();
+                    coordinates = coordinateList.get(0).getString("coordinates");
+                    localCache.put(entry.getValue(), coordinates);
+                } else {
+                    coordinates = localCache.get(entry.getValue());
+                }
             }
-            items.add(createOverlayItem(coordinates));
+
+            if (!usedCoordinates.contains(coordinates)) {
+                usedCoordinates.add(coordinates);
+                items.add(createOverlayItem(coordinates, category.getString("name")));
+            }
+            if(labels.get(category.getString("name")) == null) {
+                labels.put(category.getString("name"), new ArrayList<String>());
+            }
+
+            labels.get(category.getString("name")).add(entry.getKey());
         }
-        refreshOverlays(resourceProxy);
+        refreshOverlays(labels, resourceProxy);
     }
 
-    private void refreshOverlays(DefaultResourceProxyImpl resourceProxy) {
+    private void refreshOverlays(Map<String, List<String>> labels, DefaultResourceProxyImpl resourceProxy) {
         ItemizedOverlay<OverlayItem> locationOverlay = new ItemizedIconOverlay<OverlayItem>(items,
-                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                new ItemGestureListener<OverlayItem>(labels) {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        startActivity(new Intent(getActivity(), ShelfActivity.class));
+                        OverlayItem tappedItem = items.get(index);
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                        dialog.setTitle(tappedItem.getSnippet());
+                        dialog.setMessage(this.labels.get(tappedItem.getSnippet()).toString());
+                        dialog.show();
                         return true;
                     }
 
                     @Override
                     public boolean onItemLongPress(int i, OverlayItem overlayItem) {
-                        return false;
+                        startActivity(new Intent(getActivity(), ShelfActivity.class));
+                        return true;
                     }
                 }, resourceProxy);
 
@@ -139,9 +153,17 @@ public class ShopDisplay extends RoboFragment {
         mapView.getOverlays().add(locationOverlay);
     }
 
-    private OverlayItem createOverlayItem(String coordinates) {
+    private OverlayItem createOverlayItem(String coordinates, String category) {
         String[] coordinatePairs = coordinates.split(",");
-        return new OverlayItem("Here", "SampleDescription",
+        return new OverlayItem("Here", category,
                 new GeoPoint(Double.parseDouble(coordinatePairs[0]), Double.parseDouble(coordinatePairs[1])));
+    }
+
+    abstract class ItemGestureListener<T> implements ItemizedIconOverlay.OnItemGestureListener<T> {
+        protected Map<String, List<String>> labels;
+        protected ItemGestureListener(Map<String, List<String>> labels) {
+            super();
+            this.labels = labels;
+        }
     }
 }
