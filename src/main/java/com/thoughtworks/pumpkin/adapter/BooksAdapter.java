@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -57,8 +56,6 @@ public class BooksAdapter extends SimpleAdapter {
             holder.authors = (TextView) convertView.findViewById(R.id.authors);
             holder.wishListButton = (ImageButton) convertView.findViewById(R.id.heart);
             holder.spinner = (ProgressBar) convertView.findViewById(R.id.heartLoading);
-            holder.bookSpinner = (ProgressBar) convertView.findViewById(R.id.bookLoading);
-            holder.content = (LinearLayout) convertView.findViewById(R.id.content);
             holder.position = position;
             holder.wishListBooks = new HashMap<String, ParseObject>();
             convertView.setTag(holder);
@@ -73,8 +70,6 @@ public class BooksAdapter extends SimpleAdapter {
     }
 
     private void fillView(int position, BookViewHolder holder, ParseObject book) {
-        holder.bookSpinner.setVisibility(View.GONE);
-        holder.content.setVisibility(View.VISIBLE);
         imageLoader.DisplayImage(book.getString(COLUMN.BOOK.THUMBNAIL), holder.image);
         holder.rating.setText("#" + book.getInt(COLUMN.BOOK.RATING));
         holder.title.setText(book.getString(COLUMN.BOOK.TITLE));
