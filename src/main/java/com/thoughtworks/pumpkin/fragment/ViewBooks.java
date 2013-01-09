@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class ViewBooks extends SherlockFragment {
     private String wishList;
     private String query;
     private HashMap<String, String> forMapView;
+    private ProgressDialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,7 +93,7 @@ public class ViewBooks extends SherlockFragment {
     }
 
     private void findByWishList(String wishList) {
-        final ProgressDialog dialog = Util.showProgressDialog(getActivity());
+        dialog = Util.showProgressDialog(getActivity());
         ParseQuery query = new ParseQuery(Constant.ParseObject.WISH_LIST_BOOK);
         ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.WISH_LIST);
         innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.WISH_LIST.NAME, wishList);
@@ -110,11 +112,18 @@ public class ViewBooks extends SherlockFragment {
                     });
                     alertDialog.show();
                 } else {
-                    List<ParseObject> books = new ArrayList<ParseObject>();
+                    List<String> bookIds = new ArrayList<String>();
                     for (ParseObject wishListBook : wishListBooks) {
-                        books.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK));
+                        bookIds.add(wishListBook.getParseObject(Constant.ParseObject.COLUMN.WISH_LIST_BOOK.BOOK).getObjectId());
                     }
-                    loadBooks(books, false, dialog);
+                    ParseQuery bookQuery = new ParseQuery(Constant.ParseObject.BOOK);
+                    bookQuery.whereContainedIn("objectId", bookIds);
+                    bookQuery.findInBackground(new FindCallback() {
+                        @Override
+                        public void done(List<ParseObject> parseObjects, ParseException e) {
+                            loadBooks(parseObjects);
+                        }
+                    });
                 }
             }
         });
@@ -126,11 +135,11 @@ public class ViewBooks extends SherlockFragment {
         innerQuery.whereEqualTo(Constant.ParseObject.COLUMN.BOOK.NAME, category);
         query.whereMatchesQuery("parent", innerQuery);
         query.orderByAscending(Constant.ParseObject.COLUMN.BOOK.RATING);
-        final ProgressDialog dialog = Util.showProgressDialog(getActivity());
+        dialog = Util.showProgressDialog(getActivity());
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
-                loadBooks(parseObjects, true, dialog);
+                loadBooks(parseObjects);
             }
         });
     }
@@ -148,29 +157,24 @@ public class ViewBooks extends SherlockFragment {
 
         ParseQuery mainQuery = ParseQuery.or(parseQueries);
         mainQuery.orderByAscending(Constant.ParseObject.COLUMN.BOOK.RATING);
-        final ProgressDialog dialog = Util.showProgressDialog(getActivity());
+        dialog = Util.showProgressDialog(getActivity());
         mainQuery.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 ((BaseActivity) getActivity()).getSupportActionBar().setTitle("\"" + queryString + "\" - " + parseObjects.size() + " results");
-                loadBooks(parseObjects, true, dialog);
+                loadBooks(parseObjects);
             }
         });
     }
 
-    private void loadBooks(List<ParseObject> books, boolean fetchAll, final ProgressDialog dialog) {
+    private void loadBooks(List<ParseObject> books) {
         ArrayList<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
         forMapView = new HashMap<String, String>();
         for (ParseObject book : books) {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("book", book);
-            map.put("complete", fetchAll);
             maps.add(map);
-            if (fetchAll) {
-                forMapView.put(book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE), book.getParseObject("parent").getObjectId());
-            } else {
-                forMapView.put(book.getObjectId(), null);
-            }
+            forMapView.put(book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE), book.getParseObject("parent").getObjectId());
         }
         if (dialog.isShowing()) dialog.dismiss();
         booksListView.setAdapter(new BooksAdapter(getActivity(), maps, R.layout.book,

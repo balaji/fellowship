@@ -58,7 +58,7 @@ public class BooksAdapter extends SimpleAdapter {
             holder.wishListButton = (ImageButton) convertView.findViewById(R.id.heart);
             holder.spinner = (ProgressBar) convertView.findViewById(R.id.heartLoading);
             holder.bookSpinner = (ProgressBar) convertView.findViewById(R.id.bookLoading);
-            holder.content= (LinearLayout) convertView.findViewById(R.id.content);
+            holder.content = (LinearLayout) convertView.findViewById(R.id.content);
             holder.position = position;
             holder.wishListBooks = new HashMap<String, ParseObject>();
             convertView.setTag(holder);
@@ -68,19 +68,7 @@ public class BooksAdapter extends SimpleAdapter {
 
         Map<String, Object> item = (Map<String, Object>) getItem(position);
         ParseObject book = (ParseObject) item.get("book");
-        if ((Boolean) item.get("complete")) {
-            fillView(position, holder, book);
-        } else {
-            holder.content.setVisibility(View.GONE);
-            new ParseQuery(Constant.ParseObject.BOOK).getInBackground(book.getObjectId(), new GetCallback(position, holder) {
-                @Override
-                public void done(ParseObject book, ParseException e) {
-                    ((Map<String, Object>) getItem(this.position)).put("complete", true);
-                    ((Map<String, Object>) getItem(this.position)).put("book", book);
-                    notifyDataSetChanged();
-                }
-            });
-        }
+        fillView(position, holder, book);
         return convertView;
     }
 

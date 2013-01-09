@@ -101,6 +101,7 @@ public class SidePanel extends RoboFragment {
                     case 2:
                         key = "shop";
                         intent = new Intent(getActivity(), ShopActivity.class);
+                        intent.putExtra("books", new HashMap<String, String>());
                         break;
                 }
 
@@ -152,6 +153,4 @@ public class SidePanel extends RoboFragment {
         }
         return childData;
     }
-
-
 }

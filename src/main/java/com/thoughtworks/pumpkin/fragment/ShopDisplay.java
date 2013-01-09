@@ -98,28 +98,18 @@ public class ShopDisplay extends RoboFragment {
         String bookTitle;
         ParseObject category = null;
         for (Map.Entry<String, String> entry : books.entrySet()) {
-            if (entry.getValue() == null) {
-                ParseObject book = new ParseQuery(Constant.ParseObject.BOOK).get(entry.getKey());
-                bookTitle = book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE);
+            if (localCache.get(entry.getValue()) == null) {
+                ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.CATEGORY);
                 ParseQuery query = new ParseQuery(Constant.ParseObject.SHOP_CATEGORY);
-                category = book.getParseObject("parent").fetchIfNeeded();
+                category = innerQuery.get(entry.getValue()); //!!
                 query.whereEqualTo("category_name", category);
-                List<ParseObject> coordinateList = query.find();
+                List<ParseObject> coordinateList = query.find(); //!!
                 coordinates = coordinateList.get(0).getString("coordinates");
+                localCache.put(entry.getValue(), coordinates);
             } else {
-                if (localCache.get(entry.getValue()) == null) {
-                    ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.CATEGORY);
-                    ParseQuery query = new ParseQuery(Constant.ParseObject.SHOP_CATEGORY);
-                    category = innerQuery.get(entry.getValue());
-                    query.whereEqualTo("category_name", category);
-                    List<ParseObject> coordinateList = query.find();
-                    coordinates = coordinateList.get(0).getString("coordinates");
-                    localCache.put(entry.getValue(), coordinates);
-                } else {
-                    coordinates = localCache.get(entry.getValue());
-                }
-                bookTitle = entry.getKey();
+                coordinates = localCache.get(entry.getValue());
             }
+            bookTitle = entry.getKey();
 
             if (!usedCoordinates.contains(coordinates)) {
                 usedCoordinates.add(coordinates);
@@ -140,17 +130,6 @@ public class ShopDisplay extends RoboFragment {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
                         OverlayItem tappedItem = items.get(index);
-//                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-//                        dialog.setTitle(tappedItem.getSnippet());
-//                        List<String> strings = labels.get(tappedItem.getSnippet());
-//                        dialog.setItems(strings.toArray(new String[strings.size()]), new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                            }
-//                        });
-//                        dialog.show();
-
                         Dialog dialog = new Dialog(getActivity());
                         dialog.setTitle(tappedItem.getSnippet());
                         dialog.setContentView(R.layout.book_popup);
