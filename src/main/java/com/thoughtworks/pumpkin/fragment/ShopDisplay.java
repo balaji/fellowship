@@ -1,7 +1,8 @@
 package com.thoughtworks.pumpkin.fragment;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -9,8 +10,10 @@ import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -54,9 +57,9 @@ public class ShopDisplay extends RoboFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         final ProgressDialog dialog = Util.showProgressDialog(getActivity());
         ((BaseActivity) getActivity()).getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
-        RelativeLayout layout = (RelativeLayout) view.findViewById(R.id.mapLayout);
         XYTileSource mbtilesSource = new XYTileSource("mbtiles", ResourceProxy.string.offline_mode, 19, 21, 256, ".png", "http://pumpkin.thoughtworks.com/");
         DefaultResourceProxyImpl resourceProxy = new DefaultResourceProxyImpl(getActivity().getApplicationContext());
         SimpleRegisterReceiver simpleReceiver = new SimpleRegisterReceiver(getActivity());
@@ -68,7 +71,7 @@ public class ShopDisplay extends RoboFragment {
         mapView = new MapView(getActivity(), 256, resourceProxy, tileProviderArray);
         mapView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT));
-        layout.addView(mapView);
+        ((LinearLayout) view.findViewById(R.id.mapLayout)).addView(mapView);
 
         mapView.setBuiltInZoomControls(true);
         mapView.setMultiTouchControls(true);
@@ -92,13 +95,14 @@ public class ShopDisplay extends RoboFragment {
         ArrayList<String> usedCoordinates = new ArrayList<String>();
         HashMap<String, List<String>> labels = new HashMap<String, List<String>>();
         String coordinates;
+        String bookTitle;
         ParseObject category = null;
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         for (Map.Entry<String, String> entry : books.entrySet()) {
             if (entry.getValue() == null) {
-                ParseObject parseObject = new ParseQuery(Constant.ParseObject.BOOK).get(entry.getKey());
+                ParseObject book = new ParseQuery(Constant.ParseObject.BOOK).get(entry.getKey());
+                bookTitle = book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE);
                 ParseQuery query = new ParseQuery(Constant.ParseObject.SHOP_CATEGORY);
-                category = parseObject.getParseObject("parent");
+                category = book.getParseObject("parent").fetchIfNeeded();
                 query.whereEqualTo("category_name", category);
                 List<ParseObject> coordinateList = query.find();
                 coordinates = coordinateList.get(0).getString("coordinates");
@@ -114,17 +118,18 @@ public class ShopDisplay extends RoboFragment {
                 } else {
                     coordinates = localCache.get(entry.getValue());
                 }
+                bookTitle = entry.getKey();
             }
 
             if (!usedCoordinates.contains(coordinates)) {
                 usedCoordinates.add(coordinates);
                 items.add(createOverlayItem(coordinates, category.getString("name")));
             }
-            if(labels.get(category.getString("name")) == null) {
+            if (labels.get(category.getString("name")) == null) {
                 labels.put(category.getString("name"), new ArrayList<String>());
             }
 
-            labels.get(category.getString("name")).add(entry.getKey());
+            labels.get(category.getString("name")).add(bookTitle);
         }
         refreshOverlays(labels, resourceProxy);
     }
@@ -135,9 +140,21 @@ public class ShopDisplay extends RoboFragment {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
                         OverlayItem tappedItem = items.get(index);
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+//                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+//                        dialog.setTitle(tappedItem.getSnippet());
+//                        List<String> strings = labels.get(tappedItem.getSnippet());
+//                        dialog.setItems(strings.toArray(new String[strings.size()]), new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                            }
+//                        });
+//                        dialog.show();
+
+                        Dialog dialog = new Dialog(getActivity());
                         dialog.setTitle(tappedItem.getSnippet());
-                        dialog.setMessage(this.labels.get(tappedItem.getSnippet()).toString());
+                        dialog.setContentView(R.layout.book_popup);
+                        ((ListView) dialog.findViewById(R.id.storeBooks)).setAdapter(new CustomAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, labels.get(tappedItem.getSnippet())));
                         dialog.show();
                         return true;
                     }
@@ -161,9 +178,34 @@ public class ShopDisplay extends RoboFragment {
 
     abstract class ItemGestureListener<T> implements ItemizedIconOverlay.OnItemGestureListener<T> {
         protected Map<String, List<String>> labels;
+
         protected ItemGestureListener(Map<String, List<String>> labels) {
             super();
             this.labels = labels;
+        }
+    }
+
+    class CustomAdapter<String> extends ArrayAdapter<String> {
+
+        private View v;
+        private Context context;
+
+        public CustomAdapter(Context context, int resource, List<String> objects) {
+            super(context, resource, objects);
+            this.context = context;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            this.v = convertView;
+            if (v == null) {
+                LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = vi.inflate(android.R.layout.simple_list_item_1, null);
+            }
+            TextView textView = (TextView) v.findViewById(android.R.id.text1);
+            textView.setTextAppearance(context, android.R.style.TextAppearance_Small);
+            textView.setText(getItem(position).toString());
+            return v;
         }
     }
 }

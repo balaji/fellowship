@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +66,6 @@ public class ViewBooks extends SherlockFragment {
                 intent.putExtra("shop", ((TextView) view.findViewById(R.id.text1)).getText());
                 intent.putExtra("books", forMapView);
                 startActivity(intent);
-                getActivity().finish();
             }
 
             @Override
@@ -163,14 +161,13 @@ public class ViewBooks extends SherlockFragment {
     private void loadBooks(List<ParseObject> books, boolean fetchAll, final ProgressDialog dialog) {
         ArrayList<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
         forMapView = new HashMap<String, String>();
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         for (ParseObject book : books) {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("book", book);
             map.put("complete", fetchAll);
             maps.add(map);
             if (fetchAll) {
-                forMapView.put(book.getObjectId(), book.getParseObject("parent").getObjectId());
+                forMapView.put(book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE), book.getParseObject("parent").getObjectId());
             } else {
                 forMapView.put(book.getObjectId(), null);
             }

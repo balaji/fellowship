@@ -8,6 +8,7 @@
     <Spinner
         android:id="@+id/cart"
         android:layout_width="fill_parent"
+        android:background="@color/sideNavChildColor"
         android:layout_height="wrap_content" />
 
     <ListView

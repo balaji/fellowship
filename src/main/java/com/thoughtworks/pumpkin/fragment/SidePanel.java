@@ -11,9 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.inject.Inject;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -25,10 +22,6 @@ import com.thoughtworks.pumpkin.adapter.SidePanelAdapter;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import roboguice.fragment.RoboFragment;
-import android.app.Activity;
-import android.app.SearchManager;
-import android.widget.SearchView;
-import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,7 +104,7 @@ public class SidePanel extends RoboFragment {
                         break;
                 }
 
-                intent.putExtra(key, ((TextView) view).getText());
+                intent.putExtra(key, ((TextView) view.findViewById(R.id.text1)).getText());
                 startActivity(intent);
                 return false;
             }
@@ -137,9 +130,9 @@ public class SidePanel extends RoboFragment {
         childData.add(getChildData(pumpkinDB.getBookCategories()));
         childData.add(getChildData(pumpkinDB.getShops()));
         childData.add(new ArrayList<Map<String, String>>());
-        return new SidePanelAdapter(this, getActivity(), groupData, android.R.layout.simple_expandable_list_item_1,
-                new String[]{NAME}, new int[]{android.R.id.text1}, childData, android.R.layout.simple_expandable_list_item_1,
-                new String[]{NAME}, new int[]{android.R.id.text1});
+        return new SidePanelAdapter(this, getActivity(), groupData, R.layout.side_panel_group,
+                new String[]{NAME}, new int[]{R.id.text1}, childData, R.layout.side_panel_child,
+                new String[]{NAME}, new int[]{R.id.text1});
     }
 
     private ArrayList<Map<String, String>> wishListChildData(PumpkinDB pumpkinDB) {

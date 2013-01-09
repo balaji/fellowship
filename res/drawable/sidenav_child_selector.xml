@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:state_enabled="true" android:drawable="@drawable/sidenav_color" />
+    <item android:state_enabled="true" android:state_selected="true" android:state_window_focused="true" android:drawable="@drawable/sidenav_color_inactive" />
+    <item android:drawable="@drawable/abs__list_selector_disabled_holo_light"/>
+</selector>
