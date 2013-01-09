@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,6 @@ public class ViewBooks extends SherlockFragment {
     private ListView booksListView;
     private String category;
     private String wishList;
-    private String query;
     private HashMap<String, String> forMapView;
     private ProgressDialog dialog;
 
@@ -52,7 +50,7 @@ public class ViewBooks extends SherlockFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         category = getActivity().getIntent().getStringExtra("category");
         wishList = getActivity().getIntent().getStringExtra("wishlist");
-        query = getActivity().getIntent().getStringExtra("query");
+        String query = getActivity().getIntent().getStringExtra("query");
 
         Spinner spinner = (Spinner) view.findViewById(R.id.cart);
         List<String> shops = new PumpkinDB(getActivity()).getShops();
@@ -88,7 +86,6 @@ public class ViewBooks extends SherlockFragment {
         }
         if (query != null) {
             searchBooks(query);
-            return;
         }
     }
 
@@ -174,7 +171,7 @@ public class ViewBooks extends SherlockFragment {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("book", book);
             maps.add(map);
-            forMapView.put(book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE), book.getParseObject("parent").getObjectId());
+            forMapView.put(book.getString(Constant.ParseObject.COLUMN.BOOK.TITLE), book.getParseObject("parent").getObjectId());  // title : category id.
         }
         if (dialog.isShowing()) dialog.dismiss();
         booksListView.setAdapter(new BooksAdapter(getActivity(), maps, R.layout.book,

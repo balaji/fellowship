@@ -47,8 +47,9 @@ import java.util.Map;
 
 public class ShopDisplay extends RoboFragment {
 
-    MapView mapView;
-    ArrayList<OverlayItem> items;
+    private MapView mapView;
+    private ArrayList<OverlayItem> items;
+    private ProgressDialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class ShopDisplay extends RoboFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
-        final ProgressDialog dialog = Util.showProgressDialog(getActivity());
+        dialog = Util.showProgressDialog(getActivity());
         ((BaseActivity) getActivity()).getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         XYTileSource mbtilesSource = new XYTileSource("mbtiles", ResourceProxy.string.offline_mode, 19, 21, 256, ".png", "http://pumpkin.thoughtworks.com/");
         DefaultResourceProxyImpl resourceProxy = new DefaultResourceProxyImpl(getActivity().getApplicationContext());
@@ -96,13 +97,12 @@ public class ShopDisplay extends RoboFragment {
         HashMap<String, List<String>> labels = new HashMap<String, List<String>>();
         String coordinates;
         String bookTitle;
-        ParseObject category = null;
         for (Map.Entry<String, String> entry : books.entrySet()) {
             if (localCache.get(entry.getValue()) == null) {
                 ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.CATEGORY);
                 ParseQuery query = new ParseQuery(Constant.ParseObject.SHOP_CATEGORY);
-                category = innerQuery.get(entry.getValue()); //!!
-                query.whereEqualTo("category_name", category);
+                innerQuery.whereEqualTo("objectId", entry.getValue());
+                query.whereMatchesQuery("category_name", innerQuery);
                 List<ParseObject> coordinateList = query.find(); //!!
                 coordinates = coordinateList.get(0).getString("coordinates");
                 localCache.put(entry.getValue(), coordinates);
@@ -113,13 +113,12 @@ public class ShopDisplay extends RoboFragment {
 
             if (!usedCoordinates.contains(coordinates)) {
                 usedCoordinates.add(coordinates);
-                items.add(createOverlayItem(coordinates, category.getString("name")));
+                items.add(createOverlayItem(coordinates, entry.getValue()));
             }
-            if (labels.get(category.getString("name")) == null) {
-                labels.put(category.getString("name"), new ArrayList<String>());
+            if (labels.get(entry.getValue()) == null) {
+                labels.put(entry.getValue(), new ArrayList<String>());
             }
-
-            labels.get(category.getString("name")).add(bookTitle);
+            labels.get(entry.getValue()).add(bookTitle);
         }
         refreshOverlays(labels, resourceProxy);
     }
