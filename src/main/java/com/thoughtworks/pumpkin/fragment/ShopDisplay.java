@@ -1,8 +1,10 @@
 package com.thoughtworks.pumpkin.fragment;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.slidingmenu.lib.SlidingMenu;
 import com.thoughtworks.pumpkin.BaseActivity;
 import com.thoughtworks.pumpkin.BookDetailActivity;
+import com.thoughtworks.pumpkin.OfferActivity;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.helper.Util;
@@ -115,14 +118,25 @@ public class ShopDisplay extends RoboFragment {
     }
 
     private void addOfferOverlay(ResourceProxy resourceProxy) {
-        OverlayItem item1 = createOverlayItem("12.9838086,80.2466642", "Offer");
-        OverlayItem item2 = createOverlayItem("12.9840541,80.246334", "Discount");
+        OverlayItem item1 = createOverlayItem("12.9838086,80.2466642", "Upto 50% discount on Picture books");
+        OverlayItem item2 = createOverlayItem("12.9840541,80.246334", "5% off on Religious books");
         item1.setMarker(getActivity().getResources().getDrawable(R.drawable.marker));
         item2.setMarker(getActivity().getResources().getDrawable(R.drawable.marker));
         mapView.getOverlays().add(new ItemizedIconOverlay<OverlayItem>(Arrays.asList(item1, item2), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
             @Override
-            public boolean onItemSingleTapUp(int i, OverlayItem overlayItem) {
-                return false;
+            public boolean onItemSingleTapUp(final int index, final OverlayItem overlayItem) {
+                new AlertDialog.Builder(getActivity())
+                        .setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, Arrays.asList(overlayItem.getSnippet())), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(getActivity(), OfferActivity.class);
+                                intent.putExtra("index", overlayItem.getSnippet());
+                                startActivity(intent);
+                            }
+                        })
+                        .setPositiveButton("OK", null)
+                        .setTitle("Recommendations for You!").show();
+                return true;
             }
 
             @Override
@@ -141,7 +155,8 @@ public class ShopDisplay extends RoboFragment {
                         Dialog dialog = new Dialog(getActivity());
                         dialog.setTitle(tappedItem.getSnippet());
                         dialog.setContentView(R.layout.book_popup);
-                        ((ListView) dialog.findViewById(R.id.storeBooks)).setAdapter(new CustomAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, labels.get(tappedItem.getSnippet())));
+                        ((ListView) dialog.findViewById(R.id.storeBooks))
+                                .setAdapter(new CustomAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, labels.get(tappedItem.getSnippet())));
                         dialog.show();
                         return true;
                     }
