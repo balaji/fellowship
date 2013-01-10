@@ -1,7 +1,9 @@
 package com.thoughtworks.pumpkin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.RoboSlidingFragmentActivity;
@@ -27,24 +29,32 @@ public abstract class BaseActivity extends RoboSlidingFragmentActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.home_row, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 toggle();
+                return true;
+            case R.id.hpApp:
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.thoughtworks.hp");
+                startActivity(launchIntent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public boolean onKeyDown(int keyCode,KeyEvent event)
-    {
-        if(keyCode == KeyEvent.KEYCODE_MENU)
-            {
-                   toggle();
-                   return true;
-                   }
-            return super.onKeyDown(keyCode,event);
-            }
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            toggle();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 }
