@@ -3,7 +3,6 @@ package com.thoughtworks.pumpkin.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
-import com.google.inject.Inject;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.SaveCallback;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.ShopActivity;
 import com.thoughtworks.pumpkin.ViewBooksActivity;
@@ -28,14 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.thoughtworks.pumpkin.helper.Constant.ParseObject.WISH_LIST;
-
 public class SidePanel extends RoboFragment {
     private static final String NAME = "NAME";
     List<List<Map<String, String>>> childData;
 
-    @Inject
-    SharedPreferences preferences;
     private SimpleExpandableListAdapter adapter;
 
     @Override
@@ -67,18 +58,10 @@ public class SidePanel extends RoboFragment {
                             alertDialog.setPositiveButton(Constant.Message.OK, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i2) {
-                                    final ParseObject wishList = new ParseObject(WISH_LIST);
                                     final String wishListName = ((TextView) layout.findViewById(R.id.newListName)).getText().toString();
-                                    wishList.put(Constant.ParseObject.COLUMN.WISH_LIST.NAME, wishListName);
-                                    wishList.put(Constant.ParseObject.COLUMN.WISH_LIST.USER, preferences.getString(Constant.Preferences.USER_ID, null));
-                                    wishList.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            pumpkinDB.insertWishList(wishListName, wishList.getObjectId());
-                                            childData.set(0, wishListChildData(pumpkinDB));
-                                            adapter.notifyDataSetChanged();
-                                        }
-                                    });
+                                    pumpkinDB.insertWishList(wishListName);
+                                    childData.set(0, wishListChildData(pumpkinDB));
+                                    adapter.notifyDataSetChanged();
                                     dialogInterface.dismiss();
                                 }
                             });
@@ -137,7 +120,7 @@ public class SidePanel extends RoboFragment {
     }
 
     private ArrayList<Map<String, String>> wishListChildData(PumpkinDB pumpkinDB) {
-        ArrayList<Map<String, String>> wishListNames = getChildData(pumpkinDB.getWishListColumn("name"));
+        ArrayList<Map<String, String>> wishListNames = getChildData(pumpkinDB.getWishlistNames());
         wishListNames.add(0, new HashMap<String, String>() {{
             put(NAME, "Create New...");
         }});

@@ -15,13 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.slidingmenu.lib.SlidingMenu;
 import com.thoughtworks.pumpkin.BaseActivity;
 import com.thoughtworks.pumpkin.R;
 import com.thoughtworks.pumpkin.ShelfActivity;
-import com.thoughtworks.pumpkin.helper.Constant;
+import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.helper.Util;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
@@ -50,6 +48,7 @@ public class ShopDisplay extends RoboFragment {
     private MapView mapView;
     private ArrayList<OverlayItem> items;
     private ProgressDialog dialog;
+    private PumpkinDB pumpkinDB;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +57,7 @@ public class ShopDisplay extends RoboFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        pumpkinDB = new PumpkinDB(getActivity());
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         dialog = Util.showProgressDialog(getActivity());
         ((BaseActivity) getActivity()).getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
@@ -96,20 +96,13 @@ public class ShopDisplay extends RoboFragment {
         ArrayList<String> usedCoordinates = new ArrayList<String>();
         HashMap<String, List<String>> labels = new HashMap<String, List<String>>();
         String coordinates;
-        String bookTitle;
         for (Map.Entry<String, String> entry : books.entrySet()) {
             if (localCache.get(entry.getValue()) == null) {
-                ParseQuery innerQuery = new ParseQuery(Constant.ParseObject.CATEGORY);
-                ParseQuery query = new ParseQuery(Constant.ParseObject.SHOP_CATEGORY);
-                innerQuery.whereEqualTo("objectId", entry.getValue());
-                query.whereMatchesQuery("category_name", innerQuery);
-                List<ParseObject> coordinateList = query.find(); //!!
-                coordinates = coordinateList.get(0).getString("coordinates");
+                coordinates = pumpkinDB.getCoordinatesForCategory(entry.getValue());
                 localCache.put(entry.getValue(), coordinates);
             } else {
                 coordinates = localCache.get(entry.getValue());
             }
-            bookTitle = entry.getKey();
 
             if (!usedCoordinates.contains(coordinates)) {
                 usedCoordinates.add(coordinates);
@@ -118,7 +111,7 @@ public class ShopDisplay extends RoboFragment {
             if (labels.get(entry.getValue()) == null) {
                 labels.put(entry.getValue(), new ArrayList<String>());
             }
-            labels.get(entry.getValue()).add(bookTitle);
+            labels.get(entry.getValue()).add(entry.getKey());
         }
         refreshOverlays(labels, resourceProxy);
     }
