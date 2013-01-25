@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.google.inject.Inject;
+import com.thoughtworks.pumpkin.fragment.SidePanel;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.listener.PumpkinOnClickListener;
 import roboguice.activity.RoboActivity;
@@ -25,14 +26,16 @@ public class SigninActivity extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!SidePanel.logincheck) {
         if (preferences.getString(Constant.Preferences.USER_ID, null) != null) {
             startActivity(new Intent(this, (preferences.getString(Constant.Preferences.PREFERRED_STORE, null) != null) ?
                     HomePageActivity.class : ZipCodeActivity.class));
             return;
-        }
+        }       }
+        else   {
         setContentView(R.layout.signin);
         onClick(twitter, TwitterLoginActivity.class);
-        onClick(facebook, FacebookLoginActivity.class);
+        onClick(facebook, FacebookLoginActivity.class);   }
     }
 
     private void onClick(Button button, final Class clazz) {

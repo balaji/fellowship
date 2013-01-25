@@ -8,6 +8,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
+import com.thoughtworks.pumpkin.fragment.SidePanel;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.Util;
@@ -27,6 +28,7 @@ public class TwitterLoginActivity extends RoboActivity {
             public void done(ParseUser user, ParseException err) {
                 if (user != null) {
                     preferences.edit().putString(Constant.Preferences.USER_ID, user.getObjectId()).commit();
+                    SidePanel.logincheck = false;
                     startActivity(new Intent(twitterLoginActivity, ZipCodeActivity.class));
                 }   else if(user == null)  {
                     startActivity(new Intent(twitterLoginActivity,SigninActivity.class));

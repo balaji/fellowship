@@ -9,6 +9,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
+import com.thoughtworks.pumpkin.fragment.SidePanel;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.Keys;
 import com.thoughtworks.pumpkin.helper.Util;
@@ -28,6 +29,7 @@ public class FacebookLoginActivity extends RoboActivity {
             public void done(ParseUser user, ParseException err) {
                 if (user != null) {
                     preferences.edit().putString(Constant.Preferences.USER_ID, user.getObjectId()).commit();
+                    SidePanel.logincheck = false;
                     startActivity(new Intent(facebookLoginActivity, ZipCodeActivity.class));
                 }   else if(user == null)  {
                         startActivity(new Intent(facebookLoginActivity,SigninActivity.class));

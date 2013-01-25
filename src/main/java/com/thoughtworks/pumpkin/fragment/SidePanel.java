@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
-import com.thoughtworks.pumpkin.R;
-import com.thoughtworks.pumpkin.ShopActivity;
-import com.thoughtworks.pumpkin.ViewBooksActivity;
+import com.parse.ParseException;
+import com.parse.ParseTwitterUtils;
+import com.parse.ParseUser;
+import com.thoughtworks.pumpkin.*;
 import com.thoughtworks.pumpkin.adapter.SidePanelAdapter;
 import com.thoughtworks.pumpkin.helper.Constant;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
+import roboguice.activity.event.OnNewIntentEvent;
 import roboguice.fragment.RoboFragment;
 
 import java.util.ArrayList;
@@ -23,7 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class SidePanel extends RoboFragment {
+    public static boolean logincheck;
     private static final String NAME = "NAME";
     List<List<Map<String, String>>> childData;
 
@@ -86,6 +90,20 @@ public class SidePanel extends RoboFragment {
                         intent = new Intent(getActivity(), ShopActivity.class);
                         intent.putExtra("books", new HashMap<String, String>());
                         break;
+                    case 3:
+                        key="Settings";
+                        if(i1==0)
+                            intent = new Intent(getActivity(), ZipCodeActivity.class);
+                        if(i1==1)
+                        {
+                            logincheck = true;
+                            ParseUser.logOut();
+                            intent = new Intent(getActivity(), FacebookLoginActivity.class);
+                        }
+                        intent.putExtra("Settings", new HashMap<String, String>());
+
+                        break;
+
                 }
 
                 intent.putExtra(key, ((TextView) view.findViewById(R.id.text1)).getText());
@@ -113,6 +131,7 @@ public class SidePanel extends RoboFragment {
         childData.add(wishListChildData(pumpkinDB));
         childData.add(getChildData(pumpkinDB.getBookCategories()));
         childData.add(getChildData(pumpkinDB.getShops()));
+        childData.add(settingsChildData());
         childData.add(new ArrayList<Map<String, String>>());
         return new SidePanelAdapter(this, getActivity(), groupData, R.layout.side_panel_group,
                 new String[]{NAME}, new int[]{R.id.text1}, childData, R.layout.side_panel_child,
@@ -125,6 +144,19 @@ public class SidePanel extends RoboFragment {
             put(NAME, "Create New...");
         }});
         return wishListNames;
+    }
+
+    private ArrayList<Map<String, String>> settingsChildData() {
+       ArrayList<Map<String, String>> SettingsNames = new ArrayList<Map<String, String>>();
+        SettingsNames.add(0, new HashMap<String, String>() {{
+            put(NAME, "ResetZipCode");
+        }});
+        SettingsNames.add(1, new HashMap<String, String>() {{
+            put(NAME, "Logout");
+        }});
+
+        return SettingsNames;
+
     }
 
     private ArrayList<Map<String, String>> getChildData(List<String> data) {
