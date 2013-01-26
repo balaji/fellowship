@@ -16,6 +16,7 @@ import com.thoughtworks.pumpkin.domain.Book;
 import com.thoughtworks.pumpkin.helper.BookViewHolder;
 import com.thoughtworks.pumpkin.helper.PumpkinDB;
 import com.thoughtworks.pumpkin.listener.ImageButtonOnClickListener;
+import com.thoughtworks.pumpkin.listener.BookDescriptionViewListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,9 @@ public class BooksAdapter extends SimpleAdapter {
         holder.description.setText(Html.fromHtml(book.getSnippet()));
         drawHeartIcon(holder, book.getId());
         holder.wishListButton.setOnClickListener(new ImageButtonOnClickListener(this, holder, book));
+        holder.description.setOnClickListener(new BookDescriptionViewListener(this,book));
+        holder.image.setOnClickListener(new BookDescriptionViewListener(this,book));
+
     }
 
     private void drawHeartIcon(BookViewHolder holder, int bookId) {

@@ -5,9 +5,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.View;
+
 
 public class Util {
 
@@ -49,6 +51,7 @@ public class Util {
         });
         return builder.create();
     }
+
 
     public static ProgressDialog showProgressDialog(Activity activity) {
         return ProgressDialog.show(activity, "", Constant.Message.LOADING, true, false);
