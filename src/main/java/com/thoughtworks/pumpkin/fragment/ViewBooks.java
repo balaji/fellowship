@@ -3,12 +3,14 @@ package com.thoughtworks.pumpkin.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.thoughtworks.pumpkin.BaseActivity;
 import com.thoughtworks.pumpkin.R;
@@ -112,5 +114,7 @@ public class ViewBooks extends SherlockFragment {
         booksListView.setAdapter(new BooksAdapter(getActivity(), maps, R.layout.book,
                 new String[]{"bookImage", "title", "rank", "objectId", "snippet", "authors"},
                 new int[]{R.id.bookImage, R.id.title, R.id.rank, R.id.heart, R.id.description, R.id.authors}));
+       // TextView description =(TextView)view.findViewById(R.id.description);
+        //description.setMovementMethod(new ScrollingMovementMethod());
     }
 }

@@ -2,6 +2,7 @@ package com.thoughtworks.pumpkin.adapter;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,7 @@ public class BooksAdapter extends SimpleAdapter {
         holder.description.setText(Html.fromHtml(book.getSnippet()));
         drawHeartIcon(holder, book.getId());
         holder.wishListButton.setOnClickListener(new ImageButtonOnClickListener(this, holder, book));
+        holder.description.setMovementMethod(new ScrollingMovementMethod());
         holder.description.setOnClickListener(new BookDescriptionViewListener(this,book));
         holder.image.setOnClickListener(new BookDescriptionViewListener(this,book));
 

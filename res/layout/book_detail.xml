@@ -43,7 +43,6 @@
             <LinearLayout
                     android:layout_width="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center_vertical|center_horizontal"
                     android:layout_height="wrap_content">
 
                 <TextView
@@ -55,16 +54,19 @@
                 <TextView
                         android:id="@+id/author"
                         android:textStyle="bold"
+                        android:textColor="@android:color/holo_green_dark"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content" />
                 <TextView
                         android:id="@+id/publisher"
                         android:textStyle="bold"
+                        android:textColor="@android:color/holo_green_light"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content" />
                 <TextView
                         android:id="@+id/pgno"
-                        android:textStyle="bold"
+                        android:textStyle="normal"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content" />
 
@@ -76,9 +78,9 @@
                 android:id="@+id/description"
                 style="@android:style/TextAppearance.Small"
                 android:scrollbars = "vertical"
-                android:gravity="center_vertical|center_horizontal"
+                android:paddingLeft="10dp"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent" />
+                android:layout_width="wrap_content" />
 
     </LinearLayout>
 

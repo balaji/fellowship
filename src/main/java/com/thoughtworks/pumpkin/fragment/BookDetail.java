@@ -43,9 +43,9 @@ public class BookDetail extends RoboFragment {
         title.setText(book.get(0));
         imageLoader.DisplayImage(book.get(1),image);
         rank.setText("#"+book.get(2));
-        author.setText("Author- "+book.get(3));
-        publisher.setText("Publisher- "+book.get(4));
-        pgno.setText("Pages- "+book.get(5));
+        author.setText(book.get(3));
+        publisher.setText(book.get(4));
+        pgno.setText("Pages - "+book.get(5));
         description.setText(book.get(6));
         description.setMovementMethod(new ScrollingMovementMethod());
 
