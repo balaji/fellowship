@@ -8,6 +8,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
+import com.thoughtworks.pumpkin.fragment.SidePanel;
 
 public class FacebookLoginActivity extends RoboSherlockActivity {
 
@@ -24,6 +25,9 @@ public class FacebookLoginActivity extends RoboSherlockActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.empty);
+
+        if(SidePanel.logout==true)
+            Session.getActiveSession().closeAndClearTokenInformation();
 
         // start Facebook Login
         Session.openActiveSession(this, true, new Session.StatusCallback() {
@@ -54,4 +58,3 @@ public class FacebookLoginActivity extends RoboSherlockActivity {
     }
 
 }
-                                                  h

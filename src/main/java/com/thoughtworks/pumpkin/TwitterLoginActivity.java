@@ -28,7 +28,7 @@ public class TwitterLoginActivity extends RoboActivity {
             public void done(ParseUser user, ParseException err) {
                 if (user != null) {
                     preferences.edit().putString(Constant.Preferences.USER_ID, user.getObjectId()).commit();
-                    SidePanel.logincheck = false;
+                   // SidePanel.logincheck = false;
                     startActivity(new Intent(twitterLoginActivity, ZipCodeActivity.class));
                 }   else if(user == null)  {
                     startActivity(new Intent(twitterLoginActivity,SigninActivity.class));

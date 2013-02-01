@@ -27,7 +27,7 @@ import java.util.Map;
 
 
 public class SidePanel extends RoboFragment {
-    public static boolean logincheck;
+    public static boolean logout=false;
     private static final String NAME = "NAME";
     List<List<Map<String, String>>> childData;
 
@@ -96,8 +96,7 @@ public class SidePanel extends RoboFragment {
                             intent = new Intent(getActivity(), ZipCodeActivity.class);
                         if(i1==1)
                         {
-                            logincheck = true;
-                            ParseUser.logOut();
+                            logout = true;
                             intent = new Intent(getActivity(), FacebookLoginActivity.class);
                         }
                         intent.putExtra("Settings", new HashMap<String, String>());
