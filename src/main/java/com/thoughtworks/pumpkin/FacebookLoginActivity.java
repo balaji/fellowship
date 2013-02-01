@@ -1,52 +1,57 @@
 package com.thoughtworks.pumpkin;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import com.google.inject.Inject;
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
-import com.parse.ParseUser;
-import com.thoughtworks.pumpkin.fragment.SidePanel;
-import com.thoughtworks.pumpkin.helper.Constant;
-import com.thoughtworks.pumpkin.helper.Keys;
-import com.thoughtworks.pumpkin.helper.Util;
-import roboguice.activity.RoboActivity;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
+import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 
-public class FacebookLoginActivity extends RoboActivity {
+public class FacebookLoginActivity extends RoboSherlockActivity {
 
-    @Inject
-    SharedPreferences preferences;
+    final FacebookLoginActivity facebookLoginActivity=this;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final FacebookLoginActivity facebookLoginActivity = this;
-        ParseFacebookUtils.logIn(this, new LogInCallback() {
+
+        setContentView(R.layout.empty);
+
+        // start Facebook Login
+        Session.openActiveSession(this, true, new Session.StatusCallback() {
+
+            // callback when session changes state
             @Override
-            public void done(ParseUser user, ParseException err) {
-                if (user != null) {
-                    preferences.edit().putString(Constant.Preferences.USER_ID, user.getObjectId()).commit();
-                    SidePanel.logincheck = false;
-                    startActivity(new Intent(facebookLoginActivity, ZipCodeActivity.class));
-                }   else if(user == null)  {
-                        startActivity(new Intent(facebookLoginActivity,SigninActivity.class));
+            public void call(Session session, SessionState state, Exception exception) {
+
+                if (session.isOpened()) {
+
+                    // make request to the /me API
+                    Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+
+                        // callback after Graph API response with user object
+                        @Override
+                        public void onCompleted(GraphUser user, Response response) {
+
+                            if (user != null) {
+
+                                startActivity(new Intent(facebookLoginActivity,ZipCodeActivity.class));
+                            }
+                        }
+                    });
                 }
+
             }
         });
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode,KeyEvent event)
-    {
-        if(keyCode == KeyEvent.KEYCODE_BACK)
-        {
-            startActivity(new Intent(this,SigninActivity.class));
-            return true;
-        }
-        return super.onKeyDown(keyCode,event);
-    }
 }
-
+                                                  h
