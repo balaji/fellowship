@@ -2,10 +2,8 @@ package com.thoughtworks.pumpkin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.*;
+//import com.facebook.model.GraphUser;
 import com.facebook.model.GraphUser;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.thoughtworks.pumpkin.fragment.SidePanel;

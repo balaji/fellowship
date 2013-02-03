@@ -38,6 +38,18 @@
                     android:gravity="center"
                     android:scaleType="fitCenter"
                     android:contentDescription="@string/book_image_description" />
+            <Button
+                    android:id="@+id/shareButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:visibility="visible"
+                    android:text="@string/share"
+                    android:drawableLeft="@drawable/fb"
+                    android:drawablePadding="10dp"
+                    />
 
 
             <LinearLayout

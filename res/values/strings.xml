@@ -18,4 +18,5 @@
     <string name = "app_label">pumpkin</string>
     <string name = "search_hint">Search</string>
     <string name="view_cart">Visit Shop…</string>
+    <string name="share">Share</string>
 </resources>

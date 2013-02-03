@@ -148,7 +148,7 @@ public class SidePanel extends RoboFragment {
     private ArrayList<Map<String, String>> settingsChildData() {
        ArrayList<Map<String, String>> SettingsNames = new ArrayList<Map<String, String>>();
         SettingsNames.add(0, new HashMap<String, String>() {{
-            put(NAME, "ResetZipCode");
+            put(NAME, "Reset Zip Code");
         }});
         SettingsNames.add(1, new HashMap<String, String>() {{
             put(NAME, "Logout");
